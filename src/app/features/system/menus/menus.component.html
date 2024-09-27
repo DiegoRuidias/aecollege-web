@@ -1,0 +1,28 @@
+<div class="card">
+    <p-treeTable [value]="menuData" [scrollable]="true" [tableStyle]="{'min-width':'50rem'}"
+    selectionMode="single">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 20rem;" >Nombre del Menú</th>
+                <th style="width: 15rem;">Link</th>
+                <th style="width: 20rem;">Descripción</th>
+                <th style="width: 7rem;" >Opciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+            <tr [ttRow]="rowNode" [ttSelectableRow]="rowNode">
+                <td style="width: 20rem;">
+                    <p-treeTableToggler [rowNode]="rowNode" />
+                    <i [ngClass]="rowData?.icon" class="mr-3" ></i>{{ rowData.label }}
+                </td>
+                <td style="width: 15rem;">{{ rowData.routerLink }}</td>
+                <td style="width: 20rem;"></td>
+                <td style="width: 8rem;"> 
+                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Editar" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="warning" pTooltip="Editar" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-treeTable>
+</div>
+

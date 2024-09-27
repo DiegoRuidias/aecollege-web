@@ -1,0 +1,15 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="">
+        <img src="../layout/images/logo.png" alt="logo">
+        <span>Albert Einstein College</span>
+    </a>
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button" (click)="layoutService.onMenuToggle()">
+        <i class="pi pi-bars" style="font-size: 1.5rem;"></i>
+    </button>
+
+       <div #topbarmenu class="layout-topbar-menu">
+        <button pButton pRipple type="button" [icon]="layoutService.isIcon()" (click)="layoutService.setTheme()" class="p-button-topbar mr-2"></button>
+        <button pButton pRipple type="button" icon="pi pi-fw pi-user mr-2" class="p-button-topbar button-danger font-bold">DIEGO RUIDIAS</button>
+       </div>
+</div>
