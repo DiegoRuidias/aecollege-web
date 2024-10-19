@@ -6,6 +6,7 @@ import { LayoutService } from '../../service/app.layout.service';
 import { AppSidebarComponent } from '../app-sidebar/app-sidebar.component';
 import { AppTopbarComponent } from '../app-topbar/app-topbar.component';
 import { AppFooterComponent } from '../app-footer/app-footer.component';
+import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-layout',
   standalone: true,
@@ -14,7 +15,8 @@ import { AppFooterComponent } from '../app-footer/app-footer.component';
     AppFooterComponent,
     AppTopbarComponent,
     AppSidebarComponent,
-    RouterOutlet
+    RouterOutlet,
+    ToastModule
     
   ],
   templateUrl: './app-layout.component.html',

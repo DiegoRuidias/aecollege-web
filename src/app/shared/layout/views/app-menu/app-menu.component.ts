@@ -23,7 +23,7 @@ export class AppMenuComponent implements OnInit{
             items: [
                 {
                     label: 'Panel de Inicio',
-                    icon: 'pi pi-fw pi-home',
+                    icon: 'matHome',
                     routerLink: ['/']
                 },
             
@@ -34,7 +34,7 @@ export class AppMenuComponent implements OnInit{
           items: [
               {
                   label: 'Menús',
-                  icon: 'pi pi-fw pi-list',
+                  icon: 'matList',
                   routerLink: '/system/menus'
               },
           
@@ -45,13 +45,29 @@ export class AppMenuComponent implements OnInit{
           items: [
             {
               label: 'Roles',
-              icon: 'pi pi-fw pi-shield',
+              icon: 'matSecurity',
               routerLink: '/security/roles'
             },
             {
               label: 'Usuarios',
-              icon: 'pi pi-fw pi-user',
+              icon: 'matPeopleAlt',
               routerLink: ['/security/users']
+            },            
+          
+          ]
+        },
+        {
+          label: 'Ajustes Generales ',
+          items: [
+            {
+              label: 'Periodos Escolares',
+              icon: 'matCalendarMonth',
+              routerLink: ['/config/period']
+            },
+            {
+              label: 'Pagos',
+              icon: 'matMonetizationOn',
+              routerLink: ['/config/pay']
             },            
           
           ]
@@ -61,7 +77,7 @@ export class AppMenuComponent implements OnInit{
           items: [
             {
               label: 'Cerrar sesión',
-              icon: 'pi pi-fw pi-sign-out',
+              icon: 'matExitToApp',
               routerLink: ['/config/users']
             },           
           

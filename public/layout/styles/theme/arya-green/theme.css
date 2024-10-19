@@ -9,6 +9,7 @@
   --surface-d: #383838;
   --surface-e: #1e1e1e;
   --surface-f: #1e1e1e;
+  --surface-g: #1e1e1e;
   --text-color: rgba(255, 255, 255, 0.87);
   --text-color-menu: rgba(255, 255, 255, 0.87);
   --text-color-menu-item: #ffffff;
@@ -38,6 +39,7 @@
   --gray-700: #414141;
   --gray-800: #2a2a2a;
   --gray-900: #121212;
+  --info: #0288d1;
   --content-padding: 1rem;
   --inline-spacing: 0.5rem;
   --border-radius: 3px;

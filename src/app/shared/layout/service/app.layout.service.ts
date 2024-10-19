@@ -24,6 +24,7 @@ interface LayoutState {
     providedIn: 'root',
 })
 export class LayoutService {
+    private readonly LOCAL_STORAGE_KEY = 'appConfig'; 
     _config: AppConfig = {
         ripple: false,
         inputStyle: 'outlined',
@@ -31,10 +32,11 @@ export class LayoutService {
         colorScheme: 'light',
         theme: './layout/styles/theme/arya-green/theme.css',
         scale: 12,
-        icon:'pi pi-moon'
+        icon:'heroSunSolid'
     };
 
     config = signal<AppConfig>(this._config);
+
 
     state: LayoutState = {
         staticMenuDesktopInactive: false,
@@ -54,6 +56,13 @@ export class LayoutService {
     overlayOpen$ = this.overlayOpen.asObservable();
 
     constructor() {
+        const storedConfig = localStorage.getItem(this.LOCAL_STORAGE_KEY);
+        if (storedConfig) {
+            this._config = JSON.parse(storedConfig); // Asignar configuración guardada
+        }
+
+        this.config = signal<AppConfig>(this._config);
+        
         effect(() => {
             this.changeTheme();
             this.onConfigUpdate();
@@ -65,7 +74,7 @@ export class LayoutService {
         if( this.config().colorScheme === 'dark' ){
             this.config.update(c => ({
                 ...c,
-                icon : 'pi pi-moon',
+                icon : 'heroMoonSolid',
                 theme : './layout/styles/theme/arya-green/theme.css',
                 colorScheme : 'ligth'
             }));
@@ -73,7 +82,7 @@ export class LayoutService {
         } else {
             this.config.update(c => ({
                 ...c,
-                icon : 'pi pi-sun',
+                icon : 'heroSunSolid',
                 theme : './layout/styles/theme/saga-green/theme.css',
                 colorScheme : 'dark'
             }));
@@ -135,6 +144,7 @@ export class LayoutService {
     onConfigUpdate() {
         this._config = { ...this.config() };
         this.configUpdate.next(this.config());
+        localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(this._config));
     }
 
     changeTheme() {

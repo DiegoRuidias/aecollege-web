@@ -1,1 +1,47 @@
-<p>percyyyyyyy</p>
+<div class="card">
+    <div class="flex align-items-center justify-content-between mb-3 ml-3">
+        <div>
+            <button pButton pRipple label="Nuevo"  icon="pi pi-plus" class="text-white font-bold"></button>
+        </div>
+        <div>
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input type="text" pInputText placeholder="Buscar Usuario"/>
+            </span>
+        </div>
+    </div>
+    <p-table [value]="userList" [tableStyle]="{ 'min-width': '60rem' }" [scrollable]="true"  
+            dataKey="id" class="p-datatable-sm" [(selection)]="selectedRoles"> 
+            <ng-template pTemplate="caption">
+                <div class="flex">
+
+                </div>
+            </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th id="col1" style="width: 3.5rem" pFrozenColumn alignFrozen="left">
+                    <p-tableHeaderCheckbox /></th>
+                <th id="col2" style="width: 30rem;">Nombres</th>
+                <th id="col3" style="width: 25rem;" >Usuario</th>
+                <th id="col4">Activo</th>
+                <th id="col5" style="width: 12rem;" pFrozenColumn alignFrozen="right">Opciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item let-index="rowIndex">
+            <tr [pSelectableRow]="item">
+                <td pFrozenColumn alignFrozen="left">
+                    <p-tableCheckbox [value]="item" />
+                </td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.user }}</td>
+                <td><p-inputSwitch  /></td>
+                <td pFrozenColumn alignFrozen="right">
+                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="warning" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="help" pTooltip="Recursos" (click)="openEdit($event, item)" icon="pi pi-shield" class="mr-2  text-black text-xs"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="danger" pTooltip="Eliminar" (click)="openEdit($event, item)" icon="pi pi-trash" class="mr-2 text-xs"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table> 
+</div>

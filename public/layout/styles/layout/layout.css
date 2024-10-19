@@ -247,6 +247,7 @@ a {
 }
 .layout-menu ul a .layout-menuitem-icon {
   margin-right: 0.5rem;
+  font-size: 1.25rem;
 }
 .layout-menu ul a .layout-submenu-toggler {
   font-size: 75%;

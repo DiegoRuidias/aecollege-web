@@ -9,7 +9,7 @@
     </button>
 
        <div #topbarmenu class="layout-topbar-menu">
-        <button pButton pRipple type="button" [icon]="layoutService.isIcon()" (click)="layoutService.setTheme()" class="p-button-topbar mr-2"></button>
-        <button pButton pRipple type="button" icon="pi pi-fw pi-user mr-2" class="p-button-topbar button-danger font-bold">DIEGO RUIDIAS</button>
+        <button pButton pRipple (click)="layoutService.setTheme()" class="p-button-topbar font-bold mr-1 p-2"><ng-icon [name]="layoutService.isIcon()" class="text-2xl text-white"></ng-icon></button>
+        <button pButton pRipple class="p-button-topbar p-2 font-bold"><ng-icon name="heroUserCircleSolid" class="text-2xl text-white mr-1"></ng-icon>DIEGO RUIDIAS</button>
        </div>
 </div>

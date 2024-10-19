@@ -13,7 +13,12 @@
             <tr [ttRow]="rowNode" [ttSelectableRow]="rowNode">
                 <td style="width: 20rem;">
                     <p-treeTableToggler [rowNode]="rowNode" />
-                    <i [ngClass]="rowData?.icon" class="mr-3" ></i>{{ rowData.label }}
+                    <div class="inline-flex align-items-center vertical-align-middle">
+                        @if (rowData?.icon) {
+                            <ng-icon [name]="rowData?.icon" class="mr-2 text-xl text-primary-700"></ng-icon>
+                        }
+                        <div>{{ rowData?.order + " - " + rowData?.label }}</div>
+                    </div>
                 </td>
                 <td style="width: 15rem;">{{ rowData.routerLink }}</td>
                 <td style="width: 20rem;"></td>

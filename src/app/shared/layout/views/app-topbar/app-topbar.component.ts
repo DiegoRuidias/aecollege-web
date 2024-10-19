@@ -5,6 +5,9 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+
+import { heroUserCircleSolid, heroMoonSolid, heroSunSolid} from '@ng-icons/heroicons/solid';
 @Component({
   selector: 'app-topbar',
   standalone: true,
@@ -12,7 +15,13 @@ import { RippleModule } from 'primeng/ripple';
     CommonModule,
     RouterLink,
     ButtonModule,
-    RippleModule
+    RippleModule,
+    NgIconComponent 
+  ],
+  providers: [
+    provideIcons({ 
+      heroUserCircleSolid, heroMoonSolid, heroSunSolid
+     })
   ],
   templateUrl: './app-topbar.component.html',
   styleUrl: './app-topbar.component.scss'

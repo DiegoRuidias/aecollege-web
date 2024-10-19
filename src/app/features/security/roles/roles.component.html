@@ -1,33 +1,39 @@
 <div class="card">
     <div class="flex align-items-center justify-content-between mb-3 ml-3">
         <div>
-            <button pButton pRipple label="Nuevo"  icon="pi pi-plus" class="text-black font-bold"></button>
+            <button pButton pRipple label="Nuevo" (click)="openNew()" icon="pi pi-plus" class="text-white font-bold"></button>
         </div>
     </div>
     <p-table [value]="rolesList" [tableStyle]="{ 'min-width': '60rem' }" [scrollable]="true"  
-            dataKey="id" class="p-datatable-sm" [(selection)]="selectedRoles"> 
+            dataKey="id" class="p-datatable-sm" [(selection)]="selectedRoles" [reorderableColumns]="true"> 
         <ng-template pTemplate="header">
             <tr>
+                <th style="width:3rem"></th>
                 <th id="col1" style="width: 3.5rem" pFrozenColumn alignFrozen="left">
                     <p-tableHeaderCheckbox /></th>
                 <th id="col2" style="width: 15rem;">Código</th>
                 <th id="col3" style="width: 15rem;" >Nombre</th>
                 <th id="col4">Descripción</th>
+                <th id="col4">Activo</th>
                 <th id="col5" style="width: 12rem;" pFrozenColumn alignFrozen="right">Opciones</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item let-index="rowIndex">
-            <tr [pSelectableRow]="item">
+            <tr [pSelectableRow]="item" [pReorderableRow]="index">
+                <td>
+                    <span class="pi pi-bars" pReorderableRowHandle></span>
+                </td>
                 <td pFrozenColumn alignFrozen="left">
                     <p-tableCheckbox [value]="item" />
                 </td>
                 <td>{{ item.code }}</td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.description }}</td>
+                <td><p-inputSwitch [(ngModel)]="item.isActive"  (ngModelChange)="updateIsActive(item.id, $event)"/></td>
                 <td pFrozenColumn alignFrozen="right">
-                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Ver" (click)="openView($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
                     <button pButton pRipple type="button" [rounded]="true"  severity="warning" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
-                    <button pButton pRipple type="button" [rounded]="true"  severity="help" pTooltip="Recursos" (click)="openEdit($event, item)" icon="pi pi-shield" class="mr-2  text-black text-xs"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="help" pTooltip="Recursos" (click)="openAccess($event, item)" icon="pi pi-shield" class="mr-2  text-black text-xs"></button>
                     <button pButton pRipple type="button" [rounded]="true"  severity="danger" pTooltip="Eliminar" (click)="openEdit($event, item)" icon="pi pi-trash" class="mr-2 text-xs"></button>
                 </td>
             </tr>
@@ -35,18 +41,80 @@
     </p-table>     
 </div>
 
-<p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
-    <span class="p-text-secondary block mb-5">Update your information.</span>
-    <div class="flex align-items-center gap-3 mb-3">
-        <label for="username" class="font-semibold w-6rem">Username</label>
-        <input pInputText id="username" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex align-items-center gap-3 mb-5">
-        <label for="email" class="font-semibold w-6rem">Email</label>
-        <input pInputText id="email" class="flex-auto" autocomplete="off" />
-    </div>
+<p-dialog [modal]="true" [(visible)]="isFormRoles" [resizable]="false" [style]="{ width: '35rem' }">
+    <ng-template pTemplate="header">
+        <div class="flex flex-column">
+            <div class="p-dialog-title">{{isEdit ? 'Editar Roles de usuario ' : 'Crear roles de usuario'}}</div>
+            <div class="mt-2 text-blue-600">{{isEdit ? 'Rol de usuario de '  + selectedRoles[0]?.name : 'Ingrese los campos solicitados'}}</div>
+        </div>
+    </ng-template>
+    <form [formGroup]="formRoles">
+        <div class="field">
+            <label for="code" class="font-semibold w-6rem">Código:</label>
+            <p-inputGroup>
+                <p-inputGroupAddon class="bg-primary-200">
+                    <i class="pi pi-bookmark text-black-alpha-60"></i>
+                </p-inputGroupAddon>
+                <input pInputText id="code" formControlName="code" [maxLength]="10" class="w-full"/>
+            </p-inputGroup>
+        </div>
+        <div class="field">
+            <label for="name" class="font-semibold w-6rem">Nombre:</label>
+            <p-inputGroup>
+                <p-inputGroupAddon class="bg-primary-200">
+                    <i class="pi pi-briefcase text-black-alpha-60"></i>
+                </p-inputGroupAddon>
+                <input pInputText id="name" formControlName="name" [maxLength]="50" class="w-full"/>                
+            </p-inputGroup>
+        </div>
+        <div class="field">
+            <label for="description" class="font-semibold w-6rem">Descripción:</label>
+            <p-inputGroup>
+                <p-inputGroupAddon class="bg-primary-200">
+                    <i class="pi pi-receipt text-black-alpha-60"></i>
+                </p-inputGroupAddon>
+                <input pInputText id="description" formControlName="description" [maxLength]="50" class="w-full"/>                
+            </p-inputGroup>
+        </div>
+    </form>
     <div class="flex justify-content-end gap-2">
-        <p-button label="Cancel" severity="secondary" (onClick)="visible = false" />
-        <p-button label="Save" (onClick)="visible = false" />
+        <button pButton pRipple type="button"  severity="info" pTooltip="Cancelar" (click)="isFormRoles = false" class="font-semibold">Cancelar</button>
+        <button pButton pRipple type="button"  severity="success" pTooltip="Guardar" (click)="save()"  class="font-semibold">Guardar</button>
     </div>
 </p-dialog>
+
+<p-dialog  header="Rol de usuario" [modal]="true" [(visible)]="isViewRoles" [resizable]="false" [style]="{ width: '30rem' }">
+    <div class="grid">
+
+        <div class="col-12">
+                <div class="flex">
+                    <label for="code" class="font-semibold w-11rem h-2rem">Código:</label>
+                    <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                        <span class="text-black-alpha-90">{{ selectedRoles[0]?.code }}</span>
+                    </div>
+                </div>
+        </div>
+
+        <div class="col-12">
+                <div class="flex">
+                    <label for="name" class="font-semibold w-11rem h-2rem">Nombre:</label>
+                    <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                        <span class="text-black-alpha-90">{{ selectedRoles[0]?.name }}</span>
+                    </div>
+                </div>
+        </div>
+
+        <div class="col-12">
+                <div class="flex">
+                    <label for="description" class="font-semibold w-11rem h-2rem">Descripción:</label>
+                    <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                        <span class="text-black-alpha-90">{{ selectedRoles[0]?.description }}</span>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div class="flex justify-content-end gap-2 mt-2">
+        <button pButton pRipple type="button"  severity="primary" pTooltip="Cerrar" (click)="isViewRoles = false" class="font-semibold">Cerrar</button>    </div>
+</p-dialog>
+
+<app-roles-menus #rolesMenusComponent></app-roles-menus>

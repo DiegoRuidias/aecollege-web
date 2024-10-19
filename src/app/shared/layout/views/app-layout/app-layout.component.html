@@ -11,3 +11,11 @@
     </div>
     <div class="layout-mask"></div>
 </div>
+<p-toast>
+    <ng-template let-message pTemplate="message">
+        <div class="p-toast-message-text">
+            <div class="p-toast-summary">{{message.summary}}</div>
+            <div class="p-toast-detail" innerHtml="{{message.detail}}"></div>
+        </div>
+    </ng-template>
+</p-toast>

@@ -6,7 +6,11 @@ import { filter } from 'rxjs/operators';
 import { LayoutService } from '../../../service/app.layout.service';
 import { MenuService } from '../../../service/app.menu.service';
 import { CommonModule } from '@angular/common';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth , matMonetizationOn,
+         matExitToApp, matLaptopChromebook
 
+       } from '@ng-icons/material-icons/baseline';
 
 @Component({
   selector: '[app-menuitem]',
@@ -16,6 +20,13 @@ import { CommonModule } from '@angular/common';
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
+    NgIconComponent
+  ],
+  providers: [
+    provideIcons({ 
+      matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth, matMonetizationOn,
+      matExitToApp, matLaptopChromebook
+     })
   ],
   animations: [
     trigger('children', [
