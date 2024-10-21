@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
 import { TreeTableModule } from 'primeng/treetable';
-import { TreeNode } from 'primeng/api';
-import { TableModule } from 'primeng/table';
+import { MessageService, TreeNode } from 'primeng/api';
+import { Table, TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
@@ -12,10 +12,11 @@ import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarM
 } from '@ng-icons/material-icons/baseline';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
-import { RolesPermissionsService } from '../../rolesPermissions/roles-permissions.service';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { PermissionsLabelPipe } from './pipes/permissions.label.pipe';
 
+import { v4 as uuidv4 } from 'uuid';
+import { RolesPermissionsService } from './services/roles-permissions.service';
 @Component({
   selector: 'app-roles-menus',
   standalone: true,
@@ -41,17 +42,23 @@ import { PermissionsLabelPipe } from './pipes/permissions.label.pipe';
   styleUrl: './roles-menus.component.scss'
 })
 export class RolesMenusComponent {
+  @ViewChild('tablePermissions') tablePermissions!: Table;
   rolesPermissions = inject(RolesPermissionsService)
+  toastService = inject(MessageService);
+
   cdr = inject(ChangeDetectorRef)
-  permissionsTable: any = [];
+  permissionsTable: any[] = [];
   menuTable: TreeNode[] = [];
   role: any = [];
   isActionView: boolean = false;
   selectedMenu: any = [];
 
+  isViewSave: boolean = false;
+
   reset(): void{
     this.menuTable = [];
     this.selectedMenu = null;
+    this.isViewSave = false;
     this.permissionsTable = [];
     this.cdr.detectChanges();
   }
@@ -67,10 +74,18 @@ export class RolesMenusComponent {
     this.rolesPermissions.findAll(this.selectedMenu?.key,this.role.id).subscribe(data=>{
       this.permissionsTable = data;
     })
-
   }
 
   save():void{
-
+    var request = this.tablePermissions?._value;     
+    request.forEach((item) => {
+      if (!item.id) {
+        item.id = uuidv4(); 
+      }
+    });
+    this.rolesPermissions.create(this.role.id,request).subscribe(data=>{
+      this.toastService.add({ severity: 'success', life: 5000, summary: 'Permisos Actualizados', detail: 'El Permiso se actualizo correctamente.' });
+      this.isViewSave = false;
+    })
   }
 }

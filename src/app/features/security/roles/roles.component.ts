@@ -161,8 +161,7 @@ initFormRoles(): void {
 
   updateIsActive(id: string , event: boolean): void{
     this.rolesService.updateIsActive(id,event).subscribe(data =>{
-      this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Editado', detail: 'El rol se editó correctamente.' });
-      this.isFormRoles = false; 
+      this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Editado', detail: 'El rol se editó correctamente.' }); 
     })
   }
 
