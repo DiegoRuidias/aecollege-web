@@ -24,7 +24,7 @@ export const errorResponseInterceptor: HttpInterceptorFn = (req, next) => {
             toastService.add({ severity: 'error', life: 10000, summary: 'Ha ocurrido el siguiente error', detail: e.error.messages[0].message });
           }
         } else {
-          toastService.add({ severity: 'error', life: 10000, summary: 'Ha ocurrido el siguiente error', detail: e.error.message });
+          toastService.add({ severity: 'error', life: 10000, summary: 'Ha ocurrido el siguiente error', detail: 'El Servidor no esta disponible en este momento, intentelo más tarde'});
         }
         
         /*switch (e.error.status) {

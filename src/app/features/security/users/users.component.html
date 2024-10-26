@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="flex align-items-center justify-content-between mb-3 ml-3">
+    <p-toolbar>
         <div>
             <button pButton pRipple label="Nuevo"  icon="pi pi-plus" class="text-white font-bold"></button>
         </div>
@@ -9,10 +9,10 @@
                 <input type="text" pInputText placeholder="Buscar Usuario" (input)="filterGlobal($event, 'contains')"/>
             </span>
         </div>
-    </div>
+    </p-toolbar>
     <p-table #tableUsers [value]="userList" [tableStyle]="{ 'min-width': '60rem' }" [scrollable]="true"  
             dataKey="id" class="p-datatable-sm" [(selection)]="selectedUser"  [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5, 10, 20]"
-            [globalFilterFields]="['name', 'username', 'phone', 'email']">> 
+            [globalFilterFields]="['name', 'username', 'phone', 'email']"> 
 
         <ng-template pTemplate="header">
             <tr>
@@ -23,7 +23,7 @@
                 <th id="col4" style="width: 8rem;">Celular</th>
                 <th id="col5" style="width: 20rem;">Email</th>
                 <th id="col6">Activo</th>
-                <th id="col7" style="width: 15rem;" pFrozenColumn alignFrozen="right">Opciones</th>
+                <th id="col7" style="width: 13rem;" pFrozenColumn alignFrozen="right">Opciones</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item let-index="rowIndex">

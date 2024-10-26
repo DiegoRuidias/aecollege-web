@@ -49,6 +49,30 @@ export const routes: Routes = [
         
     },
     {
+        path: 'config',
+        loadComponent: () => import('./shared/layout/views/app-layout/app-layout.component'),
+        children:[
+            {
+                path: 'periodos',
+                title: 'AEC - Periodos Escolares',
+                data: { breadcrumb: 'Periodos Escolares' },
+                loadComponent: () => import('./features/settings/periods/periods.component')
+            }, 
+            {
+                path: 'niveles-grados',
+                title: 'AEC - Niveles Grados Escolares',
+                data: { breadcrumb: 'Niveles Grados Escolares' },
+                loadComponent: () => import('./features/settings/levels-grades/levels-grades.component')
+            }, 
+            {
+                path: 'pagos',
+                title: 'AEC - Pagos',
+                data: { breadcrumb: 'Periodos Escolares' },
+                loadComponent: () => import('./features/settings/payments/payments.component')
+            }, 
+        ]
+    },
+    {
         path: '**',
         redirectTo: ''
     }

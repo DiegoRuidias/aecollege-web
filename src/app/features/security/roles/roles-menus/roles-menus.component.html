@@ -10,7 +10,7 @@
         <div class="col-5">
             <h5 class="mb-3">Menús</h5>
             <p-treeTable [value]="menuTable" [scrollable]="true" [tableStyle]="{'min-width':'10rem'}" [(selection)]="selectedMenu"
-            selectionMode="single" (onNodeSelect)="onSelectedMenu($event)" dataKey="id">
+            selectionMode="single" (onNodeSelect)="onSelectedMenu($event)" (onNodeUnselect)="onUnSelectedMenu()" dataKey="id">
                 <ng-template pTemplate="header">
                     <tr>
                         <th class="bg-blue-600 text-white" style="width: 10rem;" >Nombre</th>

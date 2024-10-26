@@ -13,6 +13,7 @@ import { LabelBlankUsersPipe } from './pipes/label-blank-users.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { UserRolesService } from './service/user-roles.service';
 import { v4 as uuidv4 } from 'uuid';
+import { ToolbarModule } from 'primeng/toolbar';
 
 @Component({
   selector: 'app-users',
@@ -27,7 +28,8 @@ import { v4 as uuidv4 } from 'uuid';
     InputSwitchModule,
     InputTextModule,
     LabelBlankUsersPipe,
-    DialogModule
+    DialogModule,
+    ToolbarModule
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'

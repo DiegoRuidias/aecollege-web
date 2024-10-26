@@ -8,7 +8,7 @@ import { MenuService } from '../../../service/app.menu.service';
 import { CommonModule } from '@angular/common';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth , matMonetizationOn,
-         matExitToApp, matLaptopChromebook
+         matExitToApp, matLaptopChromebook,matBarChart,matClass
 
        } from '@ng-icons/material-icons/baseline';
 
@@ -25,7 +25,7 @@ import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarM
   providers: [
     provideIcons({ 
       matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth, matMonetizationOn,
-      matExitToApp, matLaptopChromebook
+      matExitToApp, matLaptopChromebook,matBarChart,matClass
      })
   ],
   animations: [

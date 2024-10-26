@@ -14,6 +14,6 @@ export class PermissionsLabelPipe implements PipeTransform {
   };
 
   transform(value: string): string {
-    return this.convert[value] || value; // Devuelve el valor traducido o el original si no se encuentra
+    return this.convert[value] || value; 
   }
 }

@@ -8,6 +8,7 @@ import { RippleModule } from 'primeng/ripple';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 
 import { heroUserCircleSolid, heroMoonSolid, heroSunSolid} from '@ng-icons/heroicons/solid';
+import { AvatarModule } from 'primeng/avatar';
 @Component({
   selector: 'app-topbar',
   standalone: true,
@@ -16,7 +17,8 @@ import { heroUserCircleSolid, heroMoonSolid, heroSunSolid} from '@ng-icons/heroi
     RouterLink,
     ButtonModule,
     RippleModule,
-    NgIconComponent 
+    NgIconComponent,
+    AvatarModule
   ],
   providers: [
     provideIcons({ 

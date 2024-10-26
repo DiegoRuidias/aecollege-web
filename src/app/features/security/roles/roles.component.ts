@@ -10,8 +10,13 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MessagesModule } from 'primeng/messages';
+
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { matEdit }from '@ng-icons/material-icons/baseline'
+import { 
+  matVpnKey, matBadge, matDescription
+} from '@ng-icons/material-icons/baseline'
 
 import { v4 as uuidv4 } from 'uuid';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators,FormsModule } from '@angular/forms';
@@ -20,6 +25,7 @@ import { RolesService } from './service/roles.service';
 import { MessageService, TreeNode } from 'primeng/api';
 import { RolesMenusComponent } from './roles-menus/roles-menus.component';
 import { MenusService } from '../../system/menus/service/menus.service';
+import { ToolbarModule } from 'primeng/toolbar';
 @Component({
   selector: 'app-roles',
   standalone: true,
@@ -38,11 +44,14 @@ import { MenusService } from '../../system/menus/service/menus.service';
     InputSwitchModule,
     InputGroupAddonModule,
     InputGroupModule,
-    RolesMenusComponent
+    RolesMenusComponent,
+    ProgressSpinnerModule,
+    MessagesModule,
+    ToolbarModule
   ],
   providers: [
     provideIcons({
-      matEdit
+      matVpnKey, matBadge, matDescription
     })
   ],
   templateUrl: './roles.component.html',
@@ -56,12 +65,14 @@ export default class RolesComponent implements OnInit{
   @ViewChild('rolesMenusComponent') rolesMenusComponent!: RolesMenusComponent;
 
   selectedRoles: any[] = [];
+  rolesList: any[] = [];
+  menuData: TreeNode[] = [];
+
+  isViewRoles: boolean = false;
   isFormRoles: boolean = false;
   isEdit: boolean = false;
-  isViewRoles: boolean = false;
-  rolesList: any[] = [];
-
-  menuData: TreeNode[] = [];
+  isLoadingRoles: boolean = false;
+  isLoadingButton: boolean = false;
 
 public formRoles: FormGroup = this.formBuilder.group({
     id: [''],
@@ -72,22 +83,30 @@ public formRoles: FormGroup = this.formBuilder.group({
     sort: [0]
 });
 
-initFormRoles(): void {
-  this.formRoles.reset();
-  this.formRoles.controls['id'].setValue(uuidv4());
-  this.formRoles.controls['isActive'].setValue(true);
-  this.formRoles.controls['sort'].setValue(0);
-}
+  initFormRoles(): void {
+    this.formRoles.reset();
+    this.formRoles.controls['id'].setValue(uuidv4());
+    this.formRoles.controls['isActive'].setValue(true);
+    this.formRoles.controls['sort'].setValue(0);
+  }
+  
   ngOnInit(): void {
+    this.isLoadingRoles = true;
     this.menuService.findAll().subscribe(data => {
       this.menuData = data;
     })
     this.loadRolesList();
   }
 
-  loadRolesList(): void{
-    this.rolesService.findAll().subscribe(data=> {
-      this.rolesList = data;
+  loadRolesList(): void {
+    this.rolesService.findAll().subscribe({
+      next: (data) => {
+        this.rolesList = data;
+        this.isLoadingRoles = false;
+      },
+      error:(err) => {
+        this.isLoadingRoles = false;
+      }
     });
   }
 
@@ -99,6 +118,7 @@ initFormRoles(): void {
   }
   
   openView(event: MouseEvent, item: any): void {
+    this.isLoadingButton = false;
     event.stopPropagation();
     event.preventDefault();
     
@@ -113,6 +133,7 @@ initFormRoles(): void {
   }
 
   openEdit( event: MouseEvent, item: any ): void {
+    this.isLoadingButton = false;
     this.formRoles.reset();
     event.stopPropagation();
     event.preventDefault();
@@ -139,23 +160,37 @@ initFormRoles(): void {
   }
 
   create(): void {
-    this.rolesService.create(this.formRoles.value).subscribe(data => {
+    this.isLoadingButton = true;
+    this.rolesService.create(this.formRoles.value).subscribe({
+      next:(data) => {
         this.rolesList = [...this.rolesList, data];
         this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Creado', detail: 'El Rol se creó correctamente.' });
+        this.isLoadingButton = false;
         this.isFormRoles = false;
+      },
+      error:(err) => {
+        this.isLoadingButton = false;
+      },
     });
   }
   
 
   update(): void{
-    this.rolesService.update(this.formRoles.value).subscribe(data => {
+    this.isLoadingButton = true;
+    this.rolesService.update(this.formRoles.value).subscribe({
+      next:(data) => {
       this.rolesList.forEach((item, index) => {
         if (item.id === data.id) {
           this.rolesList[index] = data;
         }
       })
       this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Editado', detail: 'El rol se editó correctamente.' });
+      this.isLoadingButton = false;
       this.isFormRoles = false;
+      },
+      error:(err) => {
+        this.isLoadingButton = false;  
+      },
     });
   }
 

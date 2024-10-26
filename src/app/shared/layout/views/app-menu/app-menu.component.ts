@@ -62,13 +62,19 @@ export class AppMenuComponent implements OnInit{
             {
               label: 'Periodos Escolares',
               icon: 'matCalendarMonth',
-              routerLink: ['/config/period']
+              routerLink: ['/config/periodos']
             },
+            {
+              label: 'Niveles - Grados',
+              icon: 'matBarChart',
+              routerLink: ['/config/niveles-grados']
+            },  
             {
               label: 'Pagos',
               icon: 'matMonetizationOn',
-              routerLink: ['/config/pay']
-            },            
+              routerLink: ['/config/pagos']
+            },
+          
           
           ]
         },

@@ -8,7 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MenusService } from './service/menus.service';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth , matMonetizationOn,
-  matExitToApp, matLaptopChromebook, matLock, matSettingsApplications
+  matExitToApp, matLaptopChromebook, matLock, matSettingsApplications, matBarChart,matClass
   
 } from '@ng-icons/material-icons/baseline';
 @Component({
@@ -25,7 +25,7 @@ import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarM
   providers: [
     provideIcons({ 
       matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth, matMonetizationOn,
-      matExitToApp, matLaptopChromebook, matLock, matSettingsApplications
+      matExitToApp, matLaptopChromebook, matLock, matSettingsApplications,matBarChart,matClass
      })
     ],
   templateUrl: './menus.component.html',

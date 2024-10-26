@@ -1,0 +1,65 @@
+<div class="card">
+    <p-toolbar>
+        <div class="p-toolbar-group-start">
+            <button pButton pRipple label="Nuevo"  icon="pi pi-plus" class="text-white font-bold"></button>
+
+        </div>
+        <div class="p-toolbar-group-end">
+            <p-dropdown optionLabel="name" placeholder="::  Todos los Periodos ::" />
+            <p-button  icon="pi pi-search" class="ml-2 text-white font-bold"/>
+        </div>
+    </p-toolbar>
+    <p-table #tablePayments [value]="paymentList" [tableStyle]="{ 'min-width': '50rem' }" [scrollable]="true"  
+            dataKey="id" class="p-datatable-sm" [(selection)]="selectedPayment" [loading]="isLoadingPayments"
+            loadingIcon="null"> 
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th id="col1" style="width: 3.5rem" pFrozenColumn alignFrozen="left">
+                    <p-tableHeaderCheckbox /></th>
+                <th id="col2" style="width: 17rem;">Nombre</th>
+                <th id="col3" style="width: 9rem;"  class="text-center">Único Pago</th>
+                <th id="col4" style="width: 9rem;"  class="text-center">Día Pago</th>
+                <th id="col5" style="width: 12rem;" class="text-center">Mes Inicio</th>
+                <th id="col6" style="width: 12rem;" class="text-center">Mes Fin</th>
+                <th id="col7" style="width: 9rem;" pFrozenColumn alignFrozen="right">Opciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item let-index="rowIndex">
+            <tr [pSelectableRow]="item">
+                <td pFrozenColumn alignFrozen="left">
+                    <p-tableCheckbox [value]="item" />
+                </td>
+                <td>{{ item.name }}</td>
+                <td class="text-center"><p-checkbox [binary]="true" readonly="true" [ngModel]="item.isUnique" /></td>
+                <td class="text-center"><p-tag [value]="item.day" [style]="{'font-size': '1rem','background-color':'#F1F5F9','color':'#000000'}"/></td>
+                <td class="text-center"><p-tag severity="success" [value]="item.monthStart | month" [style]="{'font-size': '0.9rem'}"/></td>
+                <td class="text-center"><p-tag severity="danger" [value]="item.monthEnd | month" [style]="{'font-size': '0.9rem'}"/></td>
+                <td pFrozenColumn alignFrozen="right">
+                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="warning" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="danger" pTooltip="Eliminar" (click)="openEdit($event, item)" icon="pi pi-trash" class="mr-2 text-xs"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="7" class="w-full">
+                    <div class="text-red-500">
+                        ... No hay Pagos disponibles
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="loadingbody">
+            <tr>
+                <td colspan="5" class="w-full">
+                    <div class="flex flex-column justify-content-center align-items-center p-m-3 w-full">
+                        <p-progressSpinner styleClass="p-mb-2"/>
+                        <p class="p-text-secondary p-mt-2">Cargando datos, por favor espere...</p>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table> 
+</div>

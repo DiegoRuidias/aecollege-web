@@ -1,11 +1,12 @@
 <div class="card">
-    <div class="flex align-items-center justify-content-between mb-3 ml-3">
+    <p-toolbar>
         <div>
             <button pButton pRipple label="Nuevo" (click)="openNew()" icon="pi pi-plus" class="text-white font-bold"></button>
         </div>
-    </div>
+    </p-toolbar>
     <p-table [value]="rolesList" [tableStyle]="{ 'min-width': '60rem' }" [scrollable]="true"  
-            dataKey="id" class="p-datatable-sm" [(selection)]="selectedRoles" [reorderableColumns]="true"> 
+            dataKey="id" class="p-datatable-sm" [(selection)]="selectedRoles" [reorderableColumns]="true"
+            [loading]="isLoadingRoles" loadingIcon="null"> 
         <ng-template pTemplate="header">
             <tr>
                 <th style="width:3rem"></th>
@@ -38,22 +39,41 @@
                 </td>
             </tr>
         </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8" class="w-full">
+                    <div class="text-red-500">
+                        ... No hay roles disponibles
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="loadingbody">
+            <tr>
+                <td colspan="5" class="w-full">
+                    <div class="flex flex-column justify-content-center align-items-center p-m-3 w-full">
+                        <p-progressSpinner styleClass="p-mb-2"/>
+                        <p class="p-text-secondary p-mt-2">Cargando datos, por favor espere...</p>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
     </p-table>     
 </div>
 
 <p-dialog [modal]="true" [(visible)]="isFormRoles" [resizable]="false" [style]="{ width: '35rem' }">
     <ng-template pTemplate="header">
         <div class="flex flex-column">
-            <div class="p-dialog-title">{{isEdit ? 'Editar Roles de usuario ' : 'Crear roles de usuario'}}</div>
-            <div class="mt-2 text-blue-600">{{isEdit ? 'Rol de usuario de '  + selectedRoles[0]?.name : 'Ingrese los campos solicitados'}}</div>
+            <div class="p-dialog-title">{{isEdit ? 'Editar Roles de Usuario ' : 'Crear Roles de Usuario'}}</div>
+            <div class="mt-2 text-blue-600">{{isEdit ? 'Rol de Usuario de '  + selectedRoles[0]?.name : 'Ingrese los campos solicitados'}}</div>
         </div>
     </ng-template>
     <form [formGroup]="formRoles">
         <div class="field">
             <label for="code" class="font-semibold w-6rem">Código:</label>
             <p-inputGroup>
-                <p-inputGroupAddon class="bg-primary-200">
-                    <i class="pi pi-bookmark text-black-alpha-60"></i>
+                <p-inputGroupAddon>
+                    <ng-icon name="matVpnKey" class="text-color text-2xl"></ng-icon>
                 </p-inputGroupAddon>
                 <input pInputText id="code" formControlName="code" [maxLength]="10" class="w-full"/>
             </p-inputGroup>
@@ -61,8 +81,8 @@
         <div class="field">
             <label for="name" class="font-semibold w-6rem">Nombre:</label>
             <p-inputGroup>
-                <p-inputGroupAddon class="bg-primary-200">
-                    <i class="pi pi-briefcase text-black-alpha-60"></i>
+                <p-inputGroupAddon >
+                    <ng-icon name="matBadge" class="text-color text-2xl"></ng-icon>
                 </p-inputGroupAddon>
                 <input pInputText id="name" formControlName="name" [maxLength]="50" class="w-full"/>                
             </p-inputGroup>
@@ -70,8 +90,8 @@
         <div class="field">
             <label for="description" class="font-semibold w-6rem">Descripción:</label>
             <p-inputGroup>
-                <p-inputGroupAddon class="bg-primary-200">
-                    <i class="pi pi-receipt text-black-alpha-60"></i>
+                <p-inputGroupAddon >
+                    <ng-icon name="matDescription" class="text-color text-2xl"></ng-icon>
                 </p-inputGroupAddon>
                 <input pInputText id="description" formControlName="description" [maxLength]="50" class="w-full"/>                
             </p-inputGroup>
@@ -79,7 +99,7 @@
     </form>
     <div class="flex justify-content-end gap-2">
         <button pButton pRipple type="button"  severity="info" pTooltip="Cancelar" (click)="isFormRoles = false" class="font-semibold">Cancelar</button>
-        <button pButton pRipple type="button"  severity="success" pTooltip="Guardar" (click)="save()"  class="font-semibold">Guardar</button>
+        <button pButton pRipple type="button" [loading]="isLoadingButton" severity="success" pTooltip="Guardar" (click)="save()"  class="font-semibold">Guardar</button>
     </div>
 </p-dialog>
 

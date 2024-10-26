@@ -7,7 +7,7 @@ import { DialogModule } from 'primeng/dialog';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth , matMonetizationOn,
-  matExitToApp, matLaptopChromebook, matLock, matSettingsApplications
+  matExitToApp, matLaptopChromebook, matLock, matSettingsApplications, matBarChart,matClass
   
 } from '@ng-icons/material-icons/baseline';
 import { ButtonModule } from 'primeng/button';
@@ -35,7 +35,7 @@ import { RolesPermissionsService } from './services/roles-permissions.service';
   providers: [
     provideIcons({ 
       matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth, matMonetizationOn,
-      matExitToApp, matLaptopChromebook, matLock, matSettingsApplications
+      matExitToApp, matLaptopChromebook, matLock, matSettingsApplications, matBarChart,matClass
      })
   ],
   templateUrl: './roles-menus.component.html',
@@ -55,7 +55,7 @@ export class RolesMenusComponent {
 
   isViewSave: boolean = false;
 
-  reset(): void{
+  reset(): void {
     this.menuTable = [];
     this.selectedMenu = null;
     this.isViewSave = false;
@@ -70,13 +70,19 @@ export class RolesMenusComponent {
     this.menuTable = JSON.parse(JSON.stringify(menuData));
   }
 
-  onSelectedMenu(event:any){
+  onSelectedMenu(event: any): void {
+    this.isViewSave = false;
     this.rolesPermissions.findAll(this.selectedMenu?.key,this.role.id).subscribe(data=>{
       this.permissionsTable = data;
     })
   }
 
-  save():void{
+  onUnSelectedMenu(): void {
+    this.isViewSave = false;
+    this.permissionsTable = [];
+  }
+
+  save(): void {
     var request = this.tablePermissions?._value;     
     request.forEach((item) => {
       if (!item.id) {
