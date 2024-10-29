@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { TreeTableModule } from 'primeng/treetable';
 import { MessageService, TreeNode } from 'primeng/api';
 import { Table, TableModule } from 'primeng/table';
@@ -46,7 +46,6 @@ export class RolesMenusComponent {
   rolesPermissions = inject(RolesPermissionsService)
   toastService = inject(MessageService);
 
-  cdr = inject(ChangeDetectorRef)
   permissionsTable: any[] = [];
   menuTable: TreeNode[] = [];
   role: any = [];
@@ -60,7 +59,6 @@ export class RolesMenusComponent {
     this.selectedMenu = null;
     this.isViewSave = false;
     this.permissionsTable = [];
-    this.cdr.detectChanges();
   }
 
   openMenusComponents(role: any, menuData: TreeNode[]): void {

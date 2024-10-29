@@ -21,6 +21,7 @@ import {
 import { GradeService } from './service/grade.service';
 import { Levels } from './model/levels.model';
 import { Grade } from './model/grade.model';
+import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities';
 
 @Component({
   selector: 'app-levels-grades',
@@ -115,6 +116,10 @@ export default class LevelsGradesComponent implements OnInit {
   }
 
   save(): void {
+    if (!this.formLevels.valid) {
+      markAllAsTouched(this.formLevels)
+      return;
+    }
     this.isLoadingButton = true;
     if (this.isEdit) {
       this.update();
@@ -188,8 +193,15 @@ export default class LevelsGradesComponent implements OnInit {
     this.isEdit = true;
     this.isFormGrade = true;
   }
+
   saveGrade(): void {
+    if (!this.formGrade.valid) {
+      markAllAsTouched(this.formGrade)
+      return;
+    }
+
     this.isLoadingButton = true;
+
     if (this.isEdit) {
       this.updateGrade();
     } else {
@@ -249,6 +261,17 @@ export default class LevelsGradesComponent implements OnInit {
         this.isLoadingButton = false;
       },
     });
+  }
+
+  hasError(field: string, error: string): boolean | undefined {
+    const control = this.formLevels.get(field);
+    return control?.hasError(error) && (control.dirty || control.touched);
+  }
+
+  
+  hasErrorGrade(field: string, error: string): boolean | undefined {
+    const control = this.formGrade.get(field);
+    return control?.hasError(error) && (control.dirty || control.touched);
   }
 
   @HostListener('document:keydown.enter', ['$event'])

@@ -126,10 +126,14 @@
             <label for="name" class="font-semibold">Nombre del nivel</label>
             <p-inputGroup>
                 <p-inputGroupAddon>
-                    <ng-icon name="matBarChart" class="text-color text-2xl"></ng-icon>
+                    <ng-icon name="matBarChart" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <input pInputText id="name" formControlName="name" [maxLength]="50" class="w-full"/>                
+                <input pInputText id="name" formControlName="name" [maxLength]="50" class="w-full"
+                [ngClass]="{'ng-invalid ng-dirty': hasError('name', 'required')}"/>                
             </p-inputGroup>
+            @if (hasError('name', 'required')) {
+                <div class="p-error ml-6">Por favor ingrese el nombre del nivel</div>
+            }  
         </div>
     </form>
     <div class="flex justify-content-end gap-2">
@@ -151,10 +155,14 @@
             <label for="name" class="font-semibold">Nombre del grado</label>
             <p-inputGroup>
                 <p-inputGroupAddon>
-                    <ng-icon name="matLayers" class="text-color text-2xl"></ng-icon>
+                    <ng-icon name="matLayers" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <input pInputText id="name" formControlName="name" [maxLength]="50" class="w-full"/>                
+                <input pInputText id="name" formControlName="name" [maxLength]="50" class="w-full"
+                [ngClass]="{'ng-invalid ng-dirty': hasError('name', 'required')}"/>                
             </p-inputGroup>
+            @if (hasError('name', 'required')) {
+                <div class="p-error ml-6">Por favor ingrese el nombre del grado.</div>
+            }
         </div>
     </form>
     <div class="flex justify-content-end gap-2">

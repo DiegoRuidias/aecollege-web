@@ -70,6 +70,7 @@ export default class UsersComponent implements OnInit{
       this.isRolesView = true;
     })
   }
+  
   filterGlobal(event: Event, matchMode: string) {
     const inputElement = event.target as HTMLInputElement;
     this.tableUsers.filterGlobal(inputElement.value, matchMode);

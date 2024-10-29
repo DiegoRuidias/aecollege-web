@@ -5,8 +5,8 @@
 
         </div>
         <div class="p-toolbar-group-end">
-            <p-dropdown optionLabel="name" placeholder="::  Todos los Periodos ::" />
-            <p-button  icon="pi pi-search" class="ml-2 text-white font-bold"/>
+            <p-button  icon="pi pi-search" rounded="true" [style]="{'color': 'white'}" class="mr-2 font-bold"/>
+            <p-dropdown optionLabel="name" placeholder=" ::  Todos los Periodos :: " />
         </div>
     </p-toolbar>
     <p-table #tablePayments [value]="paymentList" [tableStyle]="{ 'min-width': '50rem' }" [scrollable]="true"  

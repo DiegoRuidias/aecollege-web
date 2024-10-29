@@ -26,6 +26,7 @@ import { MessageService, TreeNode } from 'primeng/api';
 import { RolesMenusComponent } from './roles-menus/roles-menus.component';
 import { MenusService } from '../../system/menus/service/menus.service';
 import { ToolbarModule } from 'primeng/toolbar';
+import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities';
 @Component({
   selector: 'app-roles',
   standalone: true,
@@ -62,7 +63,6 @@ export default class RolesComponent implements OnInit{
   rolesService = inject(RolesService);
   menuService = inject(MenusService);
   toastService = inject(MessageService);
-  @ViewChild('rolesMenusComponent') rolesMenusComponent!: RolesMenusComponent;
 
   selectedRoles: any[] = [];
   rolesList: any[] = [];
@@ -110,11 +110,10 @@ public formRoles: FormGroup = this.formBuilder.group({
     });
   }
 
-  openAccess(event:any, item: any){
+  openAccess(event: any, item: any){
     event.stopPropagation();
     event.preventDefault();
-    this.selectedRoles = [item]
-    this.rolesMenusComponent.openMenusComponents(item,this.menuData);
+    this.selectedRoles = [item];
   }
   
   openView(event: MouseEvent, item: any): void {
@@ -153,6 +152,10 @@ public formRoles: FormGroup = this.formBuilder.group({
   }
 
   save(): void {
+    if (!this.formRoles.valid) {
+      markAllAsTouched(this.formRoles)
+      return;
+    }
     if (this.isEdit)
         this.update();
     else
@@ -183,7 +186,7 @@ public formRoles: FormGroup = this.formBuilder.group({
         if (item.id === data.id) {
           this.rolesList[index] = data;
         }
-      })
+      });
       this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Editado', detail: 'El rol se editó correctamente.' });
       this.isLoadingButton = false;
       this.isFormRoles = false;
@@ -200,5 +203,9 @@ public formRoles: FormGroup = this.formBuilder.group({
     })
   }
 
+  hasError(field: string, error: string): boolean | undefined {
+    const control = this.formRoles.get(field);
+    return control?.hasError(error) && (control.dirty || control.touched);
+  }
 
 }
