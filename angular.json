@@ -31,11 +31,10 @@
                 "input": "public"
               },
               {
-                "glob": "_redirects",
+                "glob": ".htaccess",
                 "input": "src",
                 "output": "."
-              },
-              "src/_redirects"
+              }
             ],
             "styles": [
               "src/styles.scss"
