@@ -4,7 +4,7 @@ import path from 'path';
 const app = express();
 
 // Cambia 'nombre-de-tu-proyecto' por el nombre exacto de tu proyecto en la carpeta dist
-app.use(express.static(path.join(__dirname, 'dist/aecollege-web/browser')));
+app.use(express.static(path.join(__dirname, 'dist/aecollege-web')));
 
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist/aecollege-web/browser/index.html'));
