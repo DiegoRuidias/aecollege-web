@@ -82,7 +82,7 @@ export class RolesMenusComponent {
   }
 
   save(): void {
-    this.isLoadingButton = false;
+    this.isLoadingButton = true;
     var request = this.tablePermissions?._value;     
     request.forEach((item) => {
       if (!item.id) {
