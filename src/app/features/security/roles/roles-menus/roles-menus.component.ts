@@ -53,6 +53,7 @@ export class RolesMenusComponent {
   selectedMenu: any = [];
 
   isViewSave: boolean = false;
+  isLoadingButton: boolean = false;
 
   reset(): void {
     this.menuTable = [];
@@ -81,15 +82,22 @@ export class RolesMenusComponent {
   }
 
   save(): void {
+    this.isLoadingButton = false;
     var request = this.tablePermissions?._value;     
     request.forEach((item) => {
       if (!item.id) {
         item.id = uuidv4(); 
       }
     });
-    this.rolesPermissions.create(this.role.id,request).subscribe(data=>{
-      this.toastService.add({ severity: 'success', life: 5000, summary: 'Permisos Actualizados', detail: 'El Permiso se actualizo correctamente.' });
-      this.isViewSave = false;
+    this.rolesPermissions.create(this.role.id,request).subscribe({
+      next:(data) => {
+        this.toastService.add({ severity: 'success', life: 5000, summary: 'Permisos Actualizados', detail: 'El Permiso se actualizo correctamente.' });
+        this.isViewSave = false;
+        this.isLoadingButton = false; 
+      },
+      error:(err) => {
+         this.isLoadingButton = false; 
+      },
     })
   }
 }

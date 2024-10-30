@@ -47,6 +47,7 @@ export default class UsersComponent implements OnInit{
   rolesTable: any[] = [];
   isViewSave: boolean = false;
   isRolesView: boolean = false;
+  isLoadingButton: boolean = false; 
 
   ngOnInit(): void {
       this.isViewSave = false;
@@ -77,15 +78,22 @@ export default class UsersComponent implements OnInit{
   }
 
   saveRoles(): void {
+    this.isLoadingButton = true; 
     var request = this.tableRoles?._value;     
     request.forEach((item) => {
       if (!item.id) {
         item.id = uuidv4(); 
       }
     });
-    this.userRolesService.create(this.selectedUser[0].id,this.tableRoles._value).subscribe(data =>{
-      this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Editado', detail: 'El rol se editó correctamente.' });
-      this.isViewSave = false;
+    this.userRolesService.create(this.selectedUser[0].id,this.tableRoles._value).subscribe({
+      next:(data) => {
+        this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Editado', detail: 'El rol se editó correctamente.' });
+        this.isViewSave = false;
+        this.isLoadingButton = false; 
+      },
+      error:(err) => {
+        this.isLoadingButton = false; 
+      },
     })
   }
 }

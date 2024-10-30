@@ -51,7 +51,7 @@
 
             <div style="max-width: 20rem;">
                 <div class="flex justify-content-end mt-5 w-20" >
-                    <button pButton pRipple label="Guardar" class="text-white" style="width: 90px;" [disabled]="!isViewSave" (click)="save()"></button>
+                    <button pButton pRipple label="Guardar" class="text-white" style="width: 90px;" [disabled]="!isViewSave" [loading]="isLoadingButton" (click)="save()"></button>
                 </div> 
             </div>
 
