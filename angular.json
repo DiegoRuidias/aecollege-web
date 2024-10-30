@@ -34,7 +34,13 @@
                 "glob": ".htaccess",
                 "input": "src",
                 "output": "."
-              }
+              },
+              {
+                "glob": "web.config",
+                "input": "src",
+                "output": "."
+              },
+              "src/web.config"
             ],
             "styles": [
               "src/styles.scss"
