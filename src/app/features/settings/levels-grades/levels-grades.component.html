@@ -158,9 +158,9 @@
                     <ng-icon name="matLayers" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
                 <input pInputText id="name" formControlName="name" [maxLength]="50" class="w-full"
-                [ngClass]="{'ng-invalid ng-dirty': hasError('name', 'required')}"/>                
+                [ngClass]="{'ng-invalid ng-dirty': hasErrorGrade('name', 'required')}"/>                
             </p-inputGroup>
-            @if (hasError('name', 'required')) {
+            @if (hasErrorGrade('name', 'required')) {
                 <div class="p-error ml-6">Por favor ingrese el nombre del grado.</div>
             }
         </div>
