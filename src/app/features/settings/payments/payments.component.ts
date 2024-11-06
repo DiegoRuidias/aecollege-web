@@ -39,6 +39,9 @@ export default class PaymentsComponent {
   toastService = inject(MessageService);
   paymentsService = inject(PaymentsService);
   paymentList: any[] = [];
+  meses: any[] = [
+    {id: 1 , month: "enero"},{id: 2 , month: "febrero"},{id: 2 , month: "febrero"},{id: 2 , month: "febrero"},{id: 2 , month: "febrero"}
+  ]
   selectedPayment: any;
 
   isLoadingPayments: boolean = false;
