@@ -1,6 +1,6 @@
 <div class="card">
     <p-treeTable [value]="menuData" [scrollable]="true" [tableStyle]="{'min-width':'50rem'}"
-    selectionMode="single">
+    selectionMode="single" [loading]="isLoadingMenu" loadingIcon="null">
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 20rem;" >Nombre del Menú</th>
@@ -25,6 +25,16 @@
                 <td style="width: 8rem;"> 
                     <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Editar" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
                     <button pButton pRipple type="button" [rounded]="true"  severity="warning" pTooltip="Editar" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="4" class="w-full">
+                    <div class="flex flex-column justify-content-center align-items-center p-m-3 w-full">
+                        <p-progressSpinner styleClass="p-mb-2"/>
+                        <p class="p-text-secondary p-mt-2">Cargando datos, por favor espere...</p>
+                    </div>
                 </td>
             </tr>
         </ng-template>

@@ -8,18 +8,25 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { UsersService } from './service/users.service';
 import { MessageService } from 'primeng/api';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LabelBlankUsersPipe } from './pipes/label-blank-users.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { UserRolesService } from './service/user-roles.service';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { v4 as uuidv4 } from 'uuid';
 import { ToolbarModule } from 'primeng/toolbar';
-
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { 
+  matVpnKey, matBadge, matDescription
+} from '@ng-icons/material-icons/baseline'
 @Component({
   selector: 'app-users',
   standalone: true,
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     TableModule,
     CheckboxModule,
     ButtonModule,
@@ -27,9 +34,18 @@ import { ToolbarModule } from 'primeng/toolbar';
     FormsModule,
     InputSwitchModule,
     InputTextModule,
+    InputGroupAddonModule,
+    InputGroupModule,
     LabelBlankUsersPipe,
     DialogModule,
-    ToolbarModule
+    ToolbarModule,
+    ProgressSpinnerModule,
+    NgIconComponent
+  ],
+  providers: [
+    provideIcons({
+      matVpnKey, matBadge, matDescription
+    })
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
@@ -37,7 +53,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 export default class UsersComponent implements OnInit{
   @ViewChild('tableUsers') tableUsers!: Table;
   @ViewChild('tableRoles') tableRoles!: Table;
-
+  private readonly formBuilder = inject(FormBuilder);
   usersService = inject(UsersService);
   userRolesService = inject(UserRolesService)
   toastService = inject(MessageService);
@@ -47,21 +63,44 @@ export default class UsersComponent implements OnInit{
   rolesTable: any[] = [];
   isViewSave: boolean = false;
   isRolesView: boolean = false;
+  isLoadingUser: boolean = false;
   isLoadingButton: boolean = false; 
+  isFormUser: boolean = false;
+  isEdit: boolean = false;
+
+  public formUser: FormGroup = this.formBuilder.group({
+    id: [''],
+    isActive: [true],
+    code: ['', Validators.required],
+    name: ['', Validators.required],
+    description: [''],
+    sort: [0]
+  });
 
   ngOnInit(): void {
-      this.isViewSave = false;
-      this.usersService.findAll().subscribe(data =>{
+    this.isViewSave = false;
+    this.isLoadingUser = true;
+    this.usersService.findAll().subscribe({
+      next: (data) => {
         this.userList = data;
-      })
+        this.isLoadingUser = false;
+      },
+      error: (data) => {
+        this.isLoadingUser = false;
+      }
+    });
       
   }
 
-  openEdit(event:MouseEvent, item:any):void{
+  openEdit(event:MouseEvent, item:any): void {
     console.log(this.tableUsers._value);
   }
 
-  openRoles(event:any , item: any){
+  save(): void {
+
+  }
+
+  openRoles(event: any , item: any) {
     this.isViewSave = false;
     event.stopPropagation();
     event.preventDefault();
@@ -69,7 +108,7 @@ export default class UsersComponent implements OnInit{
     this.userRolesService.findAll(item.id).subscribe(data => {
       this.rolesTable = data;
       this.isRolesView = true;
-    })
+    });
   }
   
   filterGlobal(event: Event, matchMode: string) {
@@ -85,6 +124,7 @@ export default class UsersComponent implements OnInit{
         item.id = uuidv4(); 
       }
     });
+
     this.userRolesService.create(this.selectedUser[0].id,this.tableRoles._value).subscribe({
       next:(data) => {
         this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Editado', detail: 'El rol se editó correctamente.' });
@@ -94,6 +134,11 @@ export default class UsersComponent implements OnInit{
       error:(err) => {
         this.isLoadingButton = false; 
       },
-    })
+    });
+  }
+
+  hasError(field: string, error: string): boolean | undefined {
+    const control = this.formUser.get(field);
+    return control?.hasError(error) && (control.dirty || control.touched);
   }
 }

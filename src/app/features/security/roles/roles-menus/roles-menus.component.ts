@@ -4,6 +4,7 @@ import { TreeTableModule } from 'primeng/treetable';
 import { MessageService, TreeNode } from 'primeng/api';
 import { Table, TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth , matMonetizationOn,
@@ -30,7 +31,8 @@ import { RolesPermissionsService } from './services/roles-permissions.service';
     ButtonModule,
     RippleModule,
     InputSwitchModule,
-    PermissionsLabelPipe
+    PermissionsLabelPipe,
+    ProgressSpinnerModule
   ],
   providers: [
     provideIcons({ 
@@ -54,6 +56,7 @@ export class RolesMenusComponent {
 
   isViewSave: boolean = false;
   isLoadingButton: boolean = false;
+  isLoadingPermissions: boolean = false;
 
   reset(): void {
     this.menuTable = [];
@@ -71,8 +74,15 @@ export class RolesMenusComponent {
 
   onSelectedMenu(event: any): void {
     this.isViewSave = false;
-    this.rolesPermissions.findAll(this.selectedMenu?.key,this.role.id).subscribe(data=>{
-      this.permissionsTable = data;
+    this.isLoadingPermissions = true;
+    this.rolesPermissions.findAll(this.selectedMenu?.key,this.role.id).subscribe({
+      next: (data) => {
+        this.permissionsTable = data;
+        this.isLoadingPermissions = false;
+      },
+      error:(err) => {
+        this.isLoadingPermissions = false;
+      },
     })
   }
 

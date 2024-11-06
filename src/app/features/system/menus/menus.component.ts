@@ -4,6 +4,7 @@ import { TreeNode } from 'primeng/api';
 import { TreeTableModule } from 'primeng/treetable';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenusService } from './service/menus.service';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
@@ -20,7 +21,8 @@ import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarM
     ButtonModule,
     RippleModule,
     InputTextModule,
-    NgIconComponent 
+    NgIconComponent,
+    ProgressSpinnerModule
   ],
   providers: [
     provideIcons({ 
@@ -36,14 +38,23 @@ export default class MenusComponent implements OnInit{
 
   menuTable: any;
   menuData: TreeNode[] = []
+
+  isLoadingMenu: boolean = false;
   
   ngOnInit(): void {
-  this.menuService.findAll().subscribe(data => {
-    this.menuData = data
-  })
+    this.isLoadingMenu = true;
+    this.menuService.findAll().subscribe({
+      next: (data) => {
+        this.isLoadingMenu = false;
+        this.menuData = data
+      },
+      error: (err) => {
+        this.isLoadingMenu = false;
+      },
+    })
   }
   
-  openEdit(event:MouseEvent, item:any):void{
+  openEdit(event:MouseEvent, item:any): void{
 
   }
 }

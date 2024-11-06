@@ -95,6 +95,13 @@
         display: none;
     }
 }
+
+
+@media (max-width: 520px) {
+    .layout-topbar .layout-topbar-logo img{
+        display: none;
+    }
+}
 @media (max-width: 991px) {
     .layout-topbar {
         justify-content: space-between;

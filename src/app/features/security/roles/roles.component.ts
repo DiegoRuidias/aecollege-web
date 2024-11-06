@@ -15,7 +15,8 @@ import { MessagesModule } from 'primeng/messages';
 
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { 
-  matVpnKey, matBadge, matDescription
+  matVpnKey, matBadge, matDescription,
+  matSchool
 } from '@ng-icons/material-icons/baseline'
 
 import { v4 as uuidv4 } from 'uuid';
@@ -52,7 +53,7 @@ import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities'
   ],
   providers: [
     provideIcons({
-      matVpnKey, matBadge, matDescription
+      matVpnKey, matBadge, matDescription,matSchool
     })
   ],
   templateUrl: './roles.component.html',

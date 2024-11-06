@@ -29,12 +29,31 @@
                         </td>
                     </tr>
                 </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="3" class="w-full">
+                            <div class="text-red-500">
+                                ... Menu no tiene permisos disponibles
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="2" class="w-full">
+                            <div class="flex flex-column justify-content-center align-items-center p-m-3 w-full">
+                                <p-progressSpinner styleClass="p-mb-2"/>
+                                <p class="p-text-secondary p-mt-2">Cargando datos, por favor espere...</p>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
             </p-treeTable>
         </div>
         <div class="col-5">
             <h5 class="mb-3">Permisos</h5>
             <p-table #tablePermissions [value]="permissionsTable" styleClass="p-datatable-gridlines"  [tableStyle]="{ 'max-width': '20rem' }" 
-            dataKey="permissionId">
+            dataKey="permissionId" [loading]="isLoadingPermissions" loadingIcon="null">
                 <ng-template pTemplate="header">
                     <tr>
                         <th class="bg-blue-600 text-center text-white" style="width: 8rem">Permiso</th>
@@ -47,16 +66,33 @@
                         <td class="text-center"><p-inputSwitch [(ngModel)]="row.isActive" (ngModelChange)="isViewSave=true"/></td>
                     </tr>
                 </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="3" class="w-full">
+                            <div class="text-red-500">
+                                ... Menu no tiene permisos disponibles
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="2" class="w-full">
+                            <div class="flex flex-column justify-content-center align-items-center p-m-3 w-full">
+                                <p-progressSpinner styleClass="p-mb-2"/>
+                                <p class="p-text-secondary p-mt-2">Cargando datos, por favor espere...</p>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
             </p-table>
-
             <div style="max-width: 20rem;">
                 <div class="flex justify-content-end mt-5 w-20" >
                     <button pButton pRipple label="Guardar" class="text-white" style="width: 90px;" [disabled]="!isViewSave" [loading]="isLoadingButton" (click)="save()"></button>
                 </div> 
             </div>
-
         </div>
- 
+
     </div>
   
 </ng-template>
