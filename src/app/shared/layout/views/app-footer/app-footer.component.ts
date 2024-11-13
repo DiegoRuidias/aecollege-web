@@ -13,5 +13,6 @@ import { CommonModule } from '@angular/common';
 })
 export class AppFooterComponent {
  layoutService = Inject(LayoutService);
+ currentYear: number = new Date().getFullYear();
  
 }

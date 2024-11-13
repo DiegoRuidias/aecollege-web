@@ -476,7 +476,7 @@
   .p-datepicker {
     padding: 0.5rem;
     background: #ffffff;
-    color: #000000;
+    color: #495057;
     border: 1px solid #ced4da;
     border-radius: 3px;
   }
@@ -490,7 +490,7 @@
   }
   .p-datepicker .p-datepicker-header {
     padding: 0.5rem;
-    color: #000000;
+    color: #495057;
     background: #ffffff;
     font-weight: 600;
     margin: 0;
@@ -510,7 +510,7 @@
   }
   .p-datepicker .p-datepicker-header .p-datepicker-prev:enabled:hover,
 .p-datepicker .p-datepicker-header .p-datepicker-next:enabled:hover {
-    color: #000000;
+    color: #495057;
     border-color: transparent;
     background: #e9ecef;
   }
@@ -525,7 +525,7 @@
   }
   .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year,
 .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
-    color: #000000;
+    color: #495057;
     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
     font-weight: 600;
     padding: 0.5rem;
@@ -552,14 +552,14 @@
     padding: 0.5rem;
   }
   .p-datepicker table td > span {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
     border-radius: 50%;
     transition: box-shadow 0.2s;
     border: 1px solid transparent;
   }
   .p-datepicker table td > span.p-highlight {
-    color: #000000;
+    color: #495057;
     background: #E8F5E9;
   }
   .p-datepicker table td > span:focus {
@@ -569,11 +569,11 @@
   }
   .p-datepicker table td.p-datepicker-today > span {
     background: #ced4da;
-    color: #000000;
+    color: #495057;
     border-color: transparent;
   }
   .p-datepicker table td.p-datepicker-today > span.p-highlight {
-    color: #000000;
+    color: #495057;
     background: #E8F5E9;
   }
   .p-datepicker .p-datepicker-buttonbar {
@@ -597,7 +597,7 @@
     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
   }
   .p-datepicker .p-timepicker button:enabled:hover {
-    color: #000000;
+    color: #495057;
     border-color: transparent;
     background: #e9ecef;
   }
@@ -627,7 +627,7 @@
     border-radius: 3px;
   }
   .p-datepicker .p-monthpicker .p-monthpicker-month.p-highlight {
-    color: #000000;
+    color: #495057;
     background: #E8F5E9;
   }
   .p-datepicker .p-yearpicker {
@@ -639,7 +639,7 @@
     border-radius: 3px;
   }
   .p-datepicker .p-yearpicker .p-yearpicker-year.p-highlight {
-    color: #000000;
+    color: #495057;
     background: #E8F5E9;
   }
   .p-datepicker.p-datepicker-multiple-month .p-datepicker-group {
@@ -729,17 +729,26 @@
   .p-cascadeselect .p-cascadeselect-trigger {
     background: transparent;
     color: #6c757d;
-    width: 2rem;
+    width: 2.357rem;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
   }
   .p-cascadeselect.p-invalid.p-component {
     border-color: #f44336;
   }
+  .p-cascadeselect.p-variant-filled {
+    background-color: #f8f9fa;
+  }
+  .p-cascadeselect.p-variant-filled:enabled:hover {
+    background-color: #f8f9fa;
+  }
+  .p-cascadeselect.p-variant-filled:enabled:focus {
+    background-color: #ffffff;
+  }
 
   .p-cascadeselect-panel {
     background: #ffffff;
-    color: #000000;
+    color: #495057;
     border: 0 none;
     border-radius: 3px;
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
@@ -750,24 +759,27 @@
   .p-cascadeselect-panel .p-cascadeselect-items .p-cascadeselect-item {
     margin: 0;
     border: 0 none;
-    color: #000000;
+    color: #495057;
     background: transparent;
     transition: box-shadow 0.2s;
     border-radius: 0;
   }
+  .p-cascadeselect-panel .p-cascadeselect-items .p-cascadeselect-item:first-child {
+    margin-top: 0;
+  }
   .p-cascadeselect-panel .p-cascadeselect-items .p-cascadeselect-item.p-highlight {
-    color: #000000;
+    color: #495057;
     background: #E8F5E9;
   }
   .p-cascadeselect-panel .p-cascadeselect-items .p-cascadeselect-item.p-highlight.p-focus {
     background: rgba(76, 175, 80, 0.24);
   }
   .p-cascadeselect-panel .p-cascadeselect-items .p-cascadeselect-item:not(.p-highlight):not(.p-disabled).p-focus {
-    color: #000000;
+    color: #495057;
     background: #dee2e6;
   }
   .p-cascadeselect-panel .p-cascadeselect-items .p-cascadeselect-item:not(.p-highlight):not(.p-disabled):hover {
-    color: #000000;
+    color: #495057;
     background: #e9ecef;
   }
   .p-cascadeselect-panel .p-cascadeselect-items .p-cascadeselect-item .p-cascadeselect-item-content {
@@ -778,10 +790,10 @@
   }
 
   .p-input-filled .p-cascadeselect {
-    background: #F8F8F8;
+    background: #f8f9fa;
   }
   .p-input-filled .p-cascadeselect:not(.p-disabled):hover {
-    background-color: #F8F8F8;
+    background-color: #f8f9fa;
   }
   .p-input-filled .p-cascadeselect:not(.p-disabled).p-focus {
     background-color: #ffffff;
@@ -807,7 +819,6 @@
   .p-overlay-modal .p-cascadeselect-item-active > .p-cascadeselect-item-content .p-cascadeselect-group-icon {
     transform: rotate(90deg);
   }
-
   .p-checkbox {
     width: 20px;
     height: 20px;
@@ -974,8 +985,8 @@
     box-shadow: none;
   }
   .p-dropdown .p-dropdown-trigger {
-    background: transparent;
-    color: #6c757d;
+    background: #4CAF50;
+    color: #ffffff;
     width: 2rem;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
@@ -4340,7 +4351,7 @@
     border-width: 0 0 2px 0;
     border-color: transparent transparent #dee2e6 transparent;
     background: #ffffff;
-    color: #6c757d;
+    color: #000000 !important;
     padding: 1rem;
     font-weight: 600;
     border-top-right-radius: 3px;

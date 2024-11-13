@@ -7,11 +7,8 @@ import { LayoutService } from '../../../service/app.layout.service';
 import { MenuService } from '../../../service/app.menu.service';
 import { CommonModule } from '@angular/common';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth , matMonetizationOn,
-         matExitToApp, matLaptopChromebook,matBarChart,matClass,matSchool, matAssignmentReturned,
-         matBookmarkAdd,matAssignmentInd,matPayments,matLibraryBooks,matPerson,
-         matPayment,
-         matAssessment
+import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth , matMonetizationOn, matExitToApp, matLaptopChromebook,matBarChart,
+         matClass,matSchool,matBookmarkAdd,matAssignmentInd,matPayments,matLibraryBooks,matPerson,matPayment,matAssessment,matDescription, matFolder,matSettings,matSettingsApplications
        } from '@ng-icons/material-icons/baseline';
 
 @Component({
@@ -19,7 +16,6 @@ import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarM
   standalone: true,
   imports: [
     CommonModule,
-    RouterOutlet,
     RouterLink,
     RouterLinkActive,
     NgIconComponent
@@ -28,7 +24,7 @@ import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarM
     provideIcons({ 
       matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth, matMonetizationOn,
       matExitToApp, matLaptopChromebook,matBarChart,matClass,matSchool,matAssignmentInd,matBookmarkAdd,
-      matPayments, matLibraryBooks,matPerson,matPayment,matAssessment
+      matPayments, matLibraryBooks,matPerson,matPayment,matAssessment,matDescription,matFolder,matSettings,matSettingsApplications
      })
   ],
   animations: [

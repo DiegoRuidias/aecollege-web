@@ -9,7 +9,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MenusService } from './service/menus.service';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth , matMonetizationOn,
-  matExitToApp, matLaptopChromebook, matLock, matSettingsApplications, matBarChart,matClass
+  matExitToApp, matLaptopChromebook, matLock, matSettingsApplications, matBarChart,matClass,
+  matFolder
   
 } from '@ng-icons/material-icons/baseline';
 @Component({
@@ -22,12 +23,12 @@ import { matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarM
     RippleModule,
     InputTextModule,
     NgIconComponent,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
   ],
   providers: [
     provideIcons({ 
       matDashboard, matHome, matList, matSecurity, matPeopleAlt, matCalendarMonth, matMonetizationOn,
-      matExitToApp, matLaptopChromebook, matLock, matSettingsApplications,matBarChart,matClass
+      matExitToApp, matLaptopChromebook, matLock, matSettingsApplications,matBarChart,matClass, matFolder
      })
     ],
   templateUrl: './menus.component.html',

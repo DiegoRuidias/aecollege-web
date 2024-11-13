@@ -25,6 +25,12 @@ export const routes: Routes = [
                 title: 'Menús',
                 data: { breadcrumb: 'Dashboard' },
                 loadComponent: () => import('./features/system/menus/menus.component')
+            },
+            {
+                path: 'matricular',
+                title: 'AEC - Matricular Alumnos',
+                data: { breadcrumb: 'Dashboard' },
+                loadComponent: () => import('./features/system/alumnos/alumnos.component')
             }
         ],
         
@@ -53,10 +59,22 @@ export const routes: Routes = [
         loadComponent: () => import('./shared/layout/views/app-layout/app-layout.component'),
         children:[
             {
+                path: 'tiposDocumentos',
+                title: 'AEC - Tipos de Documentos',
+                data: { breadcrumb: 'Tipos de Documentos' },
+                loadComponent: () => import('./features/settings/type-document/type-document.component')
+            },
+            {
                 path: 'periodos',
                 title: 'AEC - Periodos Escolares',
                 data: { breadcrumb: 'Periodos Escolares' },
                 loadComponent: () => import('./features/settings/periods/periods.component')
+            },
+            {
+                path: 'documentos',
+                title: 'AEC - Documentación',
+                data: { breadcrumb: 'Documentación' },
+                loadComponent: () => import('./features/settings/documents/documents.component')
             }, 
             {
                 path: 'niveles-grados',
@@ -69,6 +87,12 @@ export const routes: Routes = [
                 title: 'AEC - Pagos',
                 data: { breadcrumb: 'Periodos Escolares' },
                 loadComponent: () => import('./features/settings/payments/payments.component')
+            }, 
+            {
+                path: 'predeterminados',
+                title: 'AEC - Ajustes de Sistema',
+                data: { breadcrumb: 'Ajustes de sistema' },
+                loadComponent: () => import('./features/settings/settings/settings.component')
             }, 
         ]
     },

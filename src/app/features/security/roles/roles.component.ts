@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { TableModule } from 'primeng/table';
+import { Table, TableCheckbox, TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
@@ -28,6 +28,10 @@ import { RolesMenusComponent } from './roles-menus/roles-menus.component';
 import { MenusService } from '../../system/menus/service/menus.service';
 import { ToolbarModule } from 'primeng/toolbar';
 import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { DropdownModule } from 'primeng/dropdown';
+import { forkJoin } from 'rxjs';
+import { typePerson } from './model/roles.model';
 @Component({
   selector: 'app-roles',
   standalone: true,
@@ -46,10 +50,12 @@ import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities'
     InputSwitchModule,
     InputGroupAddonModule,
     InputGroupModule,
+    InputTextareaModule,
     RolesMenusComponent,
     ProgressSpinnerModule,
     MessagesModule,
-    ToolbarModule
+    ToolbarModule,
+    DropdownModule
   ],
   providers: [
     provideIcons({
@@ -68,6 +74,7 @@ export default class RolesComponent implements OnInit{
   selectedRoles: any[] = [];
   rolesList: any[] = [];
   menuData: TreeNode[] = [];
+  typePersonList = typePerson;
 
   isViewRoles: boolean = false;
   isFormRoles: boolean = false;
@@ -80,6 +87,7 @@ public formRoles: FormGroup = this.formBuilder.group({
     isActive: [true],
     code: ['', Validators.required],
     name: ['', Validators.required],
+    typePerson: [undefined, Validators.required],
     description: [''],
     sort: [0]
 });
@@ -93,22 +101,23 @@ public formRoles: FormGroup = this.formBuilder.group({
   
   ngOnInit(): void {
     this.isLoadingRoles = true;
-    this.menuService.findAll().subscribe(data => {
-      this.menuData = data;
-    })
-    this.loadRolesList();
+    this.load();
   }
 
-  loadRolesList(): void {
-    this.rolesService.findAll().subscribe({
-      next: (data) => {
-        this.rolesList = data;
+  load(): void {
+    const requestMenu = this.menuService.findAll();
+    const requestRoles = this.rolesService.findAll();
+    
+    forkJoin([requestRoles,requestMenu]).subscribe({
+      next: ([rol,menu]) => {
+        this.menuData = menu;
+        this.rolesList = rol;
         this.isLoadingRoles = false;
       },
       error:(err) => {
         this.isLoadingRoles = false;
       }
-    });
+    })
   }
 
   openAccess(event: any, item: any){

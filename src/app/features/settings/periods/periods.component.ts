@@ -13,6 +13,7 @@ import { TagModule } from 'primeng/tag';
 import { PeriodoTagPipe } from './pipes/periodo.tag.pipe';
 import { TagSevetityPipe } from './pipes/tag.sevetity.pipe';
 import { ToolbarModule } from 'primeng/toolbar';
+import { Period } from './model/periods.model';
 @Component({
   selector: 'app-periods',
   standalone: true,
@@ -36,7 +37,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 export default class PeriodsComponent implements OnInit {
   toastService = inject(MessageService);
   periodsService = inject(PeriodsService);
-  periodList: any[] = [];
+  periodList: Period[] = [];
   selectedPeriod: any;
 
   isLoadingPeriods: boolean = false;

@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card p-2 md:p-4">
     <p-toolbar>
         <div class="p-toolbar-group-start">
             <button pButton pRipple label="Nuevo"  icon="pi pi-plus" class="text-white font-bold"></button>
@@ -18,8 +18,9 @@
                 <th id="col1" style="width: 3.5rem" pFrozenColumn alignFrozen="left">
                     <p-tableHeaderCheckbox /></th>
                 <th id="col2" style="width: 17rem;">Nombre</th>
-                <th id="col3" style="width: 9rem;"  class="text-center">Único Pago</th>
-                <th id="col4" style="width: 9rem;"  class="text-center">Día Pago</th>
+                <th id="col2" style="width: 9rem;">Monto</th>
+                <th id="col3" style="width: 7rem;" class="text-center">Único Pago</th>
+                <th id="col4" style="width: 7rem;" class="text-center">Día Pago</th>
                 <th id="col5" style="width: 12rem;" class="text-center">Mes Inicio</th>
                 <th id="col6" style="width: 12rem;" class="text-center">Mes Fin</th>
                 <th id="col7" style="width: 9rem;" pFrozenColumn alignFrozen="right">Opciones</th>
@@ -31,6 +32,7 @@
                     <p-tableCheckbox [value]="item" />
                 </td>
                 <td>{{ item.name }}</td>
+                <td>{{ item.amount }}</td>
                 <td class="text-center"><p-checkbox [binary]="true" readonly="true" [ngModel]="item.isUnique" /></td>
                 <td class="text-center"><p-tag [value]="item.day" [style]="{'font-size': '1rem','background-color':'#F1F5F9','color':'#000000'}"/></td>
                 <td class="text-center"><p-tag severity="success" [value]="item.monthStart | month" [style]="{'font-size': '0.9rem'}"/></td>
