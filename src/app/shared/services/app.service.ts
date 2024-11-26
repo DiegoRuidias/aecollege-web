@@ -8,7 +8,7 @@ export class AppService {
 
   protected readonly http = inject(HttpClient)
 
-  protected readonly baseUrl: string = "http://localhost:8080/api"
+  protected readonly baseUrl: string = "https://aecollege-rest.onrender.com/api"
 
   constructor() { }
   
