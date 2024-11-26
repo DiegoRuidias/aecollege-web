@@ -1,30 +1,30 @@
-@if(isLoading){
-    <app-loading-page></app-loading-page>
+@if (isLoading){
+    @if (isError){
+        <app-error-page ></app-error-page>
+    }@else {
+        <app-loading-page></app-loading-page>
+    }
 } @else {
     <div class="card p-0 sm:p-3">
             <p-toolbar>
                 <h4 class="mt-3 text-primary">Matricular Estudiante</h4>
                 <div class="flex gap-2">
                     <p-button 
-                        (onClick)="activeIndex = 0" 
                         rounded="true" 
                         styleClass="w-2rem h-2rem p-0" 
                         [outlined]="activeIndex !== 0" 
                         label="1" />
                     <p-button 
-                        (onClick)="activeIndex = 1" 
                         rounded="true" 
                         styleClass="w-2rem h-2rem p-0" 
                         [outlined]="activeIndex !== 1" 
                         label="2" />
                     <p-button 
-                        (onClick)="activeIndex = 2" 
                         rounded="true"
                         styleClass="w-2rem h-2rem p-0" 
                         [outlined]="activeIndex !== 2" 
                         label="3" />
                     <p-button 
-                        (onClick)="activeIndex = 3" 
                         rounded="true"
                         styleClass="w-2rem h-2rem p-0" 
                         [outlined]="activeIndex !== 3" 
@@ -48,16 +48,16 @@
                             <div class="field col-12 md:col-6 py-0">
                                 <label for="matriculeId" class="font-semibold mr-2">Periodo Escolar <span class="text-red-500">*</span></label>
                                 <p-dropdown inputId="periodId" formControlName="periodId" optionLabel="name" optionValue="id" [options]="periodsList"
-                                class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('periodId', 'required')}" placeholder=":: Seleccione Periodo Escolar ::" appendTo="body"/>
-                                @if (hasErrorStudent('periodId', 'required')) {
+                                class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorAcademic('periodId', 'required')}" placeholder=":: Seleccione Periodo Escolar ::" appendTo="body"/>
+                                @if (hasErrorAcademic('periodId', 'required')) {
                                     <div class="p-error">Por favor seleccione tipo de documento.</div>
                                 }  
                             </div>
                             <div class="field col-12 md:col-6 py-0">
-                                <label for="matriculeId" class="font-semibold mr-2">Tipo de Matrícula <span class="text-red-500">*</span></label>
-                                <p-dropdown inputId="matriculeId" formControlName="matriculeId" optionLabel="name" optionValue="id" [options]="matriculeList"
-                                class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('matriculeId', 'required')}" placeholder=":: Seleccione Tipo de Matricula ::" appendTo="body"/>
-                                @if (hasErrorStudent('matriculeId', 'required')) {
+                                <label for="type" class="font-semibold mr-2">Tipo de Matrícula <span class="text-red-500">*</span></label>
+                                <p-dropdown inputId="type" formControlName="type" optionLabel="name" optionValue="id" [options]="matriculeList"
+                                class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorAcademic('type', 'required')}" placeholder=":: Seleccione Tipo de Matricula ::" appendTo="body"/>
+                                @if (hasErrorAcademic('type', 'required')) {
                                     <div class="p-error">Por favor seleccione tipo de documento.</div>
                                 }  
                             </div>
@@ -77,13 +77,41 @@
                                     <div class="p-error">Por favor seleccione grado a cursar.</div>
                                 }  
                             </div>
+                            <div class=" field col-12 mb-1">
+                                <h6 class="text-primary">Asginar Pagos</h6>
+                                <div class="text-blue-600">Seleccione el tipo de pago, solo se facturará la matricula</div>
+                            </div>
+                            <div class="field col-12 md:col-6 py-0">
+                                <label for="matriculeId" class="font-semibold mr-2">Matricula Asignada <span class="text-red-500">*</span></label>
+                                <p-dropdown inputId="matriculeId" formControlName="matriculeId" optionLabel="name" optionValue="id" [options]="matriculePayList"
+                                class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorAcademic('matriculeId', 'required')}" placeholder=":: Seleccione Matrícula ::" appendTo="body">
+                                <ng-template let-opcion pTemplate="item">
+                                    <span>{{ opcion.name }} - S/. {{ opcion.amount }}</span>
+                                  </ng-template>
+                                </p-dropdown>
+                                @if (hasErrorAcademic('matriculeId', 'required')) {
+                                    <div class="p-error">Por favor seleccione tipo de documento.</div>
+                                }  
+                            </div>
+                            <div class="field col-12 md:col-6 py-0">
+                                <label for="pensionId" class="font-semibold mr-2">Pensión Asignada <span class="text-red-500">*</span></label>
+                                <p-dropdown inputId="pensionId" formControlName="pensionId" optionLabel="name" [options]="pensionPayList" optionValue="id"
+                                class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorAcademic('pensionId', 'required')}" placeholder=":: Seleccione Pensión ::" appendTo="body">
+                                  <ng-template let-opcion pTemplate="item">
+                                    <span>{{ opcion.name }} - S/. {{ opcion.amount }}</span>
+                                  </ng-template>
+                                </p-dropdown>
+                                @if (hasErrorAcademic('pensionId', 'required')) {
+                                    <div class="p-error">Por favor seleccione la pensión a asignar.</div>
+                                }  
+                            </div>
                         </form>
                         <div class="flex justify-content-end gap-2 mt-4">
-                            <button pButton pRipple type="button" [loading]="isLoadingButton" severity="info" pTooltip="Siguiente" (click)="save()"  class="font-semibold">Siguiente</button>
+                            <button pButton pRipple type="button" [loading]="isLoadingButton" severity="info" pTooltip="Siguiente" (click)="hasFormValid()"  class="font-semibold">Siguiente</button>
                         </div>  
                 </div>
             </p-tabPanel>
-            <p-tabPanel>
+            <p-tabPanel [disabled]="activeIndex<1">
                 <ng-template pTemplate="header">
                     <div class="flex align-items-center gap-2">
                         <ng-icon name="matBadge"></ng-icon>
@@ -98,7 +126,7 @@
                     <form [formGroup]="formStudent" class="p-fluid p-formgrid grid mt-2">
                         <div class="field col-12 md:col-6 md:mr-8 py-0">
                             <label for="documentType" class="font-semibold mr-2">Tipo de documento <span class="text-red-500">*</span></label>
-                            <p-dropdown inputId="documentType" formControlName="documentType" optionLabel="name" optionValue="id" [options]="typeDocumentList"
+                            <p-dropdown (onChange)="changeDocumentType($event)" inputId="documentType" formControlName="documentType" optionLabel="name" [options]="typeDocumentList"
                             class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('documentType', 'required')}" placeholder=":: Seleccione Documento ::" appendTo="body"/>
                             @if (hasErrorStudent('documentType', 'required')) {
                                 <div class="p-error">Por favor seleccione tipo de documento.</div>
@@ -110,16 +138,22 @@
                                 <p-inputGroupAddon>
                                     <ng-icon name="matCreditCard" class="text-color text-lg"></ng-icon>
                                 </p-inputGroupAddon>
-                                <input pInputText id="documentNumber" formControlName="documentNumber" [maxLength]="5" class="w-full" 
-                                [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('documentNumber', 'required')}"/>
+                                <input pInputText (change)="changeDocumentNumber($event)" (input)="onChangeDocumentNumber($event)" id="documentNumber" formControlName="documentNumber" [maxLength]="typeDocumentLength" class="w-full" 
+                                [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('documentNumber', 'required') || hasErrorStudent('documentNumber', 'invalidFormat') || hasErrorStudent('documentNumber', 'invalidLength')}"/>
                             </p-inputGroup>
                             @if (hasErrorStudent('documentNumber', 'required')) {
                                 <div class="p-error ml-5">Por favor ingrese número de documento.</div>
+                            }
+                            @if (hasErrorStudent('documentNumber', 'invalidLength')) {
+                                <div class="p-error mb-1 ml-5">Por favor ingrese {{typeDocumentLength}} dígitos.</div>
+                              }
+                            @if (hasErrorStudent('documentNumber', 'invalidFormat')) {
+                                <div class="p-error mb-1 ml-5">Por favor ingrese solo números.</div>
                             }  
                         </div>
                         <div class="field col-12 md:col-6 py-0">
                             <label for="dateOfBirth " class="font-semibold mr-2 w-full">Fecha nacimiento <span class="text-red-500">*</span></label>
-                            <p-calendar inputId="dateOfBirth" showIcon="true" inputStyleClass="w-full" formControlName="dateOfBirth" optionLabel="label" optionValue="value" 
+                            <p-calendar inputId="dateOfBirth" showIcon="true" [readonlyInput]="isStudentReadonly" inputStyleClass="w-full" formControlName="dateOfBirth"
                             class="w-full" [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('dateOfBirth', 'required')}" placeholder="dd/mm/yyyy" appendTo="body"/>
                             @if (hasErrorStudent('dateOfBirth', 'required')) {
                                 <div class="p-error">Por favor ingrese fecha de nacimiento.</div>
@@ -131,7 +165,7 @@
                                 <p-inputGroupAddon>
                                     <ng-icon name="matArticle" class="text-color text-lg"></ng-icon>
                                 </p-inputGroupAddon>
-                                <input pInputText id="firstName" formControlName="firstName" [maxLength]="5" class="w-full" 
+                                <input pInputText id="firstName" appUppercase [readOnly]="isStudentReadonly" formControlName="firstName" [maxLength]="100" class="w-full" 
                                 [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('firstName', 'required')}"/>
                             </p-inputGroup>
                             @if (hasErrorStudent('firstName', 'required')) {
@@ -144,7 +178,7 @@
                                 <p-inputGroupAddon>
                                     <ng-icon name="matArticle" class="text-color text-lg"></ng-icon>
                                 </p-inputGroupAddon>
-                                <input pInputText id="middleName" formControlName="middleName" [maxLength]="5" class="w-full"/>
+                                <input pInputText appUppercase id="middleName" [readOnly]="isStudentReadonly" formControlName="middleName" [maxLength]="100" class="w-full"/>
                             </p-inputGroup>
                         </div>                                
             
@@ -154,7 +188,7 @@
                                 <p-inputGroupAddon>
                                     <ng-icon name="matArticle" class="text-color text-lg"></ng-icon>
                                 </p-inputGroupAddon>
-                                <input pInputText id="paternalSurname" formControlName="paternalSurname" [maxLength]="50" class="w-full"
+                                <input pInputText appUppercase id="paternalSurname" [readOnly]="isStudentReadonly" formControlName="paternalSurname" [maxLength]="100" class="w-full"
                                 [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('paternalSurname', 'required')}"/>              
                             </p-inputGroup>
                             @if (hasErrorStudent('paternalSurname', 'required')) {
@@ -168,7 +202,7 @@
                                 <p-inputGroupAddon>
                                     <ng-icon name="matArticle" class="text-color text-lg"></ng-icon>
                                 </p-inputGroupAddon>
-                                <input pInputText id="maternalSurname" formControlName="maternalSurname" [maxLength]="50" class="w-full"
+                                <input pInputText appUppercase id="maternalSurname" [readOnly]="isStudentReadonly" formControlName="maternalSurname" [maxLength]="100" class="w-full"
                                 [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('maternalSurname', 'required')}"/>              
                             </p-inputGroup>
                             @if (hasErrorStudent('maternalSurname', 'required')) {
@@ -176,22 +210,30 @@
                             }  
                         </div>
                         <div class="field col-12 md:col-6 py-0">
-                            <label for="email" class="font-semibold">Teléfono celular </label>
+                            <label for="phone" class="font-semibold">Teléfono celular </label>
                             <p-inputGroup>
                                 <p-inputGroupAddon >
                                     <ng-icon name="matPhoneAndroid" class="text-color text-lg"></ng-icon>
                                 </p-inputGroupAddon>
-                                <input pInputText id="email" formControlName="email" [maxLength]="50" class="w-full"/>              
+                                <input pInputText id="phone" [readOnly]="isStudentReadonly" (input)="onChangePhone($event)" formControlName="phone" [maxLength]="9" class="w-full"
+                                [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('phone', 'invalidFormat')}"/>              
                             </p-inputGroup>
+                            @if ( hasErrorStudent('phone', 'invalidFormat')) {
+                                <div class="p-error mb-1 ml-5">Formato incorrecto de Teléfono.</div>
+                              }
                         </div>
                         <div class="field col-12 md:col-6 py-0">
-                            <label for="phone" class="font-semibold">Email:</label>
+                            <label for="email" class="font-semibold">Email:</label>
                             <p-inputGroup>
                                 <p-inputGroupAddon >
                                     <ng-icon name="matEmail" class="text-color text-lg"></ng-icon>
                                 </p-inputGroupAddon>
-                                <input pInputText id="phone" formControlName="phone" [maxLength]="50" class="w-full"/>              
+                                <input pInputText id="email" [readOnly]="isStudentReadonly" formControlName="email" [maxLength]="255" class="w-full"
+                                [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('email', 'invalidFormat')}"/>              
                             </p-inputGroup>
+                            @if (hasErrorStudent('email', 'invalidFormat')) {
+                                <div class="p-error mb-1 ml-5">Formato de correo invalido.</div>
+                              }
                         </div>
                         <div class="field col-12 py-0">
                             <label for="address" class="font-semibold">Direccion <span class="text-red-500">*</span></label>
@@ -199,17 +241,17 @@
                                 <p-inputGroupAddon >
                                     <ng-icon name="matAddLocationAlt" class="text-color text-xl"></ng-icon>
                                 </p-inputGroupAddon>
-                                <textarea pInputTextarea id="address" formControlName="address" rows="5" [maxLength]="100" class="w-full"></textarea>                
+                                <textarea pInputTextarea id="address" [readOnly]="isStudentReadonly" formControlName="address" rows="5" [maxLength]="100" class="w-full"></textarea>                
                             </p-inputGroup>
                         </div>
                     </form>
                     <div class="flex justify-content-end gap-2">
-                        <button pButton pRipple type="button"  severity="danger" pTooltip="Cancelar" (click)="isViewParents = false" class="font-semibold">Atrás</button>
-                        <button pButton pRipple type="button" [loading]="isLoadingButton" severity="info" pTooltip="Siguiente" (click)="save()"  class="font-semibold">Siguiente</button>
+                        <button pButton pRipple type="button"  severity="danger" pTooltip="Cancelar" (click)="activeIndex = 0" class="font-semibold">Atrás</button>
+                        <button pButton pRipple type="button" [loading]="isLoadingButton" severity="info" pTooltip="Siguiente" (click)="hasFormValid()"  class="font-semibold">Siguiente</button>
                     </div>  
                 </div>
             </p-tabPanel>
-            <p-tabPanel>
+            <p-tabPanel [disabled]="activeIndex<2">
                 <ng-template pTemplate="header">
                     <div class="flex align-items-center gap-2">
                         <ng-icon name="matPersonAddAlt1"></ng-icon>
@@ -224,9 +266,9 @@
                             <h6 class="text-primary">Lista de Apoderados Registrados</h6>
                             <div class="text-blue-600 mb-3">Complete correctamente los siguientes campos <span class="text-red-500">(* obligatorio)</span></div>
                         </div>
-                        <button pButton pRipple label="Nuevo" icon="pi pi-plus" (click)="openNewParents()" class="text-white font-bold"></button>
+                        <button pButton pRipple label="Nuevo" icon="pi pi-plus" (click)="openNewParents()" [disabled]="isParentExist" class="text-white font-bold"></button>
                     </div>
-                    <p-table [value]="parents" [tableStyle]="{ 'min-width': '60rem' }">
+                    <p-table [value]="parents" [tableStyle]="{ 'min-width': '60rem' }" dataKey="documentNumber" [(selection)]="selectedParents">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th id="col1" style="width: 3.5rem" pFrozenColumn alignFrozen="left">
@@ -248,59 +290,30 @@
                                 <td>{{ item.relation }}</td>
                                 <td class="text-center"><p-checkbox [binary]="true" [(ngModel)]="item.isPrincipal" inputId="binary" /></td>
                                 <td pFrozenColumn alignFrozen="right">
-                                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Ver" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
-                                    <button pButton pRipple type="button" [rounded]="true" (click)="openEditParents($event,item)"  severity="warning" pTooltip="Editar" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
-                                    <button pButton pRipple type="button" [rounded]="true"  severity="danger" pTooltip="Eliminar" icon="pi pi-trash" class="mr-2 text-xs"></button>
+                                    @if (!isParentExist) {
+                                    <button pButton pRipple type="button" [rounded]="true" (click)="openEditParents(item)"  severity="warning" pTooltip="Editar" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
+                                    <button pButton pRipple type="button" [rounded]="true"  severity="danger" (click)="deleteParents(item)" pTooltip="Eliminar" icon="pi pi-trash" class="mr-2 text-xs"></button>
+                                    }
                                 </td>
                             </tr>
                         </ng-template>
                     </p-table>
                     <div class="flex justify-content-end gap-2 mt-4">
-                        <button pButton pRipple type="button"  severity="danger" pTooltip="Cancelar" (click)="isViewParents = false" class="font-semibold">Atrás</button>
-                        <button pButton pRipple type="button" [loading]="isLoadingButton" severity="info" pTooltip="Siguiente" (click)="save()"  class="font-semibold">Siguiente</button>
+                        <button pButton pRipple type="button"  severity="danger" pTooltip="Cancelar" (click)="activeIndex = 1" class="font-semibold">Atrás</button>
+                        <button pButton pRipple type="button" [loading]="isLoadingButton" severity="info" pTooltip="Siguiente" (click)="hasFormValid()"  class="font-semibold">Siguiente</button>
                     </div>  
                 </div>
             </p-tabPanel>
-            <p-tabPanel>
+            <p-tabPanel [disabled]="activeIndex<3">
                     <ng-template pTemplate="header">
                         <div class="flex align-items-center gap-2">
                             <ng-icon name="matNewspaper"></ng-icon>
                             <span class="font-bold white-space-nowrap m-0">
-                                Pagos y Documentos
+                                Documentación
                             </span>
                         </div>
                     </ng-template>
                 <div class="card">
-                    <form [formGroup]="formAcademic" class="field col-12 py-0 grid px-0 p-fluid mb-2">
-                        <div class=" field col-12 mb-1">
-                            <h6 class="text-primary">Asginar Pagos</h6>
-                            <div class="text-blue-600 mb-3">Seleccione el tipo de pago, solo se facturará la matricula</div>
-                        </div>
-                        <div class="field col-12 md:col-6 py-0">
-                            <label for="matriculeId" class="font-semibold mr-2">Matricula Asignada <span class="text-red-500">*</span></label>
-                            <p-dropdown inputId="matriculeId" formControlName="matriculeId" optionLabel="name" optionValue="id" [options]="matriculePayList"
-                            class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('matriculeId', 'required')}" placeholder=":: Seleccione Documento ::" appendTo="body">
-                            <ng-template let-opcion pTemplate="item">
-                                <span>{{ opcion.name }} - S/. {{ opcion.amount }}</span>
-                              </ng-template>
-                            </p-dropdown>
-                            @if (hasErrorStudent('matriculeId', 'required')) {
-                                <div class="p-error">Por favor seleccione tipo de documento.</div>
-                            }  
-                        </div>
-                        <div class="field col-12 md:col-6 py-0">
-                            <label for="pensionId" class="font-semibold mr-2">Pensión Asignada <span class="text-red-500">*</span></label>
-                            <p-dropdown inputId="pensionId" formControlName="pensionId" optionLabel="name" optionValue="id" [options]="pensionPayList"
-                            class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('pensionId', 'required')}" placeholder=":: Seleccione Documento ::" appendTo="body">
-                              <ng-template let-opcion pTemplate="item">
-                                <span>{{ opcion.name }} - S/. {{ opcion.amount }}</span>
-                              </ng-template>
-                            </p-dropdown>
-                            @if (hasErrorStudent('pensionId', 'required')) {
-                                <div class="p-error">Por favor seleccione la pensión a asignar.</div>
-                            }  
-                        </div>
-                    </form>
                     <div class="field col-12 py-0 grid mt-3 px-0">
                         <div class="col-12">
                             <h6 class="text-primary">Documentos Entregados</h6>
@@ -308,13 +321,13 @@
                         </div>
                         @for (document of documents; track $index) {
                             <div class="col-6 md:col-4 mt-3">
-                                <p-checkbox class="mr-1" [binary]="true" inputId="binary" [(ngModel)]="document.state"/>
+                                <p-checkbox class="mr-1" [binary]="true" inputId="binary" [(ngModel)]="document.isActive"/>
                                 {{document.name}}
                             </div>
                         }
                     </div>
                     <div class="flex justify-content-end gap-2">
-                        <button pButton pRipple type="button"  severity="danger" pTooltip="Cancelar" (click)="isViewParents = false" class="font-semibold">Atrás</button>
+                        <button pButton pRipple type="button"  severity="danger" pTooltip="Cancelar" (click)="activeIndex = 2" class="font-semibold">Atrás</button>
                         <button pButton pRipple type="button" [loading]="isLoadingButton" severity="success" pTooltip="Guardar" (click)="save()"  class="font-semibold">Guardar</button>
                     </div>            
                 </div>
@@ -333,7 +346,7 @@
     <form [formGroup]="formParent" class="p-fluid p-formgrid grid mt-2">
         <div class="field col-12 md:col-6 py-0">
             <label for="documentType" class="font-semibold mr-2">Tipo de documento <span class="text-red-500">*</span></label>
-            <p-dropdown inputId="documentType" formControlName="documentType" optionLabel="name" optionValue="id" [options]="typeDocumentList"
+            <p-dropdown inputId="documentType" (onChange)="changeDocumentTypeParent($event)"  formControlName="documentType" optionLabel="name" [options]="typeDocumentList"
             class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorParent('documentType', 'required')}" placeholder=":: Seleccione Documento ::" appendTo="body"/>
             @if (hasErrorParent('documentType', 'required')) {
                 <div class="p-error">Por favor seleccione tipo de documento.</div>
@@ -345,12 +358,18 @@
                 <p-inputGroupAddon>
                     <ng-icon name="matCreditCard" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <input pInputText id="documentNumber" formControlName="documentNumber" [maxLength]="5" class="w-full" 
-                [ngClass]="{'ng-invalid ng-dirty': hasErrorParent('documentNumber', 'required')}"/>
+                <input pInputText id="documentNumber" (change)="changeDocumentNumberParent($event)" formControlName="documentNumber" [maxlength]="typeDocumentLengthParent" class="w-full" 
+                (input)="onChangeDocumentNumberParent($event)" [ngClass]="{'ng-invalid ng-dirty': hasErrorParent('documentNumber', 'required') && hasErrorParent('documentNumber', 'invalidFormat') && hasErrorParent('documentNumber', 'invalidLength')}"/>
             </p-inputGroup>
             @if (hasErrorParent('documentNumber', 'required')) {
                 <div class="p-error ml-5">Por favor ingrese número de documento.</div>
-            }  
+            }
+            @if (hasErrorParent('documentNumber', 'invalidLength')) {
+                <div class="p-error mb-1 ml-5">Por favor ingrese {{typeDocumentLength}} dígitos.</div>
+              }
+            @if (hasErrorParent('documentNumber', 'invalidFormat')) {
+                <div class="p-error mb-1 ml-5">Por favor ingrese solo números.</div>
+            } 
         </div>
         <div class="field col-12 md:col-6 py-0">
             <label for="relation" class="font-semibold mr-2">Parentezco <span class="text-red-500">*</span></label>
@@ -362,7 +381,7 @@
         </div>
         <div class="field col-12 md:col-6 py-0">
             <label for="dateOfBirth " class="font-semibold mr-2 w-full">Fecha nacimiento <span class="text-red-500">*</span></label>
-            <p-calendar inputId="dateOfBirth" showIcon="true" inputStyleClass="w-full" formControlName="dateOfBirth" optionLabel="label" optionValue="value" 
+            <p-calendar inputId="dateOfBirth" showIcon="true" [readonlyInput]="isParentReadonly" inputStyleClass="w-full" formControlName="dateOfBirth" optionLabel="label" optionValue="value" 
             class="w-full" [ngClass]="{'ng-invalid ng-dirty': hasErrorParent('dateOfBirth', 'required')}" placeholder="dd/mm/yyyy" appendTo="body"/>
             @if (hasErrorParent('dateOfBirth', 'required')) {
                 <div class="p-error">Por favor ingrese fecha de nacimiento.</div>
@@ -374,7 +393,7 @@
                 <p-inputGroupAddon>
                     <ng-icon name="matArticle" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <input pInputText id="firstName" formControlName="firstName" [maxLength]="5" class="w-full" 
+                <input pInputText appUppercase id="firstName" [readOnly]="isParentReadonly" formControlName="firstName" [maxLength]="100" class="w-full" 
                 [ngClass]="{'ng-invalid ng-dirty': hasErrorParent('firstName', 'required')}"/>
             </p-inputGroup>
             @if (hasErrorParent('firstName', 'required')) {
@@ -387,7 +406,7 @@
                 <p-inputGroupAddon>
                     <ng-icon name="matArticle" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <input pInputText id="middleName" formControlName="middleName" [maxLength]="5" class="w-full"/>
+                <input pInputText appUppercase id="middleName" [readOnly]="isParentReadonly" formControlName="middleName" [maxLength]="100" class="w-full"/>
             </p-inputGroup>
         </div>                                
 
@@ -397,7 +416,7 @@
                 <p-inputGroupAddon>
                     <ng-icon name="matArticle" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <input pInputText id="paternalSurname" formControlName="paternalSurname" [maxLength]="50" class="w-full"
+                <input pInputText appUppercase id="paternalSurname" [readOnly]="isParentReadonly" formControlName="paternalSurname" [maxLength]="100" class="w-full"
                 [ngClass]="{'ng-invalid ng-dirty': hasErrorParent('paternalSurname', 'required')}"/>              
             </p-inputGroup>
             @if (hasErrorParent('paternalSurname', 'required')) {
@@ -411,7 +430,7 @@
                 <p-inputGroupAddon>
                     <ng-icon name="matArticle" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <input pInputText id="maternalSurname" formControlName="maternalSurname" [maxLength]="50" class="w-full"
+                <input pInputText appUppercase id="maternalSurname" [readOnly]="isParentReadonly" formControlName="maternalSurname" [maxLength]="100" class="w-full"
                 [ngClass]="{'ng-invalid ng-dirty': hasErrorParent('maternalSurname', 'required')}"/>              
             </p-inputGroup>
             @if (hasErrorParent('maternalSurname', 'required')) {
@@ -419,22 +438,30 @@
             }  
         </div>
         <div class="field col-12 md:col-6 py-0">
-            <label for="email" class="font-semibold">Teléfono celular </label>
+            <label for="phone" class="font-semibold">Teléfono celular </label>
             <p-inputGroup>
                 <p-inputGroupAddon >
                     <ng-icon name="matPhoneAndroid" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <input pInputText id="email" formControlName="email" [maxLength]="50" class="w-full"/>              
+                <input pInputText id="phone" formControlName="phone" [readOnly]="isParentReadonly" [maxLength]="9" class="w-full"
+                [ngClass]="{'ng-invalid ng-dirty': hasErrorParent('phone', 'invalidFormat')}"/>              
             </p-inputGroup>
+            @if ( hasErrorParent('phone', 'invalidFormat')) {
+                <div class="p-error mb-1">Formato incorrecto de Teléfono.</div>
+              }
         </div>
         <div class="field col-12 md:col-6 py-0">
-            <label for="phone" class="font-semibold">Email:</label>
+            <label for="email" class="font-semibold">Email:</label>
             <p-inputGroup>
                 <p-inputGroupAddon >
                     <ng-icon name="matEmail" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <input pInputText id="phone" formControlName="phone" [maxLength]="50" class="w-full"/>              
+                <input pInputText id="email" [readOnly]="isParentReadonly" formControlName="email" [maxLength]="255" class="w-full"
+                [ngClass]="{'ng-invalid ng-dirty': hasErrorParent('email', 'invalidFormat')}"/>              
             </p-inputGroup>
+            @if (hasErrorParent('email', 'invalidFormat')) {
+                <div class="p-error mb-1">Formato de correo invalido.</div>
+              }
         </div>
         <div class="field col-12 py-0">
             <label for="address" class="font-semibold">Direccion <span class="text-red-500">*</span></label>
@@ -442,11 +469,11 @@
                 <p-inputGroupAddon >
                     <ng-icon name="matAddLocationAlt" class="text-color text-xl"></ng-icon>
                 </p-inputGroupAddon>
-                <textarea pInputTextarea id="address" formControlName="address" rows="5" [maxLength]="100" class="w-full"></textarea>                
+                <textarea pInputTextarea [readOnly]="isParentReadonly" id="address" formControlName="address" rows="5" [maxLength]="100" class="w-full"></textarea>                
             </p-inputGroup>
         </div>
     </form>
-    <ng-template pTemplate="footer">
+    <ng-template pTemplate="footer"> 
         <div class="flex justify-content-end gap-2">
             <button pButton pRipple type="button"  severity="info" pTooltip="Cancelar" (click)="isViewParents = false" class="font-semibold">Cancelar</button>
             <button pButton pRipple type="button" [loading]="isLoadingButton" severity="success" pTooltip="Guardar" (click)="saveParents()"  class="font-semibold">Guardar</button>

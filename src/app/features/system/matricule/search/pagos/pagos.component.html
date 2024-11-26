@@ -1,0 +1,47 @@
+<div class="grid">
+    <div class="col-6 md:col-4">
+        <div class="card surface-50 p-3">
+            <h5 class="text-primary font-bold">Matrícula 2024</h5>
+            <div class="text-lg">Monto: S/. 180</div>
+            <div class="text-lg mb-3">Vencimiento: 10/04/2024</div>
+            <p-tag severity="success" value="Pagado " [style]="{'font-size': '1.1rem'}"/>
+        </div>
+    </div>
+    <div class="col-6 md:col-4">
+        <div class="card surface-50 p-3">
+            <h5 class="text-primary font-bold">Pensión Marzo</h5>
+            <div class="text-lg">Monto: S/. 180</div>
+            <div class="text-lg mb-3">Vencimiento: 10/04/2024</div>
+            <p-tag severity="danger" value="Vencido " [style]="{'font-size': '1.1rem'}"/>
+        </div>
+    </div>
+    <div class="col-6 md:col-4">
+        <div class="card surface-50  p-3">
+            <h5 class="text-primary font-bold">Pensión Abril</h5>
+            <div class="text-lg">Monto: S/. 180</div>
+            <div class="text-lg mb-3">Vencimiento: 10/04/2024</div>
+            <p-tag severity="warning" value="Facturado" [style]="{'font-size': '1.1rem'}"/>
+        </div>
+    </div>
+    <div class="col-12">
+        <p-table [value]="historial" class="p-datatable-sm" [tableStyle]="{ 'min-width': '100%' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Concepto</th>
+                    <th>Monto</th>
+                    <th>Estado</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+                <tr>
+                    <td>{{ product.code }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.category }}</td>
+                    <td>{{ product.quantity }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+</div>

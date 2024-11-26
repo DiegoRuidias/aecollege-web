@@ -70,6 +70,7 @@ export default class TypeDocumentComponent implements OnInit {
       next:(data) => {
         this.typeDocumentList = data;
         this.isLoadingDocument = false;
+        console.log(this.typeDocumentList)
       },
       error:(data) => {
         this.isLoadingDocument = false;

@@ -98,91 +98,91 @@ export class AppMenuComponent implements OnInit{
           ]
         }
       ]
-  //   this.model = [
-  //       {
-  //           label: 'Dashboard',
-  //           items: [
-  //               {
-  //                   label: 'Panel de inicio',
-  //                   icon: 'matHome',
-  //                   routerLink: ['/']
-  //               },
+    this.model = [
+        {
+            label: 'Dashboard',
+            items: [
+                {
+                    label: 'Panel de inicio',
+                    icon: 'matHome',
+                    routerLink: ['/']
+                },
             
-  //           ]
-  //       },
-  //       {
-  //         label: 'Principal',
-  //         items: [
-  //           {
-  //             label: 'Alumnos',
-  //             icon: 'matSchool',
-  //             items: [
-  //               {
-  //                 label: 'Matricular',
-  //                 icon: 'matBookmarkAdd',
-  //                 routerLink: ['/system/matricular']
-  //               }, 
-  //               {
-  //                 label: 'Consultar Matriculas',
-  //                 icon: 'matAssignmentInd',
-  //                 routerLink: ['/security/users']
-  //               }, 
-  //             ]
-  //           },
-  //           {
-  //             label: 'Pagos',
-  //             icon: 'matMonetizationOn',
-  //             routerLink: ['/security/users'],
-  //             items: [
-  //               {
-  //                 label: 'Realizar Pago',
-  //                 icon: 'matPayments',
-  //                 routerLink: ['/settings/matricular']
-  //               }, 
-  //               {
-  //                 label: 'Reporte Pagos',
-  //                 icon: 'matAssessment',
-  //                 routerLink: ['/security/users']
-  //               }, 
-  //             ]
-  //           },            
+            ]
+        },
+        {
+          label: 'Principal',
+          items: [
+            {
+              label: 'Alumnos',
+              icon: 'matSchool',
+              items: [
+                {
+                  label: 'Matricular',
+                  icon: 'matBookmarkAdd',
+                  routerLink: ['/system/matricular']
+                }, 
+                {
+                  label: 'Consultar',
+                  icon: 'matAssignmentInd',
+                  routerLink: ['/system/consultar-matricula']
+                }, 
+              ]
+            },
+            {
+              label: 'Pagos',
+              icon: 'matMonetizationOn',
+              routerLink: ['/security/users'],
+              items: [
+                {
+                  label: 'Realizar Pago',
+                  icon: 'matPayments',
+                  routerLink: ['/settings/matricular']
+                }, 
+                {
+                  label: 'Reporte Pagos',
+                  icon: 'matAssessment',
+                  routerLink: ['/security/users']
+                }, 
+              ]
+            },            
           
-  //         ]
-  //       },
-  //       {
-  //         label: 'Ajustes Generales ',
-  //         items: [
-  //           {
-  //             label: 'Cursos',
-  //             icon: 'matLibraryBooks',
-  //             routerLink: ['/config/periodos']
-  //           },
-  //           {
-  //             label: 'Docentes',
-  //             icon: 'matPerson',
-  //             routerLink: ['/config/niveles-grados']
-  //           },  
-  //           {
-  //             label: 'Aulas',
-  //             icon: 'matClass',
-  //             routerLink: ['/config/pagos']
-  //           },
+          ]
+        },
+        {
+          label: 'Ajustes Generales ',
+          items: [
+            {
+              label: 'Cursos',
+              icon: 'matLibraryBooks',
+              routerLink: ['/config/periodos']
+            },
+            {
+              label: 'Docentes',
+              icon: 'matPerson',
+              routerLink: ['/config/niveles-grados']
+            },  
+            {
+              label: 'Aulas',
+              icon: 'matClass',
+              routerLink: ['/config/pagos']
+            },
           
           
-  //         ]
-  //       },
-  //       {
-  //         label: 'Mi perfil',
-  //         items: [
-  //           {
-  //             label: 'Cerrar sesión',
-  //             icon: 'matExitToApp',
-  //             routerLink: ['/config/users']
-  //           },           
+          ]
+        },
+        {
+          label: 'Mi perfil',
+          items: [
+            {
+              label: 'Cerrar sesión',
+              icon: 'matExitToApp',
+              routerLink: ['/config/users']
+            },           
           
-  //         ]
-  //       }
-  //     ]
+          ]
+        }
+      ]
   }
 
 }

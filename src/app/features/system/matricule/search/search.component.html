@@ -1,0 +1,86 @@
+<div class="grid m-0 p-0 mt-1">
+    <div class="col-12 lg:col-3 p-0">
+        <div class="card px-1 flex flex-column justify-content-center align-items-center w-full">
+            <p-avatar label="JN" styleClass="mr-2" size="xlarge" [style]="{ 'width': '9rem', 'height':'9rem' }" shape="circle" />
+            <h3 class="mb-0">Jeslyn Nicole</h3>
+            <p class="mt-1 text-lg">DNI: 45868965</p>
+            <p-tag severity="success" value=" Activo " [style]="{'font-size': '1.1rem'}"/>
+            <div class="grid w-full mt-2 flex xl:px-2 justify-content-center" align-content-center>
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Nivel: </div>
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">Primaria </div>
+
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Grado: </div>
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">Primero </div>
+
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Sección: </div>
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">A </div>
+
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Deuda: </div>
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg text-red-500 lg:text-right text-center">S/. 450 </div>
+            </div>
+            <div class="col-12 border-bottom-1 p-0 border-300 text-lg text-center ">
+                <div class="flex justify-content-around lg:flex-column xl:flex-row mt-4 w-full pb-3">
+                    <button pButton pRipple label="Editar" icon="pi pi-pencil" class="p-button-info font-bold"></button>
+                    <button pButton pRipple label="Notificar" icon="pi pi-bell" class="p-button-warning font-bold lg:mt-2 xl:mt-0"></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-12 lg:col-9 px-2 p-0">
+        <div class="card p-1">
+            <p-tabView>
+                <p-tabPanel>
+                    <ng-template pTemplate="header">
+                        <div class="flex align-items-center gap-2">
+                            <ng-icon name="matCreditCard"></ng-icon>
+                            <span class="font-bold white-space-nowrap m-0">
+                                Pagos
+                            </span>
+                        </div>
+                    </ng-template>
+                    <app-pagos></app-pagos>
+                </p-tabPanel>
+                <p-tabPanel>
+                    <ng-template pTemplate="header">
+                        <div class="flex align-items-center gap-2">
+                            <ng-icon name="matFolder"></ng-icon>
+                            <span class="font-bold white-space-nowrap m-0">
+                                Documentos
+                            </span>
+                        </div>
+                    </ng-template>
+                    <p>
+                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium...
+                    </p>
+                </p-tabPanel>
+                <p-tabPanel>
+                    <ng-template pTemplate="header">
+                        <div class="flex align-items-center gap-2">
+                            <ng-icon name="matNewspaper"></ng-icon>
+                            <span class="font-bold white-space-nowrap m-0">
+                                Historial Académico
+                            </span>
+                        </div>
+                    </ng-template>
+                    <p>
+                        At vero eos et accusamus et iusto odio dignissimos...
+                    </p>
+                </p-tabPanel>
+                <p-tabPanel>
+                    <ng-template pTemplate="header">
+                        <div class="flex align-items-center gap-2">
+                            <ng-icon name="matPerson"></ng-icon>
+                            <span class="font-bold white-space-nowrap m-0">
+                                Apoderados
+                            </span>
+                        </div>
+                    </ng-template>
+                    <p>
+                        At vero eos et accusamus et iusto odio dignissimos...
+                    </p>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+    </div>
+</div>

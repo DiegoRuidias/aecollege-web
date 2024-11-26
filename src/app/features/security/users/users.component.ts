@@ -84,6 +84,7 @@ export default class UsersComponent implements OnInit{
       next: (data) => {
         this.userList = data;
         this.isLoadingUser = false;
+        console.log(data)
       },
       error: (data) => {
         this.isLoadingUser = false;

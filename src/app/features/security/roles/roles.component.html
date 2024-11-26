@@ -83,7 +83,7 @@
                 <p-inputGroupAddon>
                     <ng-icon name="matVpnKey" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <input pInputText id="code" formControlName="code" [maxLength]="5" class="w-full" 
+                <input pInputText id="code" formControlName="code" [maxLength]="10" class="w-full" 
                 [ngClass]="{'ng-invalid ng-dirty': hasError('code', 'required')}"/>
             </p-inputGroup>
             @if (hasError('name', 'required')) {

@@ -52,6 +52,7 @@ export default class PaymentsComponent {
       next:(data) => {
         this.paymentList = data;
         this.isLoadingPayments = false;
+        console.log(data)
       },
       error:(err) => {
         this.isLoadingPayments = false;

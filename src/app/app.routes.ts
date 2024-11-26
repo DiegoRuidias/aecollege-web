@@ -30,7 +30,19 @@ export const routes: Routes = [
                 path: 'matricular',
                 title: 'AEC - Matricular Alumnos',
                 data: { breadcrumb: 'Dashboard' },
-                loadComponent: () => import('./features/system/alumnos/alumnos.component')
+                loadComponent: () => import('./features/system/matricule/alumnos/alumnos.component')
+            },
+            {
+                path: 'consultar-matricula/:id',
+                title: 'AEC - Consulta Matriculas',
+                data: { breadcrumb: 'Dashboard' },
+                loadComponent: () => import('./features/system/matricule/search/search.component')
+            },
+            {
+                path: 'consultar-matricula',
+                title: 'AEC - Matriculados',
+                data: { breadcrumb: 'Matricualdos' },
+                loadComponent: () => import('./features/system/matricule/list/list.component')
             }
         ],
         

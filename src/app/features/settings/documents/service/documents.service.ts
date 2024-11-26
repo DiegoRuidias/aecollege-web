@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DocumentsService extends AppService{
-  findAll(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/v1/documents`);
+  findAll(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/v1/documents`);
   }
 
   create(data: any): Observable<any> {
