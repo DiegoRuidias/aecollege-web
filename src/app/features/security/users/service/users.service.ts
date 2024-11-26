@@ -14,4 +14,12 @@ export class UsersService extends AppService{
   create(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/v1/users`, data);
   }
+
+  updateIsActive(id: string, isActive: boolean): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/v1/users/${id}/${isActive}`,[]);
+  }
+
+  update(data: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/v1/users/${data.id}`, data);
+  }
 }
