@@ -64,7 +64,7 @@ export default class DocumentsComponent implements OnInit{
   public formDocument: FormGroup = this.formBuilder.group({
     id: [''],
     name: ['', Validators.required],
-    required: [false, Validators.required],
+    required: [false],
   });
 
   ngOnInit(): void {
