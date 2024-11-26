@@ -1,7 +1,7 @@
 <div class="card p-2 md:p-4">
     <p-toolbar>
         <div>
-            <button pButton pRipple label="Nuevo"  icon="pi pi-plus" class="text-white font-bold"></button>
+            <button pButton pRipple label="Nuevo" (click)="openNew()" icon="pi pi-plus" class="text-white font-bold"></button>
         </div>
         <div>
             <span class="p-input-icon-left">
@@ -35,9 +35,9 @@
                 <td>{{ item.username }}</td>
                 <td>{{ item.phone | labelBlankUsers }}</td>
                 <td>{{ item.email | labelBlankUsers }}</td>
-                <td><p-inputSwitch [(ngModel)]="item.isActive" /></td>
+                <td><p-inputSwitch [(ngModel)]="item.isActive"  (ngModelChange)="updateIsActive(item.id, $event)"/></td>
                 <td pFrozenColumn alignFrozen="right">
-                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Ver" (click)="openView($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
                     <button pButton pRipple type="button" [rounded]="true"  severity="warning" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
                     <button pButton pRipple type="button" [rounded]="true"  severity="help" pTooltip="Recursos" (click)="openRoles($event, item)" icon="pi pi-shield" class="mr-2  text-black text-xs"></button>
                     <button pButton pRipple type="button" [rounded]="true"  severity="danger" pTooltip="Eliminar" (click)="openEdit($event, item)" icon="pi pi-trash" class="mr-2 text-xs"></button>
@@ -150,6 +150,130 @@
     </form>
     <div class="flex justify-content-end gap-2">
         <button pButton pRipple type="button"  severity="info" pTooltip="Cancelar" (click)="isFormUser = false" class="font-semibold">Cancelar</button>
+        <button pButton pRipple type="button" [loading]="isLoadingButton" severity="success" pTooltip="Guardar" (click)="save()"  class="font-semibold">Guardar</button>
+    </div>
+</p-dialog>
+
+<p-dialog  header="Usuario" [modal]="true" [(visible)]="isViewUsers" [resizable]="false" [style]="{ width: '30rem' }">
+    <div class="grid">
+
+        <div class="col-12">
+                <div class="flex">
+                    <label for="code" class="font-semibold w-11rem h-2rem">Nombres:</label>
+                    <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                        <span class="text-black-alpha-90">{{ selectedUsers[0]?.username }}</span>
+                    </div>
+                </div>
+        </div>
+
+        <div class="col-12">
+                <div class="flex">
+                    <label for="name" class="font-semibold w-11rem h-2rem">Usuario</label>
+                    <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                        <span class="text-black-alpha-90">{{ selectedUsers[0]?.name }}</span>
+                    </div>
+                </div>
+        </div>
+
+        <div class="col-12">
+                <div class="flex">
+                    <label for="description" class="font-semibold w-11rem h-2rem">Celular:</label>
+                    <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                        <span class="text-black-alpha-90">{{ selectedUsers[0]?.phone }}</span>
+                    </div>
+                </div>
+        </div>
+        
+        <div class="col-12">
+            <div class="flex">
+                <label for="description" class="font-semibold w-11rem h-2rem">Email:</label>
+                <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                    <span class="text-black-alpha-90">{{ selectedUsers[0]?.email }}</span>
+                </div>
+            </div>
+    </div>
+    </div>
+    <div class="flex justify-content-end gap-2 mt-2">
+        <button pButton pRipple type="button"  severity="primary" pTooltip="Cerrar" (click)="isViewUsers = false" class="font-semibold">Cerrar</button>    </div>
+</p-dialog>
+
+
+<p-dialog [modal]="true" [(visible)]="isFormUsers" [resizable]="false" [style]="{ width: '35rem' }">
+    <ng-template pTemplate="header">
+        <div class="flex flex-column">
+            <div class="p-dialog-title">{{isEdit ? 'Editar Usuario ' : 'Crear Usuario'}}</div>
+            <div class="mt-2 text-blue-600">{{isEdit ? 'Usuario: '  + selectedUsers[0]?.name : 'Ingrese los campos solicitados'}}</div>
+        </div>
+    </ng-template>
+    <form [formGroup]="formUsers">
+        <div class="field">
+            <label for="name" class="font-semibold w-6rem">Nombre:</label>
+            <p-inputGroup>
+                <p-inputGroupAddon>
+                    <ng-icon name="matBadge" class="text-color text-lg"></ng-icon>
+                </p-inputGroupAddon>
+                <input pInputText id="name" formControlName="name" [maxLength]="50" class="w-full" 
+                [ngClass]="{'ng-invalid ng-dirty': hasError('name', 'required')}"/>
+            </p-inputGroup>
+            @if (hasError('name', 'required')) {
+                <div class="p-error ml-6">Por favor ingrese el nombre del Usuario.</div>
+            }  
+        </div>
+        <div class="field">
+            <label for="username" class="font-semibold w-6rem">Usuario</label>
+            <p-inputGroup>
+                <p-inputGroupAddon >
+                    <ng-icon username="matBadge" class="text-color text-lg"></ng-icon>
+                </p-inputGroupAddon>
+                <input pInputText id="username" formControlName="username" [maxLength]="50" class="w-full"
+                [ngClass]="{'ng-invalid ng-dirty': hasError('username', 'required')}"/>              
+            </p-inputGroup>
+            @if (hasError('username', 'required')) {
+                <div class="p-error ml-6">Por favor ingrese el usuario.</div>
+            }  
+        </div>
+        <div class="field">
+            <label for="phone" class="font-semibold w-6rem">Celular:</label>
+            <p-inputGroup>
+                <p-inputGroupAddon >
+                    <ng-icon name="matDescription" class="text-color text-lg"></ng-icon>
+                </p-inputGroupAddon>
+                <input pInputText id="phone" formControlName="phone" [maxLength]="50" class="w-full"
+                [ngClass]="{'ng-invalid ng-dirty': hasError('phone', 'required')}"/>                 
+            </p-inputGroup>
+            @if (hasError('phone', 'required')) {
+                <div class="p-error ml-6">Por favor ingrese el celular del Usuario.</div>
+            } 
+        </div>
+        <div class="field">
+            <label for="email" class="font-semibold w-6rem">Email:</label>
+            <p-inputGroup>
+                <p-inputGroupAddon>
+                    <ng-icon name="matBadge" class="text-color text-lg"></ng-icon>
+                </p-inputGroupAddon>
+                <input pInputText id="email" formControlName="email" [maxLength]="50" class="w-full" 
+                [ngClass]="{'ng-invalid ng-dirty': hasError('email', 'required')}"/>
+            </p-inputGroup>
+            @if (hasError('email', 'required')) {
+                <div class="p-error ml-6">Por favor ingrese el email del Usuario.</div>
+            }  
+        </div>
+        <div class="field">
+            <label for="password" class="font-semibold w-6rem">Contraseña:</label>
+            <p-inputGroup>
+                <p-inputGroupAddon>
+                    <ng-icon name="matBadge" class="text-color text-lg"></ng-icon>
+                </p-inputGroupAddon>
+                <input pInputText type="password" id="password" formControlName="password" [maxLength]="50" class="w-full" 
+                [ngClass]="{'ng-invalid ng-dirty': hasError('password', 'required')}"/>
+            </p-inputGroup>
+            @if (hasError('password', 'required')) {
+                <div class="p-error ml-6">Por favor ingrese el contraseña del Usuario.</div>
+            } 
+        </div>
+    </form>
+    <div class="flex justify-content-end gap-2">
+        <button pButton pRipple type="button"  severity="info" pTooltip="Cancelar" (click)="isFormUsers = false" class="font-semibold">Cancelar</button>
         <button pButton pRipple type="button" [loading]="isLoadingButton" severity="success" pTooltip="Guardar" (click)="save()"  class="font-semibold">Guardar</button>
     </div>
 </p-dialog>

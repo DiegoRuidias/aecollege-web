@@ -21,6 +21,8 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { 
   matVpnKey, matBadge, matDescription
 } from '@ng-icons/material-icons/baseline'
+import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities';
+import { identity } from 'rxjs';
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -60,6 +62,9 @@ export default class UsersComponent implements OnInit{
   userList: any[] = [];
   selectedUser: any;
 
+  isViewUsers: boolean = false;
+  isFormUsers: boolean = false;
+  selectedUsers: any[] = [];
   rolesTable: any[] = [];
   isViewSave: boolean = false;
   isRolesView: boolean = false;
@@ -67,6 +72,16 @@ export default class UsersComponent implements OnInit{
   isLoadingButton: boolean = false; 
   isFormUser: boolean = false;
   isEdit: boolean = false;
+
+  public formUsers: FormGroup = this.formBuilder.group({
+    id: [''],
+    isActive: [true],
+    name: ['', Validators.required],
+    username: ['', Validators.required],
+    phone: ['', Validators.required],
+    email: ['', Validators.required],
+    password: ['', Validators.required]
+});
 
   public formUser: FormGroup = this.formBuilder.group({
     id: [''],
@@ -77,6 +92,7 @@ export default class UsersComponent implements OnInit{
     sort: [0]
   });
 
+
   ngOnInit(): void {
     this.isViewSave = false;
     this.isLoadingUser = true;
@@ -84,7 +100,6 @@ export default class UsersComponent implements OnInit{
       next: (data) => {
         this.userList = data;
         this.isLoadingUser = false;
-        console.log(data)
       },
       error: (data) => {
         this.isLoadingUser = false;
@@ -93,13 +108,6 @@ export default class UsersComponent implements OnInit{
       
   }
 
-  openEdit(event:MouseEvent, item:any): void {
-    console.log(this.tableUsers._value);
-  }
-
-  save(): void {
-
-  }
 
   openRoles(event: any , item: any) {
     this.isViewSave = false;
@@ -139,7 +147,106 @@ export default class UsersComponent implements OnInit{
   }
 
   hasError(field: string, error: string): boolean | undefined {
-    const control = this.formUser.get(field);
+    const control = this.formUsers.get(field);
     return control?.hasError(error) && (control.dirty || control.touched);
+  }
+
+  updateIsActive(id: string , event: boolean): void{
+    this.usersService.updateIsActive(id,event).subscribe(data =>{
+      this.toastService.add({ severity: 'success', life: 5000, summary: 'User Editado', detail: 'El user se editó correctamente.' }); 
+    })
+  }
+
+  openAccess(event: any, item: any){
+    event.stopPropagation();
+    event.preventDefault();
+    this.selectedUsers = [item];
+  }
+
+  openView(event: MouseEvent, item: any): void {
+    this.isLoadingButton = false;
+    event.stopPropagation();
+    event.preventDefault();
+    
+    this.selectedUsers = [item]
+    this.isViewUsers = true;
+  }
+  initFormUsers(): void {
+    this.formUsers.reset();
+    //this.formUsers.controls['id'].setValue(uuidv4());
+    this.formUsers.controls['isActive'].setValue(true);
+  }
+
+  openNew(): void {
+    this.initFormUsers();
+    this.isEdit = false;
+    this.isFormUsers = true;
+  }
+
+  openEdit( event: MouseEvent, item: any ): void {
+    this.isLoadingButton = false;
+    this.formUsers.reset();
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.selectedUsers = [item]
+
+ 
+    this.formUsers.controls['id'].setValue(item.id);
+    this.formUsers.controls['isActive'].setValue(item.isActive);
+    this.formUsers.controls['name'].setValue(item.name);
+    this.formUsers.controls['username'].setValue(item.username);
+    this.formUsers.controls['phone'].setValue(item.phone);
+    this.formUsers.controls['email'].setValue(item.email);
+    this.formUsers.controls['password'].setValue(item.password);
+
+    this.isFormUsers = true;
+    this.isEdit = true;
+
+  }
+
+  save(): void {
+    if (!this.formUsers.valid) {
+      markAllAsTouched(this.formUsers)
+      return;
+    }
+    if (this.isEdit)
+        this.update();
+    else
+        this.create();
+  }
+
+  update(): void{
+    this.isLoadingButton = true;
+    this.usersService.update(this.formUsers.value).subscribe({
+      next:(data) => {
+      this.userList.forEach((item, index) => {
+        if (item.id === data.id) {
+          this.userList[index] = data;
+        }
+      });
+      this.toastService.add({ severity: 'success', life: 5000, summary: 'User Editado', detail: 'El usuario se editó correctamente.' });
+      this.isLoadingButton = false;
+      this.isFormUsers = false;
+      },
+      error:(err) => {
+        this.isLoadingButton = false;  
+      },
+    });
+  }
+
+  create(): void {
+    this.isLoadingButton = true;
+    this.usersService.create(this.formUsers.value).subscribe({
+      next:(data) => {
+        this.userList = [...this.userList, data];
+        this.toastService.add({ severity: 'success', life: 5000, summary: 'User Creado', detail: 'El Usuario se creó correctamente.' });
+        this.isLoadingButton = false;
+        this.isFormUsers = false;
+      },
+      error:(err) => {
+        this.isLoadingButton = false;
+      },
+    });
   }
 }
