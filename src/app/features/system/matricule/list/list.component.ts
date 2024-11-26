@@ -28,5 +28,8 @@ import { CardModule } from 'primeng/card';
   styleUrl: './list.component.scss'
 })
 export default class ListComponent {
-
+  
+  hola():void{
+    console.log("prueba");
+  }
 }

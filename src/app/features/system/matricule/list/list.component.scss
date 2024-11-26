@@ -1,0 +1,8 @@
+.student-card {
+    cursor: pointer;
+    transition: transform 0.5s ease;
+  }
+  
+  .student-card:hover {
+    transform: translateY(-5px);
+  }
