@@ -69,6 +69,7 @@ export default class UsersComponent implements OnInit{
   isViewSave: boolean = false;
   isRolesView: boolean = false;
   isLoadingUser: boolean = false;
+  isLoadingRole: boolean = false;
   isLoadingButton: boolean = false; 
   isFormUser: boolean = false;
   isEdit: boolean = false;
@@ -110,13 +111,22 @@ export default class UsersComponent implements OnInit{
 
 
   openRoles(event: any , item: any) {
+    this.rolesTable = [];
     this.isViewSave = false;
     event.stopPropagation();
     event.preventDefault();
+    this.isRolesView = true;
     this.selectedUser = [item]
-    this.userRolesService.findAll(item.id).subscribe(data => {
-      this.rolesTable = data;
-      this.isRolesView = true;
+    this.isLoadingRole = true;
+    this.userRolesService.findAll(item.id).subscribe({
+      next: (data) => {
+        this.rolesTable = data;
+        this.isLoadingRole = false
+      },
+      error:(err) => {
+        this.isLoadingRole = false
+      },
+      
     });
   }
   
@@ -134,7 +144,7 @@ export default class UsersComponent implements OnInit{
       }
     });
 
-    this.userRolesService.create(this.selectedUser[0].id,this.tableRoles._value).subscribe({
+  this.userRolesService.create(this.selectedUser[0].id,this.tableRoles._value).subscribe({
       next:(data) => {
         this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Editado', detail: 'El rol se editó correctamente.' });
         this.isViewSave = false;
@@ -153,7 +163,11 @@ export default class UsersComponent implements OnInit{
 
   updateIsActive(id: string , event: boolean): void{
     this.usersService.updateIsActive(id,event).subscribe(data =>{
-      this.toastService.add({ severity: 'success', life: 5000, summary: 'User Editado', detail: 'El user se editó correctamente.' }); 
+      if(event){
+        this.toastService.add({ severity: 'success', life: 5000, summary: 'Usuario Activado', detail: 'El usuario se activo correctamente.' });
+      } else {
+        this.toastService.add({ severity: 'success', life: 5000, summary: 'Usuario desactivado', detail: 'El usuario se desactivo correctamente.' });
+      }
     })
   }
 

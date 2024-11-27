@@ -50,7 +50,7 @@
                                 <p-dropdown inputId="periodId" formControlName="periodId" optionLabel="name" optionValue="id" [options]="periodsList"
                                 class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorAcademic('periodId', 'required')}" placeholder=":: Seleccione Periodo Escolar ::" appendTo="body"/>
                                 @if (hasErrorAcademic('periodId', 'required')) {
-                                    <div class="p-error">Por favor seleccione tipo de documento.</div>
+                                    <div class="p-error">Por favor seleccione periodo escolar.</div>
                                 }  
                             </div>
                             <div class="field col-12 md:col-6 py-0">
@@ -58,7 +58,7 @@
                                 <p-dropdown inputId="type" formControlName="type" optionLabel="name" optionValue="id" [options]="matriculeList"
                                 class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorAcademic('type', 'required')}" placeholder=":: Seleccione Tipo de Matricula ::" appendTo="body"/>
                                 @if (hasErrorAcademic('type', 'required')) {
-                                    <div class="p-error">Por favor seleccione tipo de documento.</div>
+                                    <div class="p-error">Por favor seleccione tipo de matricula.</div>
                                 }  
                             </div>
                             <div class="field col-12 md:col-6 py-0">
@@ -154,7 +154,7 @@
                         <div class="field col-12 md:col-6 py-0">
                             <label for="dateOfBirth " class="font-semibold mr-2 w-full">Fecha nacimiento <span class="text-red-500">*</span></label>
                             <p-calendar inputId="dateOfBirth" showIcon="true" [readonlyInput]="isStudentReadonly" inputStyleClass="w-full" formControlName="dateOfBirth"
-                            class="w-full" [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('dateOfBirth', 'required')}" placeholder="dd/mm/yyyy" appendTo="body"/>
+                            class="w-full" [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('dateOfBirth', 'required')}" placeholder="dd/mm/yyyy"/>
                             @if (hasErrorStudent('dateOfBirth', 'required')) {
                                 <div class="p-error">Por favor ingrese fecha de nacimiento.</div>
                             }  

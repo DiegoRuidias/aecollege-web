@@ -44,6 +44,9 @@ import { EmailValidator } from './validators/email.validator';
 import { PhoneValidator } from './validators/phone.validator';
 import { ParentsService } from './service/parents.service';
 import { UppercaseDirective } from '../../../../shared/utils/directives/uppercase.directive';
+import { Settings } from '../../../../shared/layout/api/settings.model';
+import { SettingsService } from '../../../../shared/layout/service/settings.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-alumnos',
   standalone: true,
@@ -91,7 +94,9 @@ export default class AlumnosComponent implements OnInit{
   fileRegisterService = inject(FileRegisterService);
   personService = inject(PersonService);
   parentsService = inject(ParentsService);
+  settingsService = inject(SettingsService);
   toastService = inject(MessageService);
+  router = inject(Router);
 
   matriculeList = typeMatricule;
   typeParentList = typeParent;
@@ -119,12 +124,19 @@ export default class AlumnosComponent implements OnInit{
   isParentExist: boolean = false;
   isParentReadonly: boolean = false;
 
+  settings: Settings = {
+    id:0,
+    periodId:'',
+    studentRole:''
+  }
+
   public formAcademic: FormGroup = this.formBuilder.group({
     level: [undefined, Validators.required],
     gradeId: [undefined, Validators.required],
     periodId: [undefined, Validators.required],
     matriculeId: [undefined, Validators.required],
     pensionId: [undefined, Validators.required],
+    roleId: [''],
     type: [undefined, Validators.required],
     state:[0]
   });
@@ -204,6 +216,7 @@ export default class AlumnosComponent implements OnInit{
         isActive: false
       }));
 
+      this.loadSettings();
       this.isLoading = false;
       },
       error:(err) => {
@@ -211,6 +224,15 @@ export default class AlumnosComponent implements OnInit{
       },
     });
   };
+
+  loadSettings(){
+    this.settings = this.settingsService.getSettings();
+    this.formAcademic.get('roleId')?.setValue(this.settings.studentRole);
+    this.formAcademic.get('periodId')?.setValue(this.settings.periodId);
+    if (!this.formAcademic.value.roleId) {
+      this.router.navigate(['config/predeterminados']);
+    }
+  }
 
   onChangeLevel(event: DropdownChangeEvent): void {
     this.gradeList = event.value.grades;
@@ -259,11 +281,13 @@ export default class AlumnosComponent implements OnInit{
     );
   
     this.formStudent.get('name')?.setValue(fullName);
-
+    const allActive = this.documents.every(doc => doc.isActive === true);
     const request = {
       ...this.formAcademic.value, 
       person: this.formStudent.value,
-      parents: [this.formParent.value]
+      parents: [this.formParent.value],
+      documents: this.documents,
+      isDocuments: allActive
     };
 
     this.fileRegisterService.create(request).subscribe({

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 
@@ -15,14 +15,6 @@ import { TagModule } from 'primeng/tag';
   styleUrl: './pagos.component.scss'
 })
 export class PagosComponent {
-  historial: any[] = [
-    {
-      'id':1,
-      'name':'hola'
-    },
-    {
-      'id':2,
-      'name':'Hola'
-    }
-  ]
+  @Input() charges: any[] = [];
+  historial: any[] = [];
 }

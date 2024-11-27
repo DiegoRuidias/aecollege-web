@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { LayoutService } from '../../service/app.layout.service';
 import { CommonModule } from '@angular/common';
 import { AppMenuitemComponent } from './app-menuitem/app-menuitem.component';
+import { MenuService } from '../../service/app.menu.service';
 
 @Component({
   selector: 'app-menu',
@@ -14,90 +15,92 @@ import { AppMenuitemComponent } from './app-menuitem/app-menuitem.component';
   styleUrl: './app-menu.component.scss'
 })
 export class AppMenuComponent implements OnInit{
+  menuService = inject(MenuService);
   model: any[] = [];
 
   ngOnInit(): void {
-    this.model = [
-        {
-          label: 'Sistema',
-          items: [
-              {
-                  label: 'Menús',
-                  icon: 'matList',
-                  routerLink: '/system/menus'
-              },
+    this.model = this.menuService.getSettings();
+    // this.model = [
+    //     {
+    //       label: 'Sistema',
+    //       items: [
+    //           {
+    //               label: 'Menús',
+    //               icon: 'matList',
+    //               routerLink: '/system/menus'
+    //           },
           
-          ]
-        },
-        {
-          label: 'Seguridad',
-          items: [
-            {
-              label: 'Roles',
-              icon: 'matSecurity',
-              routerLink: '/security/roles'
-            },
-            {
-              label: 'Usuarios',
-              icon: 'matPeopleAlt',
-              routerLink: ['/security/users']
-            },            
+    //       ]
+    //     },
+    //     {
+    //       label: 'Seguridad',
+    //       items: [
+    //         {
+    //           label: 'Roles',
+    //           icon: 'matSecurity',
+    //           routerLink: '/security/roles'
+    //         },
+    //         {
+    //           label: 'Usuarios',
+    //           icon: 'matPeopleAlt',
+    //           routerLink: ['/security/users']
+    //         },            
           
-          ]
-        },
-        {
-          label: 'Ajustes Generales ',
-          items: [
-            {
-              label: 'Configuraciones',
-              icon:'matSettings',
-              items: [
-                {
-                  label: 'Periodos E.',
-                  icon: 'matCalendarMonth',
-                  routerLink: ['/config/periodos']
-                },
-                {
-                  label: 'Documentación',
-                  icon: 'matFolder',
-                  routerLink: ['/config/documentos']
-                },
-                {
-                  label: 'T. de Documento',
-                  icon: 'matDescription',
-                  routerLink: ['/config/tiposDocumentos']
-                },
-              ]
-            },
-            {
-              label: 'Niveles - Grados',
-              icon: 'matBarChart',
-              routerLink: ['/config/niveles-grados']
-            },  
-            {
-              label: 'Pagos',
-              icon: 'matMonetizationOn',
-              routerLink: ['/config/pagos']
-            },
-            {
-              label: 'Predeterminados',
-              icon: 'matSettingsApplications',
-              routerLink: ['/config/predeterminados']
-            },
-          ]
-        },
-        {
-          label: 'Mi perfil',
-          items: [
-            {
-              label: 'Cerrar sesión',
-              icon: 'matExitToApp',
-              routerLink: ['/config/users']
-            },           
+    //       ]
+    //     },
+    //     {
+    //       label: 'Ajustes Generales ',
+    //       items: [
+    //         {
+    //           label: 'Configuraciones',
+    //           icon:'matSettings',
+    //           items: [
+    //             {
+    //               label: 'Periodos E.',
+    //               icon: 'matCalendarMonth',
+    //               routerLink: ['/config/periodos']
+    //             },
+    //             {
+    //               label: 'Documentación',
+    //               icon: 'matFolder',
+    //               routerLink: ['/config/documentos']
+    //             },
+    //             {
+    //               label: 'T. de Documento',
+    //               icon: 'matDescription',
+    //               routerLink: ['/config/tiposDocumentos']
+    //             },
+    //           ]
+    //         },
+    //         {
+    //           label: 'Niveles - Grados',
+    //           icon: 'matBarChart',
+    //           routerLink: ['/config/niveles-grados']
+    //         },  
+    //         {
+    //           label: 'Pagos',
+    //           icon: 'matMonetizationOn',
+    //           routerLink: ['/config/pagos']
+    //         },
+    //         {
+    //           label: 'Predeterminados',
+    //           icon: 'matSettingsApplications',
+    //           routerLink: ['/config/predeterminados']
+    //         },
+    //       ]
+    //     },
+    //     {
+    //       label: 'Mi perfil',
+    //       items: [
+    //         {
+    //           label: 'Cerrar sesión',
+    //           icon: 'matExitToApp',
+    //           routerLink: ['/config/users']
+    //         },           
           
-          ]
-        }
-      ]
+    //       ]
+    //     }
+    //   ]
     // this.model = [
     //     {
     //         label: 'Dashboard',

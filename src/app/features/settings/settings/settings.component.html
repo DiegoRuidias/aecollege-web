@@ -1,5 +1,26 @@
-<div class="card p-2 md:p-4">
+<div class="card p-4">
     <p-toolbar>
         <h5 class="mt-3">Ajustes Predeterminados del sistema</h5>
     </p-toolbar>
+    <form [formGroup]="formSettings" class="p-fluid p-formgrid grid mt-2">
+        <div class="field col-12 md:col-6 py-0">
+            <label for="periodId" class="font-semibold mr-2">Periodo Establecido <span class="text-red-500">*</span></label>
+            <p-dropdown inputId="periodId" formControlName="periodId" optionLabel="name" optionValue="id" [options]="periodList"
+            class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasError('periodId', 'required')}" placeholder=":: Seleccione Periodo ::"/>
+            @if (hasError('periodId', 'required')) {
+                <div class="p-error">Por favor seleccione tipo de persona.</div>
+            }  
+        </div>
+        <div class="field col-12 md:col-6 py-0">
+            <label for="studentRole" class="font-semibold mr-2">Rol del estudiante <span class="text-red-500">*</span></label>
+            <p-dropdown inputId="studentRole" formControlName="studentRole" optionLabel="name" optionValue="id" [options]="studentRoleList"
+            class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasError('studentRole', 'required')}" placeholder=":: Seleccione Documento ::"/>
+            @if (hasError('studentRole', 'required')) {
+                <div class="p-error">Por favor seleccione Rol de estudiante.</div>
+            }  
+        </div>
+        <div class="field col-2 py-0">
+            <button pButton pRipple type="button" [loading]="isLoadingButton" severity="success" pTooltip="Guardar" (click)="save()"  class="font-semibold w-7rem">Guardar</button>
+        </div>
+    </form>
 </div>
