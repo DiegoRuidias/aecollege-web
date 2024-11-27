@@ -1,12 +1,11 @@
-<div class="card p-2 md:p-4">
+<div class="card">
     <p-toolbar>
         <div>
-            <button pButton pRipple label="Nuevo"  icon="pi pi-plus" class="text-white font-bold"></button>
+            <button pButton pRipple label="Nuevo" (click)="openNew()" icon="pi pi-plus" class="text-white font-bold"></button>
         </div>
     </p-toolbar>
-    <p-table #tablePeriods [value]="periodList" [tableStyle]="{ 'min-width': '60rem' }" [scrollable]="true"  
-            dataKey="id" class="p-datatable-sm" [(selection)]="selectedPeriod" [loading]="isLoadingPeriods" loadingIcon="null"> 
-
+    <p-table [value]="periodList" [tableStyle]="{ 'min-width': '60rem' }" [scrollable]="true"  
+            dataKey="id" class="p-datatable-sm" [(selection)]="selectedPeriod" [reorderableColumns]="true"  [loading]="isLoadingPeriods" loadingIcon="null"> 
         <ng-template pTemplate="header">
             <tr>
                 <th id="col1" style="width: 3.5rem" pFrozenColumn alignFrozen="left">
@@ -28,7 +27,7 @@
                 <td>{{ item.yearEnd }}</td>
                 <td><p-tag [severity]="item.state | tagSevetity" [value]="item.state | periodoTag" [style]="{'font-size': '0.9rem'}"/></td>
                 <td pFrozenColumn alignFrozen="right">
-                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Ver" (click)="openView($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
                     <button pButton pRipple type="button" [rounded]="true"  severity="warning" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
                     <button pButton pRipple type="button" [rounded]="true"  severity="danger" pTooltip="Eliminar" (click)="openEdit($event, item)" icon="pi pi-trash" class="mr-2 text-xs"></button>
                 </td>
@@ -55,3 +54,107 @@
         </ng-template>
     </p-table> 
 </div>
+
+<p-dialog [modal]="true" [(visible)]="isFormPeriods" [resizable]="false" [style]="{ width: '450px' }">
+    <ng-template pTemplate="header" class="z-0">
+        <div class="flex flex-column">
+            <div class="p-dialog-title">{{ isEdit ? 'Editar Periodo' : 'Crear Periodo' }}</div>
+            <div class="mt-2 text-blue-600">{{ isEdit ? 'Periodo de ' + selectedPeriod[0]?.name : 'Ingrese los campos solicitados' }}</div>
+        </div>
+    </ng-template>
+    <form [formGroup]="formPeriods" class="p-fluid p-formgrid grid mt-0">
+        <div class="field col-6 py-0">
+            <label for="yearStart" class="font-semibold mr-2 w-full">Fecha de Inicio:</label>
+            <p-calendar inputId="yearStart" appendTo="body" [iconDisplay]="'input'"
+                [showOnFocus]="false" [showIcon]="true" formControlName="yearStart"
+                [ngClass]="{'ng-invalid ng-dirty': hasError('yearStart', 'required')}"/>
+            @if (hasError('yearStart', 'required')) {
+                <div class="p-error">Por favor ingrese la Fecha de Inicio.</div>
+            }  
+        </div>
+        
+        <div class="field col-6 py-0">
+            <label for="yearEnd" class="font-semibold mr-2 w-full">Fecha de Fin:</label>
+            <p-calendar inputId="yearEnd" appendTo="body" [iconDisplay]="'input'" 
+                [showOnFocus]="false" [showIcon]="true" formControlName="yearEnd"
+                [ngClass]="{'ng-invalid ng-dirty': hasError('yearEnd', 'required')}"/>
+
+            @if (hasError('yearEnd', 'required')) {
+                <div class="p-error">Por favor ingrese la Fecha de Fin.</div>
+            }  
+        </div>
+
+        <div class="field col-12">
+            <label for="name" class="font-semibold w-6rem">Nombre:</label>
+            <p-inputGroup>
+                <p-inputGroupAddon >
+                    <ng-icon name="matWorkHistory" class="text-color text-lg"></ng-icon>
+                </p-inputGroupAddon>
+                <input pInputText id="name" formControlName="name" [maxLength]="50" class="w-full"
+                [ngClass]="{'ng-invalid ng-dirty': hasError('name', 'required')}"/>              
+            </p-inputGroup>
+            @if (hasError('name', 'required')) {
+                <div class="p-error ml-6">Por favor ingrese el nombre.</div>
+            }  
+        </div>
+
+        <div class="field col-12 py-0">
+            <label for="state" class="font-semibold mr-2 w-full">Estado:</label>
+            <p-dropdown inputId="state" formControlName="state" [options]="stateOptions"  optionLabel="label" optionValue="value" 
+            class="w-full" [ngClass]="{'ng-invalid ng-dirty': hasError('state', 'required')}" placeholder="Seleccionar estado" appendTo="body"/>
+            @if (hasError('state', 'required')) {
+                <div class="p-error">Por favor ingrese el Estado.</div>
+            }  
+        </div>        
+
+    </form>
+    <div class="flex justify-content-end gap-2 mt-4">
+        <button pButton pRipple type="button" severity="info" pTooltip="Cancelar" (click)="isFormPeriods = false" class="font-semibold">Cancelar</button>
+        <button pButton pRipple type="button" [loading]="isLoadingButton" severity="success" pTooltip="Guardar" (click)="save()" class="font-semibold">Guardar</button>
+    </div>
+</p-dialog>
+
+<p-dialog  header="Rol de usuario" [modal]="true" [(visible)]="isViewPeriods" [resizable]="false" [style]="{ width: '30rem' }">
+    <div class="grid">
+
+        <div class="col-12">
+            <div class="flex">
+                <label for="yearStart" class="font-semibold w-11rem h-2rem">Fecha Inicio:</label>
+                <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                    <span class="text-black-alpha-90">{{selectedPeriod[0]?.yearStart}}</span>    
+                </div>
+            </div>
+    </div>
+
+    <div class="col-12">
+            <div class="flex">
+                <label for="yearEnd" class="font-semibold w-11rem h-2rem">Fecha Fin:</label>
+                <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                    <span class="text-black-alpha-90">{{selectedPeriod[0]?.yearEnd}}</span>  
+                </div>
+            </div>
+    </div>
+
+    <div class="col-12">
+            <div class="flex">
+                <label for="name" class="font-semibold w-11rem h-2rem">Nombre:</label>
+                <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                    <span class="text-black-alpha-90">{{selectedPeriod[0]?.name}}</span>    
+                </div>
+            </div>  
+    </div>
+    
+    <div class="col-12">
+        <div class="flex">
+            <label for="state" class="font-semibold w-11rem h-2rem">Estado:</label>
+            <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                <span class="text-black-alpha-90">{{selectedPeriod[0]?.state}}</span> 
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="flex justify-content-end gap-2 mt-2">
+        <button pButton pRipple type="button"  severity="primary" pTooltip="Cerrar" (click)="isViewPeriods = false" class="font-semibold">Cerrar</button>    </div>
+</p-dialog>
+
+
