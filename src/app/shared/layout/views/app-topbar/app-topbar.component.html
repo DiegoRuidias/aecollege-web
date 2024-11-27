@@ -10,7 +10,7 @@
 
        <div #topbarmenu class="layout-topbar-menu">
         <button pButton pRipple (click)="layoutService.setTheme()" class="p-button-topbar font-bold mr-2 p-2"><ng-icon [name]="layoutService.isIcon()" class="text-3xl text-white"></ng-icon></button>
-        <button pButton pRipple class="p-button-topbar p-2 font-bold"><p-avatar label="D" styleClass="mr-2" shape="circle" [style]="{ 'background-color': '#F8F8F8', color: '#000000' }"  />DIEGO RUIDIAS</button>
+        <button pButton pRipple (click)="menuService.change()" class="p-button-topbar p-2 font-bold"><p-avatar label="D" styleClass="mr-2" shape="circle" [style]="{ 'background-color': '#F8F8F8', color: '#000000' }"  />DIEGO RUIDIAS</button>
        </div>
        <div #topbarmenubutton></div>
 </div>

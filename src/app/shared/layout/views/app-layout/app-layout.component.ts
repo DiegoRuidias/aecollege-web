@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
@@ -7,6 +7,7 @@ import { AppSidebarComponent } from '../app-sidebar/app-sidebar.component';
 import { AppTopbarComponent } from '../app-topbar/app-topbar.component';
 import { AppFooterComponent } from '../app-footer/app-footer.component';
 import { ToastModule } from 'primeng/toast';
+import { SettingsService } from '../../service/settings.service';
 @Component({
   selector: 'app-layout',
   standalone: true,
@@ -23,6 +24,9 @@ import { ToastModule } from 'primeng/toast';
   styleUrl: './app-layout.component.scss'
 })
 export default class AppLayoutComponent implements OnDestroy {
+  settingsService = inject(SettingsService);
+  isLoading:boolean = true;
+  isError: boolean = false;
 
   overlayMenuOpenSubscription: Subscription;
 
@@ -68,6 +72,8 @@ export default class AppLayoutComponent implements OnDestroy {
               this.hideMenu();
               this.hideProfileMenu();
           });
+      
+          this.settingsService.fetchAndSaveSettings();
   }
 
   hideMenu() {

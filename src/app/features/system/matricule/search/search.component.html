@@ -1,22 +1,32 @@
+@if (isLoading){
+    @if (isError){
+        <app-error-page ></app-error-page>
+    }@else {
+        <app-loading-page></app-loading-page>
+    }
+} @else {
 <div class="grid m-0 p-0 mt-1">
     <div class="col-12 lg:col-3 p-0">
         <div class="card px-1 flex flex-column justify-content-center align-items-center w-full">
-            <p-avatar label="JN" styleClass="mr-2" size="xlarge" [style]="{ 'width': '9rem', 'height':'9rem' }" shape="circle" />
-            <h3 class="mb-0">Jeslyn Nicole</h3>
-            <p class="mt-1 text-lg">DNI: 45868965</p>
-            <p-tag severity="success" value=" Activo " [style]="{'font-size': '1.1rem'}"/>
+            <p-avatar [label]="matricule.person.name | avatarLabel"  styleClass="mr-2" size="xlarge" [style]="{ 'width': '9rem', 'height':'9rem' }" shape="circle" />
+            <h3 class="mb-0 text-center">{{matricule.person.name}}</h3>
+            <p class="mt-1 text-lg">DNI: {{matricule.person.documentNumber}}</p>
+            <p-tag [severity]="matricule.state | state" [value]="matricule.state | stateLabel" [style]="{'font-size': '1.1rem'}"/>
             <div class="grid w-full mt-2 flex xl:px-2 justify-content-center" align-content-center>
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Código: </div>
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">{{matricule.code}} </div>
+
                 <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Nivel: </div>
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">Primaria </div>
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">{{matricule.level}}</div>
 
                 <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Grado: </div>
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">Primero </div>
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">{{matricule.grade}} </div>
 
                 <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Sección: </div>
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">A </div>
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">{{matricule.section}} </div>
 
                 <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Deuda: </div>
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg text-red-500 lg:text-right text-center">S/. 450 </div>
+                <div class="col-6 border-bottom-1 py-2 border-300 text-lg text-red-500 lg:text-right text-center">S/. {{matricule.fileEconomic.debt}} </div>
             </div>
             <div class="col-12 border-bottom-1 p-0 border-300 text-lg text-center ">
                 <div class="flex justify-content-around lg:flex-column xl:flex-row mt-4 w-full pb-3">
@@ -39,7 +49,7 @@
                             </span>
                         </div>
                     </ng-template>
-                    <app-pagos></app-pagos>
+                    <app-pagos [charges]="matricule.charges" ></app-pagos>
                 </p-tabPanel>
                 <p-tabPanel>
                     <ng-template pTemplate="header">
@@ -84,3 +94,4 @@
         </div>
     </div>
 </div>
+}

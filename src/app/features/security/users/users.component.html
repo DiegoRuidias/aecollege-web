@@ -78,7 +78,7 @@
         <div class="p-0">
             <h5 class="mb-3">Roles</h5>
             <p-table #tableRoles [value]="rolesTable" styleClass="p-datatable-gridlines"  [tableStyle]="{ 'max-width': '30rem' }" 
-            dataKey="permissionId">
+            dataKey="permissionId" [loading]="isLoadingRole" loadingIcon="null">
                 <ng-template pTemplate="header">
                     <tr>
                         <th class="bg-blue-600 text-center text-white" style="width: 8rem">Nombre</th>
@@ -91,6 +91,25 @@
                         <td>{{ row.roleName }}</td>
                         <td>{{ row.roleDescription }}</td>
                         <td class="text-center"><p-inputSwitch [(ngModel)]="row.isActive" (ngModelChange)="isViewSave=true"/></td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="9" class="w-full">
+                            <div class="text-red-500">
+                                ... No hay roles disponibles
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7" class="w-full">
+                            <div class="flex flex-column justify-content-center align-items-center p-m-3 w-full">
+                                <p-progressSpinner styleClass="p-mb-2"/>
+                                <p class="p-text-secondary p-mt-2">Cargando datos, por favor espere...</p>
+                            </div>
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -225,11 +244,11 @@
                 <p-inputGroupAddon >
                     <ng-icon username="matBadge" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <input pInputText id="username" formControlName="username" [maxLength]="50" class="w-full"
+                <input pInputText id="username" [readonly]="isEdit" formControlName="username" [maxLength]="12" class="w-full"
                 [ngClass]="{'ng-invalid ng-dirty': hasError('username', 'required')}"/>              
             </p-inputGroup>
             @if (hasError('username', 'required')) {
-                <div class="p-error ml-6">Por favor ingrese el usuario.</div>
+                <div class="p-error ml-6">Por favor ingrese el nombre de usuario.</div>
             }  
         </div>
         <div class="field">
@@ -238,7 +257,7 @@
                 <p-inputGroupAddon >
                     <ng-icon name="matDescription" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <input pInputText id="phone" formControlName="phone" [maxLength]="50" class="w-full"
+                <input pInputText id="phone" formControlName="phone" [maxLength]="9" class="w-full"
                 [ngClass]="{'ng-invalid ng-dirty': hasError('phone', 'required')}"/>                 
             </p-inputGroup>
             @if (hasError('phone', 'required')) {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from '../../service/app.layout.service';
 import { CommonModule } from '@angular/common';
@@ -9,6 +9,7 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 
 import { heroUserCircleSolid, heroMoonSolid, heroSunSolid} from '@ng-icons/heroicons/solid';
 import { AvatarModule } from 'primeng/avatar';
+import { MenuService } from '../../service/app.menu.service';
 @Component({
   selector: 'app-topbar',
   standalone: true,
@@ -29,6 +30,7 @@ import { AvatarModule } from 'primeng/avatar';
   styleUrl: './app-topbar.component.scss'
 })
 export class AppTopbarComponent {
+  menuService = inject(MenuService);
   items!: MenuItem[];
 
   @ViewChild('menubutton') menuButton!: ElementRef;
