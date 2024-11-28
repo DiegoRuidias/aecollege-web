@@ -19,10 +19,12 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { 
-  matVpnKey, matBadge, matDescription
+  matVpnKey, matBadge, matDescription, matPerson,
+  matEmail, matPerson2
 } from '@ng-icons/material-icons/baseline'
 import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities';
 import { identity } from 'rxjs';
+import { EmailValidator } from '../../system/matricule/alumnos/validators/email.validator';
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -46,7 +48,7 @@ import { identity } from 'rxjs';
   ],
   providers: [
     provideIcons({
-      matVpnKey, matBadge, matDescription
+      matVpnKey, matBadge, matDescription, matEmail, matPerson2, matPerson
     })
   ],
   templateUrl: './users.component.html',
@@ -80,7 +82,7 @@ export default class UsersComponent implements OnInit{
     name: ['', Validators.required],
     username: ['', Validators.required],
     phone: ['', Validators.required],
-    email: ['', Validators.required],
+    email: ['',[EmailValidator(), Validators.required]],
     password: ['', Validators.required]
 });
 

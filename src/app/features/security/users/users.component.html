@@ -242,7 +242,7 @@
             <label for="username" class="font-semibold w-6rem">Usuario</label>
             <p-inputGroup>
                 <p-inputGroupAddon >
-                    <ng-icon username="matBadge" class="text-color text-lg"></ng-icon>
+                    <ng-icon name="matPerson" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
                 <input pInputText id="username" [readonly]="isEdit" formControlName="username" [maxLength]="12" class="w-full"
                 [ngClass]="{'ng-invalid ng-dirty': hasError('username', 'required')}"/>              
@@ -268,11 +268,14 @@
             <label for="email" class="font-semibold w-6rem">Email:</label>
             <p-inputGroup>
                 <p-inputGroupAddon>
-                    <ng-icon name="matBadge" class="text-color text-lg"></ng-icon>
+                    <ng-icon name="matEmail" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
                 <input pInputText id="email" formControlName="email" [maxLength]="50" class="w-full" 
-                [ngClass]="{'ng-invalid ng-dirty': hasError('email', 'required')}"/>
+                [ngClass]="{'ng-invalid ng-dirty': hasError('email','required') && hasError('email','invalidFormat')}"/>
             </p-inputGroup>
+            @if (hasError('email', 'invalidFormat')) {
+                <div class="p-error ml-6">Por favor ingrese formato correcto.</div>
+            }
             @if (hasError('email', 'required')) {
                 <div class="p-error ml-6">Por favor ingrese el email del Usuario.</div>
             }  
