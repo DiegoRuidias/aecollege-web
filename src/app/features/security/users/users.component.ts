@@ -62,11 +62,10 @@ export default class UsersComponent implements OnInit{
   userRolesService = inject(UserRolesService)
   toastService = inject(MessageService);
   userList: any[] = [];
-  selectedUser: any;
+  selectedUser: any[] = [];
 
   isViewUsers: boolean = false;
   isFormUsers: boolean = false;
-  selectedUsers: any[] = [];
   rolesTable: any[] = [];
   isViewSave: boolean = false;
   isRolesView: boolean = false;
@@ -176,15 +175,15 @@ export default class UsersComponent implements OnInit{
   openAccess(event: any, item: any){
     event.stopPropagation();
     event.preventDefault();
-    this.selectedUsers = [item];
+    this.selectedUser = [item];
   }
 
-  openView(event: MouseEvent, item: any): void {
+  openView(event: any, item: any): void {
     this.isLoadingButton = false;
     event.stopPropagation();
     event.preventDefault();
     
-    this.selectedUsers = [item]
+    this.selectedUser = [item]
     this.isViewUsers = true;
   }
   initFormUsers(): void {
@@ -199,13 +198,13 @@ export default class UsersComponent implements OnInit{
     this.isFormUsers = true;
   }
 
-  openEdit( event: MouseEvent, item: any ): void {
+  openEdit( event: any, item: any ): void {
     this.isLoadingButton = false;
     this.formUsers.reset();
     event.stopPropagation();
     event.preventDefault();
 
-    this.selectedUsers = [item]
+    this.selectedUser = [item]
 
  
     this.formUsers.controls['id'].setValue(item.id);
