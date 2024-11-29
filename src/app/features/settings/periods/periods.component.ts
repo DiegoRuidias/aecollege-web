@@ -157,35 +157,32 @@ export default class PeriodsComponent implements OnInit {
 
   save(): void {
     if (!this.formPeriods.valid) {
-      markAllAsTouched(this.formPeriods)
+      markAllAsTouched(this.formPeriods);
       return;
     }
-
+  
     const isStateInProgress = this.formPeriods.value.state === 1;
     const currentPeriodId = this.formPeriods.value.id;
-
+  
     if (isStateInProgress && this.hasCurrentPeriod(this.isEdit ? currentPeriodId : null)) {
       this.toastService.add({
         severity: 'warn',
         life: 5000,
         summary: 'Periodo duplicado',
-        detail: 'Solo puede haber un período en curso a la vez.'
+        detail: 'Solo puede haber un período en curso a la vez.',
       });
       return;
     }
-
-    if (this.isEdit)
-        this.update();
-    else
-        this.create()  
-}
-
+  
+    this.isEdit ? this.update() : this.create();
+  }
+  
   create(): void {
     this.isLoadingButton = true;
     this.periodsService.create(this.formPeriods.value).subscribe({
       next:(data) => {
         this.periodList = [...this.periodList, data];
-        this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Creado', detail: 'El Rol se creó correctamente.' });
+        this.toastService.add({ severity: 'success', life: 5000, summary: 'Periodo Creado', detail: 'El Periodo se creó correctamente.' });
         this.isLoadingButton = false;
         this.isFormPeriods = false;
       },
