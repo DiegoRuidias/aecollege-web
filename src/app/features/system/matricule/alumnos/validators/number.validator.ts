@@ -11,7 +11,7 @@ export function NumberValidator(maxLength: number): ValidatorFn {
     }
 
     if((value.length !== maxLength)){
-      return { invalidLength: `Debe tener 8 caracteres` };
+      return { invalidLength: `Debe tener ${maxLength} caracteres` };
     }
 
     return null;
