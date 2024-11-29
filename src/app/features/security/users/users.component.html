@@ -258,8 +258,11 @@
                     <ng-icon name="matDescription" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
                 <input pInputText id="phone" formControlName="phone" [maxLength]="9" class="w-full"
-                [ngClass]="{'ng-invalid ng-dirty': hasError('phone', 'required')}"/>                 
+                [ngClass]="{'ng-invalid ng-dirty': hasError('phone', 'required') && hasError('phone', 'invalidFormat')}"/>                 
             </p-inputGroup>
+            @if (hasError('phone', 'invalidFormat')) {
+                <div class="p-error ml-6">Por favor formato del celular correcto.</div>
+            }
             @if (hasError('phone', 'required')) {
                 <div class="p-error ml-6">Por favor ingrese el celular del Usuario.</div>
             } 

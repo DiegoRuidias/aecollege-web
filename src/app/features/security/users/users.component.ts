@@ -25,6 +25,7 @@ import {
 import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities';
 import { identity } from 'rxjs';
 import { EmailValidator } from '../../system/matricule/alumnos/validators/email.validator';
+import { PhoneValidator } from '../../system/matricule/alumnos/validators/phone.validator';
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -80,7 +81,7 @@ export default class UsersComponent implements OnInit{
     isActive: [true],
     name: ['', Validators.required],
     username: ['', Validators.required],
-    phone: ['', Validators.required],
+    phone: ['',[PhoneValidator(), Validators.required]],
     email: ['',[EmailValidator(), Validators.required]],
     password: ['', Validators.required]
 });
