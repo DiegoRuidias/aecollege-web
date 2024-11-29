@@ -70,6 +70,9 @@
                 [ngClass]="{'ng-invalid ng-dirty': hasError('yearStart', 'required')}"/>
             @if (hasError('yearStart', 'required')) {
                 <div class="p-error">Por favor ingrese la Fecha de Inicio.</div>
+            }
+            @if (formPeriods.errors?.['invalidDate']) {
+                <div class="p-error">La fecha de inicio debe ser menor.</div>
             }  
         </div>
         
@@ -78,9 +81,11 @@
             <p-calendar inputId="yearEnd" appendTo="body" [iconDisplay]="'input'" 
                 [showOnFocus]="false" [showIcon]="true" formControlName="yearEnd"
                 [ngClass]="{'ng-invalid ng-dirty': hasError('yearEnd', 'required')}"/>
-
             @if (hasError('yearEnd', 'required')) {
                 <div class="p-error">Por favor ingrese la Fecha de Fin.</div>
+            } 
+            @if (formPeriods.errors?.['invalidDate']) {
+                <div class="p-error">La fecha de fin debe ser mayor.</div>
             }  
         </div>
 
