@@ -65,6 +65,7 @@ import { typePerson } from './model/roles.model';
   templateUrl: './roles.component.html',
   styleUrl: './roles.component.scss'
 })
+
 export default class RolesComponent implements OnInit{
   private readonly formBuilder = inject(FormBuilder);
   rolesService = inject(RolesService);
@@ -149,7 +150,6 @@ public formRoles: FormGroup = this.formBuilder.group({
 
     this.selectedRoles = [item]
 
- 
     this.formRoles.controls['id'].setValue(item.id);
     this.formRoles.controls['isActive'].setValue(item.isActive);
     this.formRoles.controls['code'].setValue(item.code);
