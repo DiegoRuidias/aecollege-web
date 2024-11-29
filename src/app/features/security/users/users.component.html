@@ -180,7 +180,7 @@
                 <div class="flex">
                     <label for="code" class="font-semibold w-11rem h-2rem">Nombres:</label>
                     <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
-                        <span class="text-black-alpha-90">{{ selectedUsers[0]?.username }}</span>
+                        <span class="text-black-alpha-90">{{ selectedUser[0]?.username }}</span>
                     </div>
                 </div>
         </div>
@@ -189,7 +189,7 @@
                 <div class="flex">
                     <label for="name" class="font-semibold w-11rem h-2rem">Usuario</label>
                     <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
-                        <span class="text-black-alpha-90">{{ selectedUsers[0]?.name }}</span>
+                        <span class="text-black-alpha-90">{{ selectedUser[0]?.name }}</span>
                     </div>
                 </div>
         </div>
@@ -198,7 +198,7 @@
                 <div class="flex">
                     <label for="description" class="font-semibold w-11rem h-2rem">Celular:</label>
                     <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
-                        <span class="text-black-alpha-90">{{ selectedUsers[0]?.phone }}</span>
+                        <span class="text-black-alpha-90">{{ selectedUser[0]?.phone }}</span>
                     </div>
                 </div>
         </div>
@@ -207,10 +207,10 @@
             <div class="flex">
                 <label for="description" class="font-semibold w-11rem h-2rem">Email:</label>
                 <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
-                    <span class="text-black-alpha-90">{{ selectedUsers[0]?.email }}</span>
+                    <span class="text-black-alpha-90">{{ selectedUser[0]?.email }}</span>
                 </div>
             </div>
-    </div>
+        </div>
     </div>
     <div class="flex justify-content-end gap-2 mt-2">
         <button pButton pRipple type="button"  severity="primary" pTooltip="Cerrar" (click)="isViewUsers = false" class="font-semibold">Cerrar</button>    </div>
@@ -221,7 +221,7 @@
     <ng-template pTemplate="header">
         <div class="flex flex-column">
             <div class="p-dialog-title">{{isEdit ? 'Editar Usuario ' : 'Crear Usuario'}}</div>
-            <div class="mt-2 text-blue-600">{{isEdit ? 'Usuario: '  + selectedUsers[0]?.name : 'Ingrese los campos solicitados'}}</div>
+            <div class="mt-2 text-blue-600">{{isEdit ? 'Usuario: '  + selectedUser[0]?.name : 'Ingrese los campos solicitados'}}</div>
         </div>
     </ng-template>
     <form [formGroup]="formUsers">
@@ -242,7 +242,7 @@
             <label for="username" class="font-semibold w-6rem">Usuario</label>
             <p-inputGroup>
                 <p-inputGroupAddon >
-                    <ng-icon username="matBadge" class="text-color text-lg"></ng-icon>
+                    <ng-icon name="matPerson" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
                 <input pInputText id="username" [readonly]="isEdit" formControlName="username" [maxLength]="12" class="w-full"
                 [ngClass]="{'ng-invalid ng-dirty': hasError('username', 'required')}"/>              
@@ -258,8 +258,11 @@
                     <ng-icon name="matDescription" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
                 <input pInputText id="phone" formControlName="phone" [maxLength]="9" class="w-full"
-                [ngClass]="{'ng-invalid ng-dirty': hasError('phone', 'required')}"/>                 
+                [ngClass]="{'ng-invalid ng-dirty': hasError('phone', 'required') && hasError('phone', 'invalidFormat')}"/>                 
             </p-inputGroup>
+            @if (hasError('phone', 'invalidFormat')) {
+                <div class="p-error ml-6">Por favor formato del celular correcto.</div>
+            }
             @if (hasError('phone', 'required')) {
                 <div class="p-error ml-6">Por favor ingrese el celular del Usuario.</div>
             } 
@@ -268,11 +271,14 @@
             <label for="email" class="font-semibold w-6rem">Email:</label>
             <p-inputGroup>
                 <p-inputGroupAddon>
-                    <ng-icon name="matBadge" class="text-color text-lg"></ng-icon>
+                    <ng-icon name="matEmail" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
                 <input pInputText id="email" formControlName="email" [maxLength]="50" class="w-full" 
-                [ngClass]="{'ng-invalid ng-dirty': hasError('email', 'required')}"/>
+                [ngClass]="{'ng-invalid ng-dirty': hasError('email','required') && hasError('email','invalidFormat')}"/>
             </p-inputGroup>
+            @if (hasError('email', 'invalidFormat')) {
+                <div class="p-error ml-6">Por favor ingrese formato correcto.</div>
+            }
             @if (hasError('email', 'required')) {
                 <div class="p-error ml-6">Por favor ingrese el email del Usuario.</div>
             }  
