@@ -1,0 +1,67 @@
+<div class="card pt-3">
+    <div class="col-12 p-0 text-lg mb-2">
+        <button pButton pRipple icon="pi pi-arrow-left" label="Atrás" (click)="location.back()" class="p-button-danger font-bold"></button>
+    </div>
+    <div class="col-12 p-0">
+        <div class="card surface-100 p-3 pb-0">
+            <div class="grid">
+                <div class="col-2 hidden sm:block md:col-1 text-center">
+                    <p-avatar [label]="'sasas jj' | avatarLabel"  styleClass="mr-2" size="xlarge"  shape="circle" />
+                </div>
+                <div class="col-10 md:col-11">
+                    <h4 class="font-bold text-primary mb-0">DIEGO JEFFERSON RUIDIAS OLIVERA - 74862780</h4>
+                    <p class="mt-1 text-lg">Código: 202401 | Nivel: PRIMARIA | Grado: PRIMERO | Sección: A</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid mt-1">
+        <div class="col-12 md:col-6 mt-2">
+            <h5>Seleccionar Pagos</h5>
+            @for (charge of charges; track $index) {
+                <div class="card surface-50  px-2 p-0 mb-0 mt-2">
+                    <div class="grid p-0 pt-2">
+                        <div class="col-1 flex align-items-center">
+                            <p-checkbox [(ngModel)]="selectedCharges" [value]="charge" [disabled]="!isSelectable($index)" (onChange)="onChangePay(charge,$index)"/>
+                        </div>
+                        <div class="col-11">
+                            <h5 class="mb-0 font-bold">{{charge.charge}} </h5>
+                            <p class="mb-0 text-xl">Monto: S/. {{charge.amount | number:'1.2-2'}}</p>
+                            <p class="text-xl">Fecha de Vencimiento: {{charge.expiry}}</p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    
+        <div class="col-12 md:col-6 mt-2">
+            <p-dropdown placeholder=":: Eliga medio de pago ::" [options]="halfPayments" class="p-fluid text-base" optionLabel="name"/>
+            <div class="card surface-100 px-3 mt-2">
+                <h5 class="font-bold">Resumen de pagos</h5>
+                <div class="grid px-3 mt-2 border-bottom-1">
+                    @for (item of selectedCharges; track $index) {
+                        <div class="col-6 py-2">
+                            <li class="text-lg text-primary font-bold">{{item.charge}}</li>
+                        </div>
+                        <div class="col-6 text-right py-2">
+                            <p class="text-lg text-primary font-bold">S/. {{item.amount | number:'1.2-2'}}</p>
+                        </div>
+                    }
+                </div>
+                <div class="grid mt-2 px-5">
+                    <div class="col-6 p-0 pt-2">
+                        <h5>Total a Pagar:</h5>
+                    </div>
+                    <div class="col-6 p-0 pt-2 text-right">
+                        <h5>S/. {{total | number:'1.2-2'}}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 p-0 text-lg mb-2 text-right">
+            <button pButton pRipple icon="pi pi-check-circle" label="Pagar" (click)="onPay()" class="p-button-info font-bold"></button>
+            </div>
+        </div>
+    </div>
+
+</div>

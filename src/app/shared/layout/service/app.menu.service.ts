@@ -104,7 +104,7 @@ export class MenuService {
                 {
                     label: 'Panel de inicio',
                     icon: 'matHome',
-                    routerLink: ['']
+                    routerLink: ['/home']
                 },
             
             ]

@@ -174,6 +174,12 @@ export default class AlumnosComponent implements OnInit{
     address:['']
   });
 
+  reset(): void {
+    this.activeIndex = 0;
+    this.formAcademic.reset();
+    this.formStudent.reset();
+    this.formParent.reset();
+  }
   onChangeDocumentNumber(event: any): void {
     let value = event.target.value;
     value = value.replace(/[^0-9]/g, '');
@@ -298,6 +304,8 @@ export default class AlumnosComponent implements OnInit{
           summary: 'Alumno Matriculado',
           detail: 'El Alumno se matriculó correctamente.',
         });
+        this.reset();
+        this.load();
         this.isLoadingButton = false;
       },
       error:(err) => {

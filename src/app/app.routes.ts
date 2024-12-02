@@ -3,7 +3,7 @@ import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     {
-        path: '',
+        path: 'home',
         loadComponent: () => import('./shared/layout/views/app-layout/app-layout.component'),
         children: [
             {
@@ -110,6 +110,6 @@ export const routes: Routes = [
     },
     {
         path: '**',
-        redirectTo: ''
+        redirectTo: '/home'
     }
 ];

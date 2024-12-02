@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
@@ -13,13 +13,18 @@ import {
   matPersonAddAlt1,
   matNewspaper
 } from '@ng-icons/material-icons/baseline'
-import { PagosComponent } from './pagos/pagos.component';
 import { FileRegisterService } from '../alumnos/service/file-register.service';
 import { StateLabelPipe } from '../list/pipes/state-label.pipe';
 import { StatePipe } from '../list/pipes/state.pipe';
 import { ErrorPageComponent } from '../../../../shared/utils/error-page/error-page.component';
 import { AvatarLabelPipe } from '../list/pipes/avatar-label.pipe';
 import { LoadingPageComponent } from '../../../../shared/utils/loading-page/loading-page.component';
+import { PaymentsComponent } from './payments/payments.component';
+import { DocumentsComponent } from './documents/documents.component';
+import { forkJoin } from 'rxjs';
+import { ParentsComponent } from './parents/parents.component';
+import { ParentsService } from '../alumnos/service/parents.service';
+import { ChargesService } from '../alumnos/service/charges.service';
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -32,12 +37,14 @@ import { LoadingPageComponent } from '../../../../shared/utils/loading-page/load
     RippleModule,
     TabViewModule,
     NgIconComponent,
-    PagosComponent,
     StateLabelPipe,
     StatePipe,
     AvatarLabelPipe,
     ErrorPageComponent,
-    LoadingPageComponent
+    LoadingPageComponent,
+    PaymentsComponent,
+    DocumentsComponent,
+    ParentsComponent
   ],
   providers: [
     provideIcons({
@@ -50,22 +57,48 @@ import { LoadingPageComponent } from '../../../../shared/utils/loading-page/load
 })
 export default class SearchComponent implements OnInit {
   fileRegisterService = inject(FileRegisterService);
-  @Input("id") id!: any[];
+  parentService = inject(ParentsService);
+  location = inject(Location);
+  chargesService = inject (ChargesService);
+  @Input("id") id: number = 0;
 
   matricule!: any;
+  pays: any[] = [];
   isLoading: boolean = false;
   isError: boolean = false;
+
   ngOnInit(): void {
     this.isLoading = true
-    this.fileRegisterService.findById(this.id).subscribe({
-      next:(data) => {
-        this.matricule = data;
-        this.isLoading = false;
+    const fileRequest = this.fileRegisterService.findById(this.id);
+
+    forkJoin([fileRequest]).subscribe({
+      next:([fileRegister]) => {
+        this.matricule = fileRegister;
+
+        if(fileRegister){
+          this.getCharges(this.matricule.fileEconomic.id)
+        }else {
+          this.isLoading = true;
+          this.isError = true;
+        }
       },
-      error:(err) => {
+      error:([err]) => {
         this.isLoading = true;
         this.isError = true;
       }
+    });
+  }
+
+  getCharges(id: number): void {
+    this.chargesService.findPays(id).subscribe({
+      next: (charge) => {
+        this.pays = charge;
+        this.isLoading = false;
+      },
+      error: (err) =>{
+        this.isLoading = true;
+        this.isError = true; 
+      },
     })
   }
 }
