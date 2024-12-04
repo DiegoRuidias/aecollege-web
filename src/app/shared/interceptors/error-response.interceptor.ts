@@ -3,9 +3,13 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 
 import { MessageService } from 'primeng/api';
 import { catchError, tap, throwError } from 'rxjs';
+import { Router } from '@angular/router';
+import { LoginService } from '../auth/services/login.service';
 
 export const errorResponseInterceptor: HttpInterceptorFn = (req, next) => {
   const toastService = inject(MessageService);
+  const router = inject(Router);
+  const loginService = inject(LoginService);
   return next(req).pipe(
     tap({
       error: (e) => {        
@@ -30,6 +34,10 @@ export const errorResponseInterceptor: HttpInterceptorFn = (req, next) => {
           }
           case 500: {
             console.log('default');
+            break;
+          }
+          case 403: {
+            loginService.isAuthenticated();
             break;
           }
           default: {

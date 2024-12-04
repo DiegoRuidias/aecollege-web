@@ -530,7 +530,11 @@ export default class AlumnosComponent implements OnInit{
 
   @HostListener('document:keydown.enter', ['$event'])
   handleKeyboardEvent() {
+    if(this.activeIndex === 1){
+      this.validateStudent();
+    } else {
     this.hasFormValid();
+    }
   }
 
 }

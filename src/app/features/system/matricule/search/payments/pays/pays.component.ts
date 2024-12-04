@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RevenuesService } from '../../../alumnos/service/revenues.service';
 import { MessageService } from 'primeng/api';
+import { LoginService } from '../../../../../../shared/auth/services/login.service';
 
 
 @Component({
@@ -34,6 +35,7 @@ export class PaysComponent {
   router = inject(Router);
   revenuesService = inject(RevenuesService);
   toastService = inject(MessageService);
+  loginService = inject(LoginService);
 
   halfPayments = halfPayments;
   selectedCharges: any[] = [];
@@ -56,6 +58,7 @@ export class PaysComponent {
     this.selectedCharges = [];
     this.isHalfPaymentSelected = false;
     this.isPaysVisible = true;
+    console.log(this.loginService.getUserId())
   }
 
   onPay(): void {
@@ -80,7 +83,7 @@ export class PaysComponent {
     const request = {
       charges: this.selectedCharges,
       halfPayment: this.selectedHalfPayment,
-      userId: 1,
+      userId: this.loginService.getUserId(),
       fileEconomicId: this.fileEconomic?.id
     }
     this.revenuesService.create(request).subscribe({

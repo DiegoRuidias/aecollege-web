@@ -197,7 +197,7 @@
                     <ng-icon name="matAttachMoney" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
                 <p-dropdown inputId="type" formControlName="type" [options]="typeList"  optionLabel="name" optionValue="id" 
-                class="w-full" [ngClass]="{'ng-invalid ng-dirty': hasError('type', 'required')}" placeholder=":: Seleccionar Tipo ::" 
+                class="w-full" [ngClass]="{'ng-invalid ng-dirty': hasError('type', 'required')}" placeholder="::Seleccionar Tipo::" 
                 appendTo="body" (onChange)="onTypeChange($event)"/>
                 
             </div>
@@ -226,16 +226,13 @@
                 <p-inputGroupAddon>
                     <ng-icon name="matCalendarMonth" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <p-dropdown class="w-full" inputId="monthStart" formControlName="monthStart" [options]="months"  optionLabel="month" optionValue="id" 
-                 [ngClass]="{'ng-invalid ng-dirty': hasError('monthStart', 'required')}" placeholder=":: Seleccione Mes ::"  appendTo="body" />
+                <p-dropdown class="w-full" inputId="monthStart" formControlName="monthStart" [options]="meses"  optionLabel="month" optionValue="id" 
+                 [ngClass]="{'ng-invalid ng-dirty': hasError('monthStart', 'required')}" placeholder="::Seleccione Mes::"  appendTo="body" />
                 <!-- <input pInputText id="monthStart" formControlName="monthStart" [maxLength]="50" class="w-full" 
                 [ngClass]="{'ng-invalid ng-dirty': hasError('monthStart', 'required')}"/> -->
             </div>
             @if (hasError('monthStart', 'required')) {
                 <div class="p-error ml-5">Por favor ingrese el mes de inicio.</div>
-            }
-            @if(formPayments.hasError('monthGreaterThanEnd')){
-                <div class="p-error ml-5">Mes debe ser Menor.</div>
             }  
         </div>
         <div class="field col-6 py-0">
@@ -244,14 +241,11 @@
                 <p-inputGroupAddon>
                     <ng-icon name="matCalendarMonth" class="text-color text-lg"></ng-icon>
                 </p-inputGroupAddon>
-                <p-dropdown class="w-full" inputId="monthEnd" formControlName="monthEnd" [options]="months"  optionLabel="month" optionValue="id" 
-                  [ngClass]="{'ng-invalid ng-dirty': hasError('monthEnd', 'required')}" placeholder=":: Seleccione Mes ::"  appendTo="body" />
+                <p-dropdown class="w-full" inputId="monthEnd" formControlName="monthEnd" [options]="meses"  optionLabel="month" optionValue="id" 
+                  [ngClass]="{'ng-invalid ng-dirty': hasError('monthEnd', 'required')}" placeholder="::Seleccione Mes::"  appendTo="body" />
             </div>
             @if (hasError('monthEnd', 'required')) {
                 <div class="p-error ml-5">Por favor ingrese el mes de fin.</div>
-            } 
-            @if(formPayments.hasError('monthGreaterThanEnd')){
-                <div class="p-error ml-5">Mes debe ser Mayor.</div>
             }  
         </div>
 
@@ -274,6 +268,10 @@
                 <p-inputSwitch formControlName="isUnique" [readonly]="isSwitchDisabled" />
             </p-inputGroup> 
         </div>
+
+        @if(formPayments.hasError('monthGreaterThanEnd')){
+            <div class="p-error ml-5">El mes de inicio no puede ser mayor al mes de fin.</div>
+        }
         
 
     </form>

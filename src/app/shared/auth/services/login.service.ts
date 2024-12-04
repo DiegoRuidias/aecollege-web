@@ -30,6 +30,14 @@ export class LoginService extends AppService {
     return payload.role || 6;  
   }
 
+  getUserId(): number{
+    const token = this.getToken();
+    if (!token) return 1;
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.userId || 1;  
+  }
+
   isAuthenticated(): boolean {
   const token = this.getToken();
   if (!token) return false;

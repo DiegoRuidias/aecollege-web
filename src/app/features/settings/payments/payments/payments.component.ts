@@ -20,7 +20,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities';
 import { matAttachMoney, matBadge, matCalendarMonth, matDescription, matToday, matVpnKey } from '@ng-icons/material-icons/baseline';
-import { months, typePayment } from './model/payments.model';
+import { typePayment } from './model/payments.model';
 import { PeriodsService } from '../periods/service/periods.service';
 @Component({
   selector: 'app-payments',
@@ -60,7 +60,20 @@ export default class PaymentsComponent {
   paymentsService = inject(PaymentsService);
   paymentList: any[] = [];
   paymentListC: any[] = [];
-  months: any[] = months;
+  meses: any[] = [
+    {id: 1 , month: "enero".toUpperCase()},
+    {id: 2 , month: "febrero".toUpperCase()},
+    {id: 3 , month: "marzo".toUpperCase()},
+    {id: 4 , month: "abril".toUpperCase()},
+    {id: 5 , month: "mayo".toUpperCase()},
+    {id: 6 , month: "junio".toUpperCase()},
+    {id: 7 , month: "julio".toUpperCase()},
+    {id: 8 , month: "agosto".toUpperCase()},
+    {id: 9, month: "septiembre".toUpperCase()},
+    {id: 10, month: "octubre".toUpperCase()},
+    {id: 11, month: "noviembre".toUpperCase()},
+    {id: 12, month: "diciembre".toUpperCase()}
+];
 
   selectedPeriod: any;
   selectedPayment: any;
@@ -126,7 +139,7 @@ export default class PaymentsComponent {
     this.formPayments.reset();
     this.isSwitchDisabled = false;
     // this.formUsers.controls['id'].setValue(uuidv4());
-    this.formPayments.controls['isUnique'].setValue(false);
+    // this.formPayments.controls['isActive'].setValue(true);
   }
 
   openNew(): void {
@@ -234,7 +247,7 @@ export default class PaymentsComponent {
     compareMonth(form: FormGroup){
       const monthStart = form.get('monthStart')?.value;
       const monthEnd = form.get('monthEnd')?.value;
-      if (monthStart && monthEnd && monthStart >= monthEnd) {
+      if (monthStart && monthEnd && monthStart > monthEnd) {
         return { monthGreaterThanEnd: true };
       }
       return null;
