@@ -89,7 +89,7 @@ export class LayoutService {
         }
     }
 
-    themeLigth() {
+    themeLigth(): void {
         this.config.update(c => ({
             ...c,
             icon : 'heroSunSolid',

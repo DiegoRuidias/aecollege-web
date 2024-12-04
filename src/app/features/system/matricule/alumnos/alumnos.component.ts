@@ -259,6 +259,7 @@ export default class AlumnosComponent implements OnInit{
     this.isEdit = true;
     const dateValue = new Date(data?.dateOfBirth); 
 
+    this.formParent.controls['name'].setValue(data?.name);
     this.formParent.controls['documentType'].setValue(data?.documentType);
     this.formParent.controls['relation'].setValue(data?.relation);
     this.formParent.controls['documentNumber'].setValue(data?.documentNumber);

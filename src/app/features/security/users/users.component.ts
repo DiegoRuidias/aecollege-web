@@ -82,7 +82,6 @@ export default class UsersComponent implements OnInit{
   public formUsers: FormGroup = this.formBuilder.group({
     id: [''],
     isActive: [true],
-    typePerson: ['', Validators.required],
     name: ['', Validators.required],
     username: ['', Validators.required],
     phone: ['',[PhoneValidator(), Validators.required]],
@@ -132,8 +131,16 @@ export default class UsersComponent implements OnInit{
   }
 
   saveRoles(): void {
-    this.isLoadingButton = true; 
-    var request = this.tableRoles?._value;     
+    this.isLoadingButton = true;
+    var request = this.tableRoles?._value; 
+
+    const activeRoles = request.filter(d => d.isActive);
+    if (activeRoles.length > 1) {
+      this.toastService.add({ severity: 'error', life: 5000, summary: 'Error de rol', detail: 'Solo puede haber un rol activo.' });
+      this.isLoadingButton = false; 
+      return;
+    } 
+
     request.forEach((item) => {
       if (!item.id) {
         item.id = uuidv4(); 
@@ -191,6 +198,7 @@ export default class UsersComponent implements OnInit{
     this.initFormUsers();
     this.isEdit = false;
     this.isFormUsers = true;
+    this.formUsers.controls['isActive'].setValue(true);
   }
 
   openEdit( event: any, item: any ): void {
@@ -208,7 +216,7 @@ export default class UsersComponent implements OnInit{
     this.formUsers.controls['username'].setValue(item.username);
     this.formUsers.controls['phone'].setValue(item.phone);
     this.formUsers.controls['email'].setValue(item.email);
-    this.formUsers.controls['password'].setValue(item.password);
+    this.formUsers.controls['password'].setValue('****');
 
     this.isFormUsers = true;
     this.isEdit = true;

@@ -36,14 +36,17 @@ import { expiredSessionMessage, noLogout } from '../model/jwtToken.model';
   styleUrl: './login.component.scss'
 })
 export default class LoginComponent implements OnInit{
-  layoutService = inject(LayoutService);
+
   loginService = inject(LoginService);
   settingsService = inject(SettingsService);
   menuService = inject(MenuService);
   toastService = inject(MessageService);
   router = inject(Router);
 
-  
+  constructor(public layoutService: LayoutService) {
+    layoutService.themeLigth()
+   }
+
   private readonly formBuilder = inject(FormBuilder);
   isLoading: boolean = false;
   public formAuth: FormGroup = this.formBuilder.group({
@@ -53,7 +56,6 @@ export default class LoginComponent implements OnInit{
 
   ngOnInit(): void {
     this.loginService.logout();
-    this.layoutService.themeLigth();
     this.menuService.clearMenus();
   }
 
@@ -73,13 +75,13 @@ export default class LoginComponent implements OnInit{
         this.isLoading = false;
         return;
       }
-      
-      this.router.navigate(['/home']);
+
       this.isLoading = false;
+      this.router.navigate(['/home']);
+      
       
     } catch (error) {
       this.isLoading = false;
-      console.error('Error during login or settings fetch', error);
     }
   }
 

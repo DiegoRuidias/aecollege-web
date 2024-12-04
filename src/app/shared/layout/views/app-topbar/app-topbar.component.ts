@@ -12,6 +12,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { MenuService } from '../../service/app.menu.service';
 import { NameLabelPipe } from '../../../pipes/name-label.pipe';
 import { LoginService } from '../../../auth/services/login.service';
+import { AvatarLabelPipe } from '../../../../features/system/matricule/list/pipes/avatar-label.pipe';
 @Component({
   selector: 'app-topbar',
   standalone: true,
@@ -22,7 +23,8 @@ import { LoginService } from '../../../auth/services/login.service';
     RippleModule,
     NgIconComponent,
     AvatarModule,
-    NameLabelPipe
+    NameLabelPipe,
+    AvatarLabelPipe
   ],
   providers: [
     provideIcons({ 

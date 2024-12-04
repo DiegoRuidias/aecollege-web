@@ -8,7 +8,7 @@
     <!-- Formulario de Login a la derecha -->
     <div class="col-12 sm:col-5 flex justify-content-center align-items-center">
         <div class="flex flex-column align-items-center text-center">
-            <img src="/layout/images/logo.png" alt="Login Image" style="width: 100%; max-width: 7rem; object-fit: cover;">
+            <img src="/layout/images/logo.png" class="cursor-pointer" alt="Login Image" style="width: 100%; max-width: 7rem; object-fit: cover;" (click)="layoutService.setTheme()">
             <h2 class="text-center text-primary font-bold mb-4">Albert Einstein College</h2>
             <form [formGroup]="formAuth" class="grid p-0 flex-column mt-3 w-full">
                 <div class="col-12 mb-3 p-0 w-full p-fluid">
