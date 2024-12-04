@@ -26,6 +26,8 @@ import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities'
 import { identity } from 'rxjs';
 import { EmailValidator } from '../../system/matricule/alumnos/validators/email.validator';
 import { PhoneValidator } from '../../system/matricule/alumnos/validators/phone.validator';
+import { typePerson } from '../roles/model/roles.model';
+import { DropdownModule } from 'primeng/dropdown';
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -45,7 +47,8 @@ import { PhoneValidator } from '../../system/matricule/alumnos/validators/phone.
     DialogModule,
     ToolbarModule,
     ProgressSpinnerModule,
-    NgIconComponent
+    NgIconComponent,
+    DropdownModule
   ],
   providers: [
     provideIcons({
@@ -62,6 +65,7 @@ export default class UsersComponent implements OnInit{
   usersService = inject(UsersService);
   userRolesService = inject(UserRolesService)
   toastService = inject(MessageService);
+  typePerson = typePerson;
   userList: any[] = [];
   selectedUser: any[] = [];
 
@@ -73,7 +77,6 @@ export default class UsersComponent implements OnInit{
   isLoadingUser: boolean = false;
   isLoadingRole: boolean = false;
   isLoadingButton: boolean = false; 
-  isFormUser: boolean = false;
   isEdit: boolean = false;
 
   public formUsers: FormGroup = this.formBuilder.group({
@@ -85,16 +88,6 @@ export default class UsersComponent implements OnInit{
     email: ['',[EmailValidator(), Validators.required]],
     password: ['', Validators.required]
 });
-
-  public formUser: FormGroup = this.formBuilder.group({
-    id: [''],
-    isActive: [true],
-    code: ['', Validators.required],
-    name: ['', Validators.required],
-    description: [''],
-    sort: [0]
-  });
-
 
   ngOnInit(): void {
     this.isViewSave = false;
@@ -138,8 +131,16 @@ export default class UsersComponent implements OnInit{
   }
 
   saveRoles(): void {
-    this.isLoadingButton = true; 
-    var request = this.tableRoles?._value;     
+    this.isLoadingButton = true;
+    var request = this.tableRoles?._value; 
+
+    const activeRoles = request.filter(d => d.isActive);
+    if (activeRoles.length > 1) {
+      this.toastService.add({ severity: 'error', life: 5000, summary: 'Error de rol', detail: 'Solo puede haber un rol activo.' });
+      this.isLoadingButton = false; 
+      return;
+    } 
+
     request.forEach((item) => {
       if (!item.id) {
         item.id = uuidv4(); 
@@ -197,6 +198,7 @@ export default class UsersComponent implements OnInit{
     this.initFormUsers();
     this.isEdit = false;
     this.isFormUsers = true;
+    this.formUsers.controls['isActive'].setValue(true);
   }
 
   openEdit( event: any, item: any ): void {
@@ -214,7 +216,7 @@ export default class UsersComponent implements OnInit{
     this.formUsers.controls['username'].setValue(item.username);
     this.formUsers.controls['phone'].setValue(item.phone);
     this.formUsers.controls['email'].setValue(item.email);
-    this.formUsers.controls['password'].setValue(item.password);
+    this.formUsers.controls['password'].setValue('****');
 
     this.isFormUsers = true;
     this.isEdit = true;

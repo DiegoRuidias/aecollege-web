@@ -1,0 +1,53 @@
+
+<div class="grid m-0 p-fluid" style="height: 100vh;">
+    <!-- Imagen a la izquierda -->
+    <div class="hidden background sm:block sm:col-7 p-0 h-full flex flex-column justify-content-center align-items-center bg-primary">
+    
+    </div>
+
+    <!-- Formulario de Login a la derecha -->
+    <div class="col-12 sm:col-5 flex justify-content-center align-items-center">
+        <div class="flex flex-column align-items-center text-center">
+            <img src="/layout/images/logo.png" class="cursor-pointer" alt="Login Image" style="width: 100%; max-width: 7rem; object-fit: cover;" (click)="layoutService.setTheme()">
+            <h2 class="text-center text-primary font-bold mb-4">Albert Einstein College</h2>
+            <form [formGroup]="formAuth" class="grid p-0 flex-column mt-3 w-full">
+                <div class="col-12 mb-3 p-0 w-full p-fluid">
+                    <p-floatLabel>
+                        <input pInputText id="username" formControlName="username" class="text-xl w-full p-fluid"/>
+                        <label for="username" class="text-lg">Usuario</label>
+                    </p-floatLabel>
+                </div>
+                <br/>
+                <div class="col-12 mb-3 p-0">
+                    <p-floatLabel>
+                        <input pInputText id="password" formControlName="password" type="password" class=" text-xl p-fluid w-full"/>
+                        <label for="password" class="text-lg">Contraseña</label>
+                    </p-floatLabel>
+                </div>
+                <br />
+                <button pButton label="Acceder" (click)="login()" class="p-mt-3 w-full text-xl font-bold"></button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<p-toast>
+    <ng-template let-message pTemplate="message">
+        <div class="p-toast-message-text">
+            <div class="p-toast-summary">{{message.summary}}</div>
+            <div class="p-toast-detail" innerHtml="{{message.detail}}"></div>
+        </div>
+    </ng-template>
+</p-toast>
+
+<p-dialog [(visible)]="isLoading" [modal]="true" [style]="{ height: '100vh', width: '100vw' }">
+    <ng-template pTemplate="headless">
+      <div class="flex justify-content-center align-items-center h-full w-full" style="background-color: rgba(0, 0, 0, 0.08);">
+        <div class="flex flex-column align-items-center">
+          <p-progressSpinner [style]="{width: '80px', height: '80px'}" [animationDuration]="'2s'"></p-progressSpinner>
+          <p class="p-mt-3" style="font-size: 1.2rem; font-weight: 600; color: #007bff;">Cargando, por favor espera...</p>
+        </div>
+      </div>
+    </ng-template>
+  </p-dialog>
+

@@ -89,6 +89,15 @@ export class LayoutService {
         }
     }
 
+    themeLigth(): void {
+        this.config.update(c => ({
+            ...c,
+            icon : 'heroSunSolid',
+            theme : './layout/styles/theme/saga-green/theme.css',
+            colorScheme : 'dark'
+        }));
+    }
+
     onMenuToggle() {
         if (this.isOverlay()) {
             this.state.overlayMenuActive = !this.state.overlayMenuActive;
