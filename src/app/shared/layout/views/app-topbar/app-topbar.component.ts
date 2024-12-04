@@ -10,9 +10,9 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroUserCircleSolid, heroMoonSolid, heroSunSolid} from '@ng-icons/heroicons/solid';
 import { AvatarModule } from 'primeng/avatar';
 import { MenuService } from '../../service/app.menu.service';
-import { LoginService } from '../../../auth/services/login.service';
-import { TruncateLabelPipe } from '../../../pipes/truncate-label.pipe';
 import { NameLabelPipe } from '../../../pipes/name-label.pipe';
+import { LoginService } from '../../../auth/services/login.service';
+import { AvatarLabelPipe } from '../../../../features/system/matricule/list/pipes/avatar-label.pipe';
 @Component({
   selector: 'app-topbar',
   standalone: true,
@@ -23,7 +23,8 @@ import { NameLabelPipe } from '../../../pipes/name-label.pipe';
     RippleModule,
     NgIconComponent,
     AvatarModule,
-    NameLabelPipe
+    NameLabelPipe,
+    AvatarLabelPipe
   ],
   providers: [
     provideIcons({ 

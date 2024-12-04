@@ -65,3 +65,4 @@ export class LoginService extends AppService {
     this.router.navigate(['/auth']);
   }
 }
+

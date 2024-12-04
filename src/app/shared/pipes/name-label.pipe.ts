@@ -8,7 +8,6 @@ export class NameLabelPipe implements PipeTransform {
 
   transform(value: string): string {
     if (!value) return ''; 
-
     const names = value.split(' ');  
     return names[0];
   }
