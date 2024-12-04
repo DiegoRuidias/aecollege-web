@@ -12,6 +12,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { MenuService } from '../../service/app.menu.service';
 import { LoginService } from '../../../auth/services/login.service';
 import { TruncateLabelPipe } from '../../../pipes/truncate-label.pipe';
+import { NameLabelPipe } from '../../../pipes/name-label.pipe';
 @Component({
   selector: 'app-topbar',
   standalone: true,
@@ -22,7 +23,7 @@ import { TruncateLabelPipe } from '../../../pipes/truncate-label.pipe';
     RippleModule,
     NgIconComponent,
     AvatarModule,
-    TruncateLabelPipe
+    NameLabelPipe
   ],
   providers: [
     provideIcons({ 
