@@ -7,26 +7,29 @@
 } @else {
 <div class="grid m-0 p-0 mt-1">
     <div class="col-12 lg:col-3 p-0">
-        <div class="card px-1 flex flex-column justify-content-center align-items-center w-full">
+        <div class="card px-1 flex flex-column justify-content-center align-items-center px-4 lg:px-0 w-full">
+            <div class="col-12 p-0 text-lg px-3 mb-2">
+                <button pButton pRipple icon="pi pi-arrow-left" (click)=" this.router.navigate(['/system/consultar-matricula']);" class="p-button-danger font-bold"></button>
+            </div>
             <p-avatar [label]="matricule.person.name | avatarLabel"  styleClass="mr-2" size="xlarge" [style]="{ 'width': '9rem', 'height':'9rem' }" shape="circle" />
             <h3 class="mb-0 text-center">{{matricule.person.name}}</h3>
-            <p class="mt-1 text-lg">DNI: {{matricule.person.documentNumber}}</p>
+            <p class="mt-1 text-lg">{{matricule.person.documentType.name}}: {{matricule.person.documentNumber}}</p>
             <p-tag [severity]="matricule.state | state" [value]="matricule.state | stateLabel" [style]="{'font-size': '1.1rem'}"/>
             <div class="grid w-full mt-2 flex xl:px-2 justify-content-center" align-content-center>
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Código: </div>
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">{{matricule.code}} </div>
+                <div class="col-5 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Código: </div>
+                <div class="col-7 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">{{matricule.code}} </div>
 
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Nivel: </div>
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">{{matricule.level}}</div>
+                <div class="col-5 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Nivel: </div>
+                <div class="col-7 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">{{matricule.level}}</div>
 
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Grado: </div>
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">{{matricule.grade}} </div>
+                <div class="col-5 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Grado: </div>
+                <div class="col-7 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">{{matricule.grade}} </div>
 
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Sección: </div>
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">{{matricule.section}} </div>
+                <div class="col-5 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Sección: </div>
+                <div class="col-7 border-bottom-1 py-2 border-300 text-lg lg:text-right text-center">{{matricule.section}} </div>
 
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Deuda: </div>
-                <div class="col-6 border-bottom-1 py-2 border-300 text-lg text-red-500 lg:text-right text-center">S/. {{matricule.fileEconomic.debt}} </div>
+                <div class="col-5 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Deuda: </div>
+                <div class="col-7 border-bottom-1 py-2 border-300 text-lg text-red-500 lg:text-right text-center">S/. {{matricule.fileEconomic.debt}} </div>
             </div>
             <div class="col-12 border-bottom-1 p-0 border-300 text-lg text-center ">
                 <div class="flex justify-content-around lg:flex-column xl:flex-row mt-4 w-full pb-3">
@@ -49,7 +52,7 @@
                             </span>
                         </div>
                     </ng-template>
-                    <app-pagos [charges]="matricule.charges" ></app-pagos>
+                    <app-payments (load)="getCharges(matricule.fileEconomic.id)" [charges]="charges" [pays]="pays" [person]="matricule?.person" [fileEconomic]="matricule?.fileEconomic"></app-payments>
                 </p-tabPanel>
                 <p-tabPanel>
                     <ng-template pTemplate="header">
@@ -60,9 +63,7 @@
                             </span>
                         </div>
                     </ng-template>
-                    <p>
-                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium...
-                    </p>
+                    <app-documents [documents]="matricule?.documentList"></app-documents>
                 </p-tabPanel>
                 <p-tabPanel>
                     <ng-template pTemplate="header">
@@ -73,8 +74,8 @@
                             </span>
                         </div>
                     </ng-template>
-                    <p>
-                        At vero eos et accusamus et iusto odio dignissimos...
+                    <p class="text-red-500">
+                        Proximamente...
                     </p>
                 </p-tabPanel>
                 <p-tabPanel>
@@ -86,12 +87,11 @@
                             </span>
                         </div>
                     </ng-template>
-                    <p>
-                        At vero eos et accusamus et iusto odio dignissimos...
-                    </p>
+                    <app-parents [parents]="matricule?.parents"></app-parents>
                 </p-tabPanel>
             </p-tabView>
         </div>
     </div>
 </div>
 }
+

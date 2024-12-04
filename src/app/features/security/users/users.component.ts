@@ -19,10 +19,15 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { 
-  matVpnKey, matBadge, matDescription
+  matVpnKey, matBadge, matDescription, matPerson,
+  matEmail, matPerson2
 } from '@ng-icons/material-icons/baseline'
 import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities';
 import { identity } from 'rxjs';
+import { EmailValidator } from '../../system/matricule/alumnos/validators/email.validator';
+import { PhoneValidator } from '../../system/matricule/alumnos/validators/phone.validator';
+import { typePerson } from '../roles/model/roles.model';
+import { DropdownModule } from 'primeng/dropdown';
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -42,11 +47,12 @@ import { identity } from 'rxjs';
     DialogModule,
     ToolbarModule,
     ProgressSpinnerModule,
-    NgIconComponent
+    NgIconComponent,
+    DropdownModule
   ],
   providers: [
     provideIcons({
-      matVpnKey, matBadge, matDescription
+      matVpnKey, matBadge, matDescription, matEmail, matPerson2, matPerson
     })
   ],
   templateUrl: './users.component.html',
@@ -59,40 +65,30 @@ export default class UsersComponent implements OnInit{
   usersService = inject(UsersService);
   userRolesService = inject(UserRolesService)
   toastService = inject(MessageService);
+  typePerson = typePerson;
   userList: any[] = [];
-  selectedUser: any;
+  selectedUser: any[] = [];
 
   isViewUsers: boolean = false;
   isFormUsers: boolean = false;
-  selectedUsers: any[] = [];
   rolesTable: any[] = [];
   isViewSave: boolean = false;
   isRolesView: boolean = false;
   isLoadingUser: boolean = false;
   isLoadingRole: boolean = false;
   isLoadingButton: boolean = false; 
-  isFormUser: boolean = false;
   isEdit: boolean = false;
 
   public formUsers: FormGroup = this.formBuilder.group({
     id: [''],
     isActive: [true],
+    typePerson: ['', Validators.required],
     name: ['', Validators.required],
     username: ['', Validators.required],
-    phone: ['', Validators.required],
-    email: ['', Validators.required],
+    phone: ['',[PhoneValidator(), Validators.required]],
+    email: ['',[EmailValidator(), Validators.required]],
     password: ['', Validators.required]
 });
-
-  public formUser: FormGroup = this.formBuilder.group({
-    id: [''],
-    isActive: [true],
-    code: ['', Validators.required],
-    name: ['', Validators.required],
-    description: [''],
-    sort: [0]
-  });
-
 
   ngOnInit(): void {
     this.isViewSave = false;
@@ -174,15 +170,15 @@ export default class UsersComponent implements OnInit{
   openAccess(event: any, item: any){
     event.stopPropagation();
     event.preventDefault();
-    this.selectedUsers = [item];
+    this.selectedUser = [item];
   }
 
-  openView(event: MouseEvent, item: any): void {
+  openView(event: any, item: any): void {
     this.isLoadingButton = false;
     event.stopPropagation();
     event.preventDefault();
     
-    this.selectedUsers = [item]
+    this.selectedUser = [item]
     this.isViewUsers = true;
   }
   initFormUsers(): void {
@@ -197,13 +193,13 @@ export default class UsersComponent implements OnInit{
     this.isFormUsers = true;
   }
 
-  openEdit( event: MouseEvent, item: any ): void {
+  openEdit( event: any, item: any ): void {
     this.isLoadingButton = false;
     this.formUsers.reset();
     event.stopPropagation();
     event.preventDefault();
 
-    this.selectedUsers = [item]
+    this.selectedUser = [item]
 
  
     this.formUsers.controls['id'].setValue(item.id);

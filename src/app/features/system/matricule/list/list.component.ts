@@ -80,8 +80,8 @@ export default class ListComponent implements OnInit {
     const periodRequest = this.periodService.findAll();
 
     forkJoin([fileRequest,periodRequest]).subscribe(([fileRegister,period])=>{
-      this.matriculeList = fileRegister;
-      this.totalRecords = fileRegister.length;
+      this.matriculeList = fileRegister.fileRegisterRequest;
+      this.totalRecords = fileRegister.totalRegisters;
       this.periodList = period;
     });
 

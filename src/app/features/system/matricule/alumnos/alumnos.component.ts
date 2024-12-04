@@ -133,9 +133,9 @@ export default class AlumnosComponent implements OnInit{
   public formAcademic: FormGroup = this.formBuilder.group({
     level: [undefined, Validators.required],
     gradeId: [undefined, Validators.required],
-    periodId: [undefined, Validators.required],
-    matriculeId: [undefined, Validators.required],
-    pensionId: [undefined, Validators.required],
+    period: [undefined, Validators.required],
+    matricule: [undefined, Validators.required],
+    pension: [undefined, Validators.required],
     roleId: [''],
     type: [undefined, Validators.required],
     state:[0]
@@ -174,6 +174,12 @@ export default class AlumnosComponent implements OnInit{
     address:['']
   });
 
+  reset(): void {
+    this.activeIndex = 0;
+    this.formAcademic.reset();
+    this.formStudent.reset();
+    this.formParent.reset();
+  }
   onChangeDocumentNumber(event: any): void {
     let value = event.target.value;
     value = value.replace(/[^0-9]/g, '');
@@ -227,8 +233,9 @@ export default class AlumnosComponent implements OnInit{
 
   loadSettings(){
     this.settings = this.settingsService.getSettings();
+    const period = this.periodsList.find(d => d.id === this.settings.periodId );
     this.formAcademic.get('roleId')?.setValue(this.settings.studentRole);
-    this.formAcademic.get('periodId')?.setValue(this.settings.periodId);
+    this.formAcademic.get('period')?.setValue(period);
     if (!this.formAcademic.value.roleId) {
       this.router.navigate(['config/predeterminados']);
     }
@@ -270,6 +277,59 @@ export default class AlumnosComponent implements OnInit{
 
   };
 
+  validateStudent(): void {
+    const documentNumber = this.formStudent.value.documentNumber;
+    const period = this.formAcademic.value.period;
+    this.isLoadingButton = true;
+    this.fileRegisterService.validateStudentPeriod(documentNumber,period.id).subscribe({
+      next: (data) => {
+        if(data){
+          this.hasFormValid();
+        } else {
+          this.toastService.add({
+            severity: 'error',
+            life: 5000,
+            summary: 'Alumno ya matriculado',
+            detail: `El alumno ya se encuentra matriculado en este periodo ${period.name}.`,
+          });
+        }
+        this.isLoadingButton = false;
+      },
+      error: (err) => {
+        this.isLoadingButton = false;
+      },
+    });
+  }
+
+
+  hasFormValid(): void {
+    if(!this.formAcademic.valid){
+      markAllAsTouched(this.formAcademic)
+      return;
+    }
+    if(!this.formStudent.valid && this.activeIndex > 0){
+      markAllAsTouched(this.formStudent)
+      return;
+    }
+
+    if(!(this.parents.length > 0) && this.activeIndex > 1){
+      this.toastService.add({
+        severity: 'error',
+        life: 5000,
+        summary: 'No hay Apoderados',
+        detail: 'Cree Apoderados para continuar.',
+      });
+      return;
+    }
+
+    if(this.activeIndex === 3){
+      this.save();
+      return;
+    }
+    this.activeIndex = this.activeIndex + 1;
+  }
+
+
   save(): void {
     this.isLoadingButton = true;
     const fullName = this.buildFullName(
@@ -298,6 +358,8 @@ export default class AlumnosComponent implements OnInit{
           summary: 'Alumno Matriculado',
           detail: 'El Alumno se matriculó correctamente.',
         });
+        this.reset();
+        this.load();
         this.isLoadingButton = false;
       },
       error:(err) => {
@@ -449,33 +511,7 @@ export default class AlumnosComponent implements OnInit{
     ]);    
     this.formParent.get('documentNumber')?.updateValueAndValidity();
   }
-  hasFormValid(): void {
-    if(!this.formAcademic.valid){
-      markAllAsTouched(this.formAcademic)
-      return;
-    }
-
-    if(!this.formStudent.valid && this.activeIndex > 0){
-      markAllAsTouched(this.formStudent)
-      return;
-    }
-
-    if(!(this.parents.length > 0) && this.activeIndex > 1){
-      this.toastService.add({
-        severity: 'error',
-        life: 5000,
-        summary: 'No hay Apoderados',
-        detail: 'Cree Apoderados para continuar.',
-      });
-      return;
-    }
-
-    if(this.activeIndex === 3){
-      this.save();
-      return;
-    }
-    this.activeIndex = this.activeIndex + 1;
-  }
+  
 
   hasErrorStudent(field: string, error: string): boolean | undefined {
     const control = this.formStudent.get(field);
@@ -494,7 +530,11 @@ export default class AlumnosComponent implements OnInit{
 
   @HostListener('document:keydown.enter', ['$event'])
   handleKeyboardEvent() {
+    if(this.activeIndex === 1){
+      this.validateStudent();
+    } else {
     this.hasFormValid();
+    }
   }
 
 }

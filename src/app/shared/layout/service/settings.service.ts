@@ -34,19 +34,36 @@ export class SettingsService extends AppService{
     localStorage.setItem('settings', JSON.stringify(settings));
   }
 
-  fetchAndSaveSettings(): boolean {
-    this.http.get<Settings>(`${this.baseUrl}/v1/settings`).subscribe({
-      next: (data) => {
+  async fetchAndSaveSettings(): Promise<boolean> {
+    try {
+      const data = await this.http.get<Settings>(`${this.baseUrl}/v1/settings`).toPromise();
+  
+      // Validamos si `data` es definido antes de usarlo
+      if (data) {
         this.config.set(data);
         this.saveToLocalStorage(data);
         return true;
-      },
-      error: (err) => {
-        return false;
+      } else {
+        return false; // Si data es undefined, manejamos el error adecuadamente
       }
-    });
-    return false;
+    } catch (error) {
+      return false;
+    }
   }
+
+  // fetchAndSaveSettings(): boolean {
+  //   this.http.get<Settings>(`${this.baseUrl}/v1/settings`).subscribe({
+  //     next: (data) => {
+  //       this.config.set(data);
+  //       this.saveToLocalStorage(data);
+  //       return true;
+  //     },
+  //     error: (err) => {
+  //       return false;
+  //     }
+  //   });
+  //   return false;
+  // }
 
   getSettings(): Settings {
     return this.config();

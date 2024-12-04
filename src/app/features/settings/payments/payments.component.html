@@ -1,17 +1,16 @@
 <div class="card p-2 md:p-4">
     <p-toolbar>
         <div class="p-toolbar-group-start">
-            <button pButton pRipple label="Nuevo"  icon="pi pi-plus" class="text-white font-bold"></button>
+            <button pButton pRipple label="Nuevo" (click)="openNew()" icon="pi pi-plus" class="text-white font-bold"></button>
 
         </div>
         <div class="p-toolbar-group-end">
-            <p-button  icon="pi pi-search" rounded="true" [style]="{'color': 'white'}" class="mr-2 font-bold"/>
-            <p-dropdown optionLabel="name" placeholder=" ::  Todos los Periodos :: " />
+            <p-dropdown class="w-full" optionValue="id" [options]="periodList" optionLabel="name" (onChange)="filterByPeriod($event)" placeholder=" ::  Todos los Periodos :: " />
         </div>
     </p-toolbar>
-    <p-table #tablePayments [value]="paymentList" [tableStyle]="{ 'min-width': '50rem' }" [scrollable]="true"  
-            dataKey="id" class="p-datatable-sm" [(selection)]="selectedPayment" [loading]="isLoadingPayments"
-            loadingIcon="null"> 
+    <p-table #tablePayments [value]="paymentList" [tableStyle]="{ 'min-width': '50rem' }" [scrollable]="true"
+            dataKey="id" class="p-datatable-sm" [(selection)]="selectedPayments" [loading]="isLoadingPayments"
+            loadingIcon="null">
 
         <ng-template pTemplate="header">
             <tr>
@@ -32,15 +31,14 @@
                     <p-tableCheckbox [value]="item" />
                 </td>
                 <td>{{ item.name }}</td>
-                <td>{{ item.amount }}</td>
+                <td>S/.{{ item.amount }}</td>
                 <td class="text-center"><p-checkbox [binary]="true" readonly="true" [ngModel]="item.isUnique" /></td>
                 <td class="text-center"><p-tag [value]="item.day" [style]="{'font-size': '1rem','background-color':'#F1F5F9','color':'#000000'}"/></td>
                 <td class="text-center"><p-tag severity="success" [value]="item.monthStart | month" [style]="{'font-size': '0.9rem'}"/></td>
                 <td class="text-center"><p-tag severity="danger" [value]="item.monthEnd | month" [style]="{'font-size': '0.9rem'}"/></td>
                 <td pFrozenColumn alignFrozen="right">
-                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="ver" (click)="openView($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
                     <button pButton pRipple type="button" [rounded]="true"  severity="warning" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
-                    <button pButton pRipple type="button" [rounded]="true"  severity="danger" pTooltip="Eliminar" (click)="openEdit($event, item)" icon="pi pi-trash" class="mr-2 text-xs"></button>
                 </td>
             </tr>
         </ng-template>
@@ -63,5 +61,226 @@
                 </td>
             </tr>
         </ng-template>
-    </p-table> 
+    </p-table>
 </div>
+
+<p-dialog  header="Pagos" [modal]="true" [(visible)]="isViewPayment" [resizable]="false" [style]="{ width: '30rem' }">
+    <div class="grid">
+        <div class="col-12">
+                <div class="flex">
+                    <label for="code" class="font-semibold w-11rem h-2rem">Nombres:</label>
+                    <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                        <span class="text-black-alpha-90">{{ selectedPayments[0]?.name }}</span>
+                    </div>
+                </div>
+        </div>
+
+        <div class="col-12">
+                <div class="flex">
+                    <label for="name" class="font-semibold w-11rem h-2rem">Tipo de pago</label>
+                    <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                        @if(selectedPayments[0]?.type){
+                            <span class="text-black-alpha-90">PENSION</span>
+                        }
+                        @else{
+                            <span class="text-black-alpha-90">MATRICULA</span>
+                        }
+                        
+                    </div>
+                </div>
+        </div>
+
+        <div class="col-12">
+                <div class="flex">
+                    <label for="description" class="font-semibold w-11rem h-2rem">Pago único:</label>
+                    <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                        @if(selectedPayments[0]?.isUnique){
+                            <span class="text-black-alpha-90">SI</span>
+                        }
+                        @else{
+                            <span class="text-black-alpha-90">NO</span>
+                        }
+                    </div>
+                </div>
+        </div>
+
+        <div class="col-12">
+            <div class="flex">
+                <label for="description" class="font-semibold w-11rem h-2rem">Día Pago:</label>
+                <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                    <span class="text-black-alpha-90">{{ selectedPayments[0]?.day }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="flex">
+                <label for="description" class="font-semibold w-11rem h-2rem">Inicio:</label>
+                <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                    <span class="text-black-alpha-90">{{ selectedPayments[0]?.monthStart | month }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="flex">
+                <label for="description" class="font-semibold w-11rem h-2rem">Fin:</label>
+                <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                    <span class="text-black-alpha-90">{{ selectedPayments[0]?.monthEnd | month }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="flex">
+                <label for="description" class="font-semibold w-11rem h-2rem">Monto:</label>
+                <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                    <span class="text-black-alpha-90">S/.{{ selectedPayments[0]?.amount }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="flex">
+                <label for="period" class="font-semibold w-11rem h-2rem">Periodo:</label>
+                <div class="flex align-items-center bg-primary-200 border-round px-2 w-full">
+                    <span class="text-black-alpha-90">{{ selectedPayments[0]?.period.name }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-content-end gap-2 mt-2">
+        <button pButton pRipple type="button"  severity="primary" pTooltip="Cerrar" (click)="isViewPayment = false" class="font-semibold">Cerrar</button>    </div>
+</p-dialog>
+
+<p-dialog [modal]="true" [(visible)]="isFormPayments" [resizable]="false" [style]="{ width: '50rem' }">
+    <ng-template pTemplate="header">
+        <div class="flex flex-column">
+            <div class="p-dialog-title">{{isEdit ? 'Editar Pago ' : 'Crear Pago'}}</div>
+            <div class="mt-2 text-blue-600">{{isEdit ? 'Pago: '  + selectedPayments[0]?.name : 'Ingrese los campos solicitados'}}</div>
+        </div>
+    </ng-template>
+    <form [formGroup]="formPayments" class="p-fluid p-formgrid grid mt-0">
+        <div class="field col-6 py-0">
+            <label for="name" class="font-semibold w-6rem">Nombre:</label>
+            <p-inputGroup>
+                <p-inputGroupAddon>
+                    <ng-icon name="matBadge" class="text-color text-lg"></ng-icon>
+                </p-inputGroupAddon>
+                <input pInputText id="name" formControlName="name" [maxLength]="50" class="w-full" 
+                [ngClass]="{'ng-invalid ng-dirty': hasError('name', 'required')}" placeholder="Ingrese el nombre del pago"/>
+            </p-inputGroup>
+            @if (hasError('name', 'required')) {
+                <div class="p-error ml-5">Por favor ingrese el nombre del pago.</div>
+            }  
+        </div>
+        <div class="field col-6 py-0">
+            <label for="periodId" class="font-semibold w-4rem">Periodo:</label>
+            <div class="flex">
+                <p-inputGroupAddon>
+                    <ng-icon name="matCalendarMonth" class="text-color text-lg "></ng-icon>
+                </p-inputGroupAddon>
+                <p-dropdown id="periodId" formControlName="periodId" class="w-full" optionValue="id" [options]="periodList" optionLabel="name" placeholder="::Seleccione Periodo::"
+                    [ngClass]="{'ng-invalid ng-dirty' : this.formPayments.controls['periodId'].invalid && (this.formPayments.controls['periodId'].dirty || this.formPayments.controls['periodId'].touched)}" />
+            </div>
+            @if (this.formPayments.controls['periodId'].invalid && (this.formPayments.controls['periodId'].dirty || this.formPayments.controls['periodId'].touched)) {
+                @if (this.formPayments.controls['periodId'].hasError('required')) {
+                    <div class="p-error ml-5">Por favor seleccione el periodo.</div>
+                }
+            }
+        </div>
+
+        <div class="field col-6 py-0">
+            <label for="type" class="font-semibold w-6rem">Tipo: </label>
+            <div class="flex">
+                <p-inputGroupAddon >
+                    <ng-icon name="matAttachMoney" class="text-color text-lg"></ng-icon>
+                </p-inputGroupAddon>
+                <p-dropdown inputId="type" formControlName="type" [options]="typeList"  optionLabel="name" optionValue="id" 
+                class="w-full" [ngClass]="{'ng-invalid ng-dirty': hasError('type', 'required')}" placeholder=":: Seleccionar Tipo ::" 
+                appendTo="body" (onChange)="onTypeChange($event)"/>
+                
+            </div>
+            @if (hasError('type', 'required')) {
+                <div class="p-error ml-5">Por favor ingrese el Tipo de pago.</div>
+            } 
+        </div>
+        <div class="field col-6 py-0">
+            <label for="day" class="font-semibold w-6rem">Dia de pago</label>
+            <p-inputGroup>
+                <p-inputGroupAddon >
+                    <ng-icon name="matToday" class="text-color text-lg"></ng-icon>
+                </p-inputGroupAddon>
+                <input pInputText id="day" formControlName="day" [maxLength]="2" class="w-full"
+                [ngClass]="{'ng-invalid ng-dirty': hasError('day', 'required')}"
+                (input)="onlyNumbersDay($event)" placeholder="Días del 1 al 27"/>              
+            </p-inputGroup>
+            @if (hasError('day', 'required')) {
+                <div class="p-error ml-5">Por favor ingrese el día de pago.</div>
+            }  
+        </div> 
+        
+        <div class="field col-6 py-0">
+            <label for="monthStart" class="font-semibold w-7rem">Mes de inicio:</label>
+            <div class="flex ">
+                <p-inputGroupAddon>
+                    <ng-icon name="matCalendarMonth" class="text-color text-lg"></ng-icon>
+                </p-inputGroupAddon>
+                <p-dropdown class="w-full" inputId="monthStart" formControlName="monthStart" [options]="months"  optionLabel="month" optionValue="id" 
+                 [ngClass]="{'ng-invalid ng-dirty': hasError('monthStart', 'required')}" placeholder=":: Seleccione Mes ::"  appendTo="body" />
+                <!-- <input pInputText id="monthStart" formControlName="monthStart" [maxLength]="50" class="w-full" 
+                [ngClass]="{'ng-invalid ng-dirty': hasError('monthStart', 'required')}"/> -->
+            </div>
+            @if (hasError('monthStart', 'required')) {
+                <div class="p-error ml-5">Por favor ingrese el mes de inicio.</div>
+            }
+            @if(formPayments.hasError('monthGreaterThanEnd')){
+                <div class="p-error ml-5">Mes debe ser Menor.</div>
+            }  
+        </div>
+        <div class="field col-6 py-0">
+            <label for="monthEnd" class="font-semibold w-6rem">Mes de fin:</label>
+            <div class="flex ">
+                <p-inputGroupAddon>
+                    <ng-icon name="matCalendarMonth" class="text-color text-lg"></ng-icon>
+                </p-inputGroupAddon>
+                <p-dropdown class="w-full" inputId="monthEnd" formControlName="monthEnd" [options]="months"  optionLabel="month" optionValue="id" 
+                  [ngClass]="{'ng-invalid ng-dirty': hasError('monthEnd', 'required')}" placeholder=":: Seleccione Mes ::"  appendTo="body" />
+            </div>
+            @if (hasError('monthEnd', 'required')) {
+                <div class="p-error ml-5">Por favor ingrese el mes de fin.</div>
+            } 
+            @if(formPayments.hasError('monthGreaterThanEnd')){
+                <div class="p-error ml-5">Mes debe ser Mayor.</div>
+            }  
+        </div>
+
+        <div class="field col-6 py-0">
+            <label for="amount" class="font-semibold w-8rem">Monto de pago:</label>
+            <p-inputGroup>
+                <p-inputGroupAddon>
+                    <ng-icon name="matAttachMoney" class="text-color text-lg"></ng-icon>
+                </p-inputGroupAddon>
+                <input pInputText id="amount" formControlName="amount" [maxLength]="50" class="w-full" 
+                (input)="onlyNumbers($event)"[ngClass]="{'ng-invalid ng-dirty': hasError('amount', 'required')}" placeholder="Ingrese el monto del pago"/>
+            </p-inputGroup>
+            @if (hasError('amount', 'required')) {
+                <div class="p-error ml-5">Por favor ingrese el Monto de pago.</div>
+            }  
+        </div>
+        <div class="field col-6 py-0">
+            <label for="isUnique" class="font-semibold w-6rem">Pago único:</label>
+            <p-inputGroup>
+                <p-inputSwitch formControlName="isUnique" [readonly]="isSwitchDisabled" />
+            </p-inputGroup> 
+        </div>
+        
+
+    </form>
+    <div class="flex justify-content-end gap-2">
+        <button pButton pRipple type="button"  severity="info" pTooltip="Cancelar" (click)="isFormPayments = false" class="font-semibold">Cancelar</button>
+        <button pButton pRipple type="button" [loading]="isLoadingButton" severity="success" pTooltip="Guardar" (click)="save()"  class="font-semibold">Guardar</button>
+    </div>
+
+    
+</p-dialog>

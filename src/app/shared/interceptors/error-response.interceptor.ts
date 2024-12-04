@@ -3,31 +3,17 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 
 import { MessageService } from 'primeng/api';
 import { catchError, tap, throwError } from 'rxjs';
+import { Router } from '@angular/router';
+import { LoginService } from '../auth/services/login.service';
 
 export const errorResponseInterceptor: HttpInterceptorFn = (req, next) => {
   const toastService = inject(MessageService);
+  const router = inject(Router);
+  const loginService = inject(LoginService);
   return next(req).pipe(
     tap({
-      error: (e) => {
-        console.log('Error...', e);
-        
-        if (e.error.messages) {
-          const arrayErrors: Array<any> = e.error.messages;
-          if (arrayErrors.length > 1) {
-            let errorMessage = "<ul>";
-            arrayErrors.forEach(item => {
-              errorMessage = errorMessage + "<li>" + item.message + "</li>";
-            });
-            errorMessage = errorMessage + "</ul>";
-            toastService.add({ severity: 'error', life: 10000, summary: 'Ha ocurrido los siguientes errores', detail: errorMessage });
-          } else {
-            toastService.add({ severity: 'error', life: 10000, summary: 'Ha ocurrido el siguiente error', detail: e.error.messages[0].message });
-          }
-        } else {
-          toastService.add({ severity: 'error', life: 10000, summary: 'Ha ocurrido el siguiente error', detail: 'El Servidor no esta disponible en este momento, intentelo más tarde'});
-        }
-        
-        /*switch (e.error.status) {
+      error: (e) => {        
+        switch (e.status) {
           case 400: {
             const arrayErrors: Array<any> = e.error.messages;
             if (arrayErrors.length > 1) {
@@ -42,15 +28,37 @@ export const errorResponseInterceptor: HttpInterceptorFn = (req, next) => {
             }
             break;
           }
+          case 401: {
+            toastService.add({ severity: 'error', life: 10000, summary: 'Fallo en la autenticación', detail: e.error.message });
+            break;
+          }
           case 500: {
             console.log('default');
             break;
           }
-          default: {
-            console.log('default');
+          case 403: {
+            loginService.isAuthenticated();
             break;
           }
-        }*/
+          default: {
+            if (e.error.messages) {
+              const arrayErrors: Array<any> = e.error.messages;
+              if (arrayErrors.length > 1) {
+                let errorMessage = "<ul>";
+                arrayErrors.forEach(item => {
+                  errorMessage = errorMessage + "<li>" + item.message + "</li>";
+                });
+                errorMessage = errorMessage + "</ul>";
+                toastService.add({ severity: 'error', life: 10000, summary: 'Ha ocurrido los siguientes errores', detail: errorMessage });
+              } else {
+                toastService.add({ severity: 'error', life: 10000, summary: 'Ha ocurrido el siguiente error', detail: e.error.messages[0].message });
+              }
+            } else {
+              toastService.add({ severity: 'error', life: 10000, summary: 'Ha ocurrido el siguiente error', detail: 'El Servidor no esta disponible en este momento, intentelo más tarde'});
+            }
+            break;
+          }
+        }
       }
     })
   );

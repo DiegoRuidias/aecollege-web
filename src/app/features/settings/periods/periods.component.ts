@@ -28,6 +28,7 @@ import {
   matSchool,
   matWorkHistory
 } from '@ng-icons/material-icons/baseline'
+import { DateValidator } from './validators/date.validator';
 
 @Component({
   selector: 'app-periods',
@@ -100,7 +101,7 @@ export default class PeriodsComponent implements OnInit {
     yearEnd: ['', Validators.required],    
     state: [0], 
     createdAt: [''],
-  });
+  },{ validators: DateValidator() } );
 
   initFormPeriods(): void {
     this.formPeriods.reset();

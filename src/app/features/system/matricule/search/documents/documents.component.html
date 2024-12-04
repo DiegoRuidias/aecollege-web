@@ -1,0 +1,17 @@
+<div class="grid">
+    @for (item of documents; track $index) {
+    <div class="col-6 md:col-3">
+        <div class="card surface-50 p-1 flex flex-column text-center align-items-center justify-content-center" style="height: 13rem ;">
+            <ng-icon name="matInsertDriveFile" class="text-5xl w-full"></ng-icon>
+            <h5>{{item.document.name}}</h5>
+            @if(item.isActive){
+                <li class="text-primary mb-3">Entregado</li>
+            } @else {
+                <li class="text-red-500 mb-3">No Entregado</li>
+                <button pButton pRipple label="Solicitar" class="p-button-warning font-bold lg:mt-2 xl:mt-0"></button>               
+            }
+        </div>
+    </div>
+    }
+</div>
+

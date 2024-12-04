@@ -1,0 +1,14 @@
+.background {
+    flex: 1;
+    background: #4CAF50;
+    background-image: 
+        linear-gradient(#ffffff20 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff20 1px, transparent 1px);
+    background-size: 20px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}

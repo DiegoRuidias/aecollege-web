@@ -11,4 +11,8 @@ export class MenusService extends AppService{
     return this.http.get(`${this.baseUrl}/v1/menus`);
   }
   
+  findAllByTypePerson(personId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/v1/menus/type-person/${personId}`);
+  }
+  
 }

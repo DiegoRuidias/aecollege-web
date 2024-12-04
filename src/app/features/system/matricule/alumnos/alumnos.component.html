@@ -46,10 +46,10 @@
                     <div class="text-blue-600 mb-3">Complete correctamente los siguientes campos <span class="text-red-500">(* obligatorio)</span></div>
                         <form [formGroup]="formAcademic" class="p-fluid p-formgrid grid mt-2">
                             <div class="field col-12 md:col-6 py-0">
-                                <label for="matriculeId" class="font-semibold mr-2">Periodo Escolar <span class="text-red-500">*</span></label>
-                                <p-dropdown inputId="periodId" formControlName="periodId" optionLabel="name" optionValue="id" [options]="periodsList"
-                                class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorAcademic('periodId', 'required')}" placeholder=":: Seleccione Periodo Escolar ::" appendTo="body"/>
-                                @if (hasErrorAcademic('periodId', 'required')) {
+                                <label for="period" class="font-semibold mr-2">Periodo Escolar <span class="text-red-500">*</span></label>
+                                <p-dropdown inputId="period" formControlName="period" optionLabel="name" [options]="periodsList"
+                                class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorAcademic('period', 'required')}" placeholder=":: Seleccione Periodo Escolar ::" appendTo="body"/>
+                                @if (hasErrorAcademic('period', 'required')) {
                                     <div class="p-error">Por favor seleccione periodo escolar.</div>
                                 }  
                             </div>
@@ -71,7 +71,7 @@
                             </div>
                             <div class="field col-12 md:col-6 py-0">
                                 <label for="gradeId" class="font-semibold mr-2">Grado a cursar <span class="text-red-500">*</span></label>
-                                <p-dropdown inputId="gradeId" formControlName="gradeId" optionLabel="name" optionValue="id" [readonly]="isLevelSelected" [options]="gradeList"
+                                <p-dropdown inputId="gradeId" formControlName="gradeId" optionLabel="name" [readonly]="isLevelSelected" [options]="gradeList"
                                 class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorAcademic('gradeId', 'required')}" placeholder=":: Seleccione Grado ::" appendTo="body"/>
                                 @if (hasErrorAcademic('gradeId', 'required')) {
                                     <div class="p-error">Por favor seleccione grado a cursar.</div>
@@ -82,26 +82,26 @@
                                 <div class="text-blue-600">Seleccione el tipo de pago, solo se facturará la matricula</div>
                             </div>
                             <div class="field col-12 md:col-6 py-0">
-                                <label for="matriculeId" class="font-semibold mr-2">Matricula Asignada <span class="text-red-500">*</span></label>
-                                <p-dropdown inputId="matriculeId" formControlName="matriculeId" optionLabel="name" optionValue="id" [options]="matriculePayList"
-                                class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorAcademic('matriculeId', 'required')}" placeholder=":: Seleccione Matrícula ::" appendTo="body">
+                                <label for="matricule" class="font-semibold mr-2">Matricula Asignada <span class="text-red-500">*</span></label>
+                                <p-dropdown inputId="matricule" formControlName="matricule" optionLabel="name" [options]="matriculePayList"
+                                class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorAcademic('matricule', 'required')}" placeholder=":: Seleccione Matrícula ::" appendTo="body">
                                 <ng-template let-opcion pTemplate="item">
                                     <span>{{ opcion.name }} - S/. {{ opcion.amount }}</span>
                                   </ng-template>
                                 </p-dropdown>
-                                @if (hasErrorAcademic('matriculeId', 'required')) {
+                                @if (hasErrorAcademic('matricule', 'required')) {
                                     <div class="p-error">Por favor seleccione tipo de documento.</div>
                                 }  
                             </div>
                             <div class="field col-12 md:col-6 py-0">
-                                <label for="pensionId" class="font-semibold mr-2">Pensión Asignada <span class="text-red-500">*</span></label>
-                                <p-dropdown inputId="pensionId" formControlName="pensionId" optionLabel="name" [options]="pensionPayList" optionValue="id"
-                                class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorAcademic('pensionId', 'required')}" placeholder=":: Seleccione Pensión ::" appendTo="body">
+                                <label for="pension" class="font-semibold mr-2">Pensión Asignada <span class="text-red-500">*</span></label>
+                                <p-dropdown inputId="pension" formControlName="pension" optionLabel="name" [options]="pensionPayList"
+                                class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasErrorAcademic('pension', 'required')}" placeholder=":: Seleccione Pensión ::" appendTo="body">
                                   <ng-template let-opcion pTemplate="item">
                                     <span>{{ opcion.name }} - S/. {{ opcion.amount }}</span>
                                   </ng-template>
                                 </p-dropdown>
-                                @if (hasErrorAcademic('pensionId', 'required')) {
+                                @if (hasErrorAcademic('pension', 'required')) {
                                     <div class="p-error">Por favor seleccione la pensión a asignar.</div>
                                 }  
                             </div>
@@ -247,7 +247,7 @@
                     </form>
                     <div class="flex justify-content-end gap-2">
                         <button pButton pRipple type="button"  severity="danger" pTooltip="Cancelar" (click)="activeIndex = 0" class="font-semibold">Atrás</button>
-                        <button pButton pRipple type="button" [loading]="isLoadingButton" severity="info" pTooltip="Siguiente" (click)="hasFormValid()"  class="font-semibold">Siguiente</button>
+                        <button pButton pRipple type="button" [loading]="isLoadingButton" severity="info" pTooltip="Siguiente" (click)="validateStudent()"  class="font-semibold">Siguiente</button>
                     </div>  
                 </div>
             </p-tabPanel>

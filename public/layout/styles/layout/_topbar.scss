@@ -87,6 +87,18 @@
 }
 
 
+@media (max-width: 300px) {
+    .layout-topbar .layout-topbar-logo{
+        margin-right: 1rem;
+    }
+}
+
+@media (max-width: 520px) {
+    .layout-topbar .layout-topbar-logo{
+        margin-right: 4rem;
+    }
+}
+
 @media (max-width: 595px) {
     .layout-topbar .layout-topbar-logo{
         width: 0;
@@ -96,12 +108,6 @@
     }
 }
 
-
-@media (max-width: 520px) {
-    .layout-topbar .layout-topbar-logo img{
-        display: none;
-    }
-}
 @media (max-width: 991px) {
     .layout-topbar {
         justify-content: space-between;

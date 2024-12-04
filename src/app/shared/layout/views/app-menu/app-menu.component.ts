@@ -19,7 +19,9 @@ export class AppMenuComponent implements OnInit{
   model: any[] = [];
 
   ngOnInit(): void {
-    this.model = this.menuService.getSettings();
+    this.menuService.menus$.subscribe((menus) => {
+      this.model = menus;
+    })
     // this.model = [
     //     {
     //       label: 'Sistema',

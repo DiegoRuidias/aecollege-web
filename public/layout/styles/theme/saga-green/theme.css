@@ -6331,6 +6331,10 @@
     background-color: #0288d1;
     color: #ffffff;
   }
+  .p-tag.p-tag-secondary {
+    background-color: #DEE2E6;
+    color: #2C3E50
+  }
   .p-tag.p-tag-warning {
     background-color: #fbc02d;
     color: #212529;
