@@ -97,8 +97,8 @@ export default class PeriodsComponent implements OnInit {
   public formPeriods: FormGroup = this.formBuilder.group({
     id: [''],
     name: ['', Validators.required],
-    yearStart: ['', Validators.required], 
-    yearEnd: ['', Validators.required],    
+    yearStart: ['', [Validators.required, DateValidator()]],  
+    yearEnd: ['', [Validators.required, DateValidator()]],  
     state: [0], 
     createdAt: [''],
   },{ validators: DateValidator() } );
@@ -191,7 +191,7 @@ export default class PeriodsComponent implements OnInit {
         this.isLoadingButton = false;
       },
     });
-}
+  }
 
   update(): void{
     this.isLoadingButton = true;
@@ -209,8 +209,33 @@ export default class PeriodsComponent implements OnInit {
       error:(err) => {
         this.isLoadingButton = false;  
       },
+    }); 
+  }
+
+  openDelete(event: MouseEvent, item: any): void {
+    this.isLoadingButton = false;
+    event.stopPropagation();
+    event.preventDefault();
+  
+    const confirmed = confirm(`¿Estás seguro de que deseas eliminar el período: ${item.name}?`);
+    if (!confirmed) {
+      return;
+    }
+  
+    this.isLoadingButton = true;
+    this.periodsService.delete(item).subscribe({
+      next: () => {
+        this.periodList = this.periodList.filter(period => period.id !== item.id);
+        this.toastService.add({ severity: 'success', life: 5000, summary: 'Periodo Eliminado', detail: `El período "${item.name}" se eliminó correctamente.`,});
+        this.isLoadingButton = false;
+      },
+      error: (err) => {
+        this.toastService.add({severity: 'error', life: 5000, summary: 'Error al Eliminar', detail: 'Ocurrió un error al intentar eliminar el período.',});
+        this.isLoadingButton = false;
+      },
     });
-}
+  }
+  
 
   hasError(field: string, error: string): boolean | undefined {
     const control = this.formPeriods.get(field);

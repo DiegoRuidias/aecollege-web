@@ -29,7 +29,7 @@
                 <td pFrozenColumn alignFrozen="right">
                     <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Ver" (click)="openView($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
                     <button pButton pRipple type="button" [rounded]="true"  severity="warning" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
-                    <button pButton pRipple type="button" [rounded]="true"  severity="danger" pTooltip="Eliminar" (click)="openEdit($event, item)" icon="pi pi-trash" class="mr-2 text-xs"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="danger" pTooltip="Eliminar" (click)="openDelete($event, item)" icon="pi pi-trash" class="mr-2 text-xs"></button>
                 </td>
             </tr>
         </ng-template>
@@ -73,7 +73,13 @@
             }
             @if (formPeriods.errors?.['invalidDate']) {
                 <div class="p-error">La fecha de inicio debe ser menor.</div>
-            }  
+            }
+            @if (formPeriods.errors?.['startMonthDate']){
+                <div class="p-error">El mes a registrar debe ser enero.</div>
+            }
+            @if (formPeriods.errors?.['yearDate']){
+                <div class="p-error">Los años del periodo no coinciden.</div>
+            }   
         </div>
         
         <div class="field col-6 py-0">
@@ -86,7 +92,13 @@
             } 
             @if (formPeriods.errors?.['invalidDate']) {
                 <div class="p-error">La fecha de fin debe ser mayor.</div>
-            }  
+            }
+            @if (formPeriods.errors?.['endMonthDate']){
+                <div class="p-error">El mes a registrar debe ser diciembre.</div>
+            }
+            @if (formPeriods.errors?.['yearDate']){
+                <div class="p-error">Los años del periodo no coinciden.</div>
+            } 
         </div>
 
         <div class="field col-12">
