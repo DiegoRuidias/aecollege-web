@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { PaysComponent } from './pays/pays.component';
@@ -25,5 +25,10 @@ export class PaymentsComponent {
   @Input() person: any[] = [];
   @Input() pays: any[] = [];
   @Input() fileEconomic: any[] = [];
+  @Output() load = new EventEmitter<void>();
   historial: any[] = [];
+
+  refreshPage(): void {
+    this.load.emit();
+  }
 }

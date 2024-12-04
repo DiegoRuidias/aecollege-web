@@ -9,7 +9,7 @@
     <div class="col-12 lg:col-3 p-0">
         <div class="card px-1 flex flex-column justify-content-center align-items-center px-4 lg:px-0 w-full">
             <div class="col-12 p-0 text-lg px-3 mb-2">
-                <button pButton pRipple icon="pi pi-arrow-left" (click)="location.back()" class="p-button-danger font-bold"></button>
+                <button pButton pRipple icon="pi pi-arrow-left" (click)=" this.router.navigate(['/system/consultar-matricula']);" class="p-button-danger font-bold"></button>
             </div>
             <p-avatar [label]="matricule.person.name | avatarLabel"  styleClass="mr-2" size="xlarge" [style]="{ 'width': '9rem', 'height':'9rem' }" shape="circle" />
             <h3 class="mb-0 text-center">{{matricule.person.name}}</h3>
@@ -52,7 +52,7 @@
                             </span>
                         </div>
                     </ng-template>
-                    <app-payments [charges]="matricule?.charges" [pays]="pays" [person]="matricule?.person" [fileEconomic]="matricule?.fileEconomic"></app-payments>
+                    <app-payments (load)="getCharges(matricule.fileEconomic.id)" [charges]="charges" [pays]="pays" [person]="matricule?.person" [fileEconomic]="matricule?.fileEconomic"></app-payments>
                 </p-tabPanel>
                 <p-tabPanel>
                     <ng-template pTemplate="header">

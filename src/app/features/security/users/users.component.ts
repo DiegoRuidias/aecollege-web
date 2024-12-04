@@ -26,6 +26,8 @@ import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities'
 import { identity } from 'rxjs';
 import { EmailValidator } from '../../system/matricule/alumnos/validators/email.validator';
 import { PhoneValidator } from '../../system/matricule/alumnos/validators/phone.validator';
+import { typePerson } from '../roles/model/roles.model';
+import { DropdownModule } from 'primeng/dropdown';
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -45,7 +47,8 @@ import { PhoneValidator } from '../../system/matricule/alumnos/validators/phone.
     DialogModule,
     ToolbarModule,
     ProgressSpinnerModule,
-    NgIconComponent
+    NgIconComponent,
+    DropdownModule
   ],
   providers: [
     provideIcons({
@@ -62,6 +65,7 @@ export default class UsersComponent implements OnInit{
   usersService = inject(UsersService);
   userRolesService = inject(UserRolesService)
   toastService = inject(MessageService);
+  typePerson = typePerson;
   userList: any[] = [];
   selectedUser: any[] = [];
 
@@ -73,28 +77,18 @@ export default class UsersComponent implements OnInit{
   isLoadingUser: boolean = false;
   isLoadingRole: boolean = false;
   isLoadingButton: boolean = false; 
-  isFormUser: boolean = false;
   isEdit: boolean = false;
 
   public formUsers: FormGroup = this.formBuilder.group({
     id: [''],
     isActive: [true],
+    typePerson: ['', Validators.required],
     name: ['', Validators.required],
     username: ['', Validators.required],
     phone: ['',[PhoneValidator(), Validators.required]],
     email: ['',[EmailValidator(), Validators.required]],
     password: ['', Validators.required]
 });
-
-  public formUser: FormGroup = this.formBuilder.group({
-    id: [''],
-    isActive: [true],
-    code: ['', Validators.required],
-    name: ['', Validators.required],
-    description: [''],
-    sort: [0]
-  });
-
 
   ngOnInit(): void {
     this.isViewSave = false;

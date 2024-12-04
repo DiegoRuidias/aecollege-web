@@ -1,4 +1,4 @@
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
@@ -25,6 +25,7 @@ import { forkJoin } from 'rxjs';
 import { ParentsComponent } from './parents/parents.component';
 import { ParentsService } from '../alumnos/service/parents.service';
 import { ChargesService } from '../alumnos/service/charges.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -58,24 +59,23 @@ import { ChargesService } from '../alumnos/service/charges.service';
 export default class SearchComponent implements OnInit {
   fileRegisterService = inject(FileRegisterService);
   parentService = inject(ParentsService);
-  location = inject(Location);
+  router = inject(Router);
   chargesService = inject (ChargesService);
   @Input("id") id: number = 0;
 
   matricule!: any;
   pays: any[] = [];
+  charges: any[] = [];
   isLoading: boolean = false;
   isError: boolean = false;
 
   ngOnInit(): void {
     this.isLoading = true
-    const fileRequest = this.fileRegisterService.findById(this.id);
+    this.fileRegisterService.findById(this.id).subscribe({
+      next:(data) => {
+        this.matricule = data;
 
-    forkJoin([fileRequest]).subscribe({
-      next:([fileRegister]) => {
-        this.matricule = fileRegister;
-
-        if(fileRegister){
+        if(data){
           this.getCharges(this.matricule.fileEconomic.id)
         }else {
           this.isLoading = true;
@@ -90,9 +90,12 @@ export default class SearchComponent implements OnInit {
   }
 
   getCharges(id: number): void {
-    this.chargesService.findPays(id).subscribe({
-      next: (charge) => {
-        this.pays = charge;
+    const paysRequest = this.chargesService.findPays(id);
+    const chargesRequest = this.chargesService.findcharges(id);
+    forkJoin([paysRequest,chargesRequest]).subscribe({
+      next: ([pay,charge]) => {
+        this.pays = pay;
+        this.charges = charge;
         this.isLoading = false;
       },
       error: (err) =>{

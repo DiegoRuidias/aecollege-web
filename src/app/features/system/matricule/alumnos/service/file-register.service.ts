@@ -11,7 +11,7 @@ export class FileRegisterService extends AppService{
     return this.http.post(`${this.baseUrl}/v1/fileRegister`, data);
   }
 
-  findAll(page: number, size: number, periodId: string, searchText?: string): Observable<any[]> {
+  findAll(page: number, size: number, periodId: string, searchText?: string): Observable<any> {
     let reqParams = {} as any;
     reqParams.page = page;
     reqParams.size = size;
@@ -19,10 +19,14 @@ export class FileRegisterService extends AppService{
     if (searchText) {
         reqParams.searchText = searchText;
     }
-    return this.http.get<any[]>(`${this.baseUrl}/v1/fileRegister`, { params: reqParams });
+    return this.http.get<any>(`${this.baseUrl}/v1/fileRegister`, { params: reqParams });
   }
 
   findById(id: any): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/v1/fileRegister/${id}`);
+  }
+
+  validateStudentPeriod(documentNumber: string, periodId: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseUrl}/v1/fileRegister/student-valid/${documentNumber}/${periodId}`);
   }
 }

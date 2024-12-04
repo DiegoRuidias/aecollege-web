@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
@@ -30,6 +30,7 @@ export class PaysComponent {
   @Input() person: any;
   @Input() pays: any[] = [];
   @Input() fileEconomic: any;
+  @Output() load = new EventEmitter<void>();
   router = inject(Router);
   revenuesService = inject(RevenuesService);
   toastService = inject(MessageService);
@@ -45,6 +46,10 @@ export class PaysComponent {
   isHalfPaymentSelected = false;
  
 
+  refreshPage(): void {
+    this.load.emit();
+  }
+  
   viewComponent(): void {
     this.lastSelectedIndex = -1;
     this.selectedHalfPayment = 3;
@@ -86,8 +91,9 @@ export class PaysComponent {
           summary: 'Pago realizado',
           detail: 'El Pago se realizó correctamente.',
         });
-        window.location.reload();
+        this.refreshPage();
         this.isLoading = false;
+        this.isPaysVisible = false;
       },
       error:(err) => {
           this.isLoading = false;
