@@ -30,6 +30,14 @@ export class LoginService extends AppService {
     return payload.role || 6;  
   }
 
+  getName(): string{
+    const token = this.getToken();
+    if (!token) return 'INVITADO';
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.name || 'INVITADO';  
+  }
+
   getUserId(): number{
     const token = this.getToken();
     if (!token) return 1;

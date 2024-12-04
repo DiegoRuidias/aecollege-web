@@ -10,6 +10,8 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroUserCircleSolid, heroMoonSolid, heroSunSolid} from '@ng-icons/heroicons/solid';
 import { AvatarModule } from 'primeng/avatar';
 import { MenuService } from '../../service/app.menu.service';
+import { LoginService } from '../../../auth/services/login.service';
+import { TruncateLabelPipe } from '../../../pipes/truncate-label.pipe';
 @Component({
   selector: 'app-topbar',
   standalone: true,
@@ -19,7 +21,8 @@ import { MenuService } from '../../service/app.menu.service';
     ButtonModule,
     RippleModule,
     NgIconComponent,
-    AvatarModule
+    AvatarModule,
+    TruncateLabelPipe
   ],
   providers: [
     provideIcons({ 
@@ -31,6 +34,7 @@ import { MenuService } from '../../service/app.menu.service';
 })
 export class AppTopbarComponent {
   menuService = inject(MenuService);
+  loginService = inject(LoginService);
   items!: MenuItem[];
 
   @ViewChild('menubutton') menuButton!: ElementRef;
