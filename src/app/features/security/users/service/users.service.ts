@@ -22,4 +22,8 @@ export class UsersService extends AppService{
   update(data: any): Observable<any> {
     return this.http.put(`${this.baseUrl}/v1/users/${data.id}`, data);
   }
+
+  updateDeletedAt(id: string): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/v1/users/${id}`,[]);
+  }
 }

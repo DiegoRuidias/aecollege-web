@@ -78,6 +78,8 @@ export default class UsersComponent implements OnInit{
   isLoadingRole: boolean = false;
   isLoadingButton: boolean = false; 
   isEdit: boolean = false;
+  selectedDel: any;
+  isDeleteDialog: boolean = false;
 
   public formUsers: FormGroup = this.formBuilder.group({
     id: [''],
@@ -267,4 +269,24 @@ export default class UsersComponent implements OnInit{
       },
     });
   }
+
+
+  updateDelete(): void{
+    this.isLoadingButton = true;
+    this.usersService.updateDeletedAt(this.selectedDel).subscribe(data =>{
+      this.toastService.add({ severity: 'success', life: 5000, summary: 'User Eliminado', detail: 'El usuario se eliminó correctamente.' }); 
+      this.isLoadingButton = false;
+      this.isDeleteDialog = false;
+      
+    })
+  }
+
+  openDelete(event: MouseEvent, item: any): void {
+      this.selectedDel = item;
+      this.isDeleteDialog = true;
+      event.stopImmediatePropagation();
+  }
+
+
+
 }
