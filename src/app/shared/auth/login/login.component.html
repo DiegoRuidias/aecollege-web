@@ -8,21 +8,25 @@
     <!-- Formulario de Login a la derecha -->
     <div class="col-12 sm:col-5 flex justify-content-center align-items-center">
         <div class="flex flex-column align-items-center text-center">
-            <img src="/layout/images/logo.png" class="cursor-pointer" alt="Login Image" style="width: 100%; max-width: 7rem; object-fit: cover;" (click)="layoutService.setTheme()">
+            <img src="/layout/images/logo.png" class="cursor-pointer" alt="Login Image" style="width: 100%; max-width: 7rem; object-fit: cover;">
             <h2 class="text-center text-primary font-bold mb-4">Albert Einstein College</h2>
             <form [formGroup]="formAuth" class="grid p-0 flex-column mt-3 w-full">
-                <div class="col-12 mb-3 p-0 w-full p-fluid">
-                    <p-floatLabel>
-                        <input pInputText id="username" formControlName="username" class="text-xl w-full p-fluid"/>
-                        <label for="username" class="text-lg">Usuario</label>
-                    </p-floatLabel>
+                <div class="col-12 mb-1 p-0 w-full p-fluid text-left">
+                    <label for="username" class="text-lg">Usuario</label>
+                    <input pInputText id="username" placeholder="Ingrese usuario" formControlName="username" class="w-full p-fluid"
+                    [ngClass]="{'ng-invalid ng-dirty': hasError('username', 'required')}"/>
+                    @if (hasError('username', 'required')) {
+                        <div class="p-error">Por favor ingrese el usuario</div>
+                    }  
                 </div>
                 <br/>
-                <div class="col-12 mb-3 p-0">
-                    <p-floatLabel>
-                        <input pInputText id="password" formControlName="password" type="password" class=" text-xl p-fluid w-full"/>
-                        <label for="password" class="text-lg">Contraseña</label>
-                    </p-floatLabel>
+                <div class="col-12 mb-1 p-0 text-left">
+                    <label for="password" class="text-lg">Contraseña</label>
+                    <p-password class="mt-2"  [feedback]="false" placeholder="Ingrese constraseña"  id="password" [toggleMask]="true" formControlName="password" type="password"
+                    [ngClass]="{'ng-invalid ng-dirty': hasError('password', 'required')}"></p-password>
+                    @if (hasError('password', 'required')) {
+                        <div class="p-error">Por favor ingrese la contraseña</div>
+                    }  
                 </div>
                 <br />
                 <button pButton label="Acceder" (click)="login()" class="p-mt-3 w-full text-xl font-bold"></button>
