@@ -207,7 +207,7 @@ export default class PeriodsComponent implements OnInit {
     const errorMessage = error?.error?.message || 'Ocurrió un error inesperado en el ingreso de datos';
     this.toastService.add({ severity: 'error', life: 5000, summary: 'Error', detail: errorMessage,});
 
-    const errMessage = error?.error?.message || 'Verifica la duplicidad de datos';
+    const errMessage = error?.error?.message || 'Verificar que no exista duplicidad de datos';
     this.toastService.add({ severity: 'warn', life: 5000, summary: 'Duplicidad de Datos', detail: errMessage,});
   }
   
