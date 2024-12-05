@@ -138,6 +138,19 @@ export const routes: Routes = [
         ]
     },
     {
+        path: 'settings',
+        loadComponent: () => import('./shared/layout/views/app-layout/app-layout.component'),
+        children:[
+            {
+                path: 'docentes',
+                title: 'AEC - Docentes',
+                canActivate:[authGuard,authorizedGuard],
+                data: { breadcrumb: 'Docentes' },
+                loadComponent: () => import('./features/settings/employees/employees.component')
+            },  
+        ]
+    },
+    {
         path: '**',
         redirectTo: '/home'
     }

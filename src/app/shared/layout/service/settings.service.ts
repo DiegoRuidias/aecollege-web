@@ -10,7 +10,8 @@ export class SettingsService extends AppService{
   _config: Settings = {
     id:0,
     periodId:'',
-    studentRole:''
+    studentRole:'',
+    employeeRole:''
   }
   private config = signal<Settings>(this._config);
 
