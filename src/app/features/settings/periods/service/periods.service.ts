@@ -18,8 +18,4 @@ export class PeriodsService extends AppService{
   update(data: any): Observable<any> {
     return this.http.put(`${this.baseUrl}/v1/periods/${data.id}`, data);
   }
-
-  delete(data: any): Observable<any>{
-    return this.http.delete(`${this.baseUrl}/v1/periods/${data.id}`, data);  
-  }
 }
