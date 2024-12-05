@@ -25,6 +25,24 @@ export const errorResponseInterceptor: HttpInterceptorFn = (req, next) => {
           }
           case 403: {
             toastService.add({ severity: 'error', life: 10000, summary: 'Fallo en la autenticación', detail: e.error.message });
+            const token = loginService.getToken();
+
+            if (token && token.split('.').length === 3) {
+                const payloadBase64 = token.split('.')[1];
+                const decodedPayload = atob(payloadBase64);
+                const payload = JSON.parse(decodedPayload);
+        
+                // Verifica si el token está expirado
+                const isExpired = Date.now() >= payload.exp * 1000;
+                if (isExpired) {
+                    loginService.logout(); // Si el token ha expirado, cierra la sesión
+                    break;
+                }
+            } else {
+                console.error('Token no disponible, nulo o con formato incorrecto.');
+                loginService.logout(); // Opcional: Cerrar sesión si no hay token o si el formato es incorrecto
+                break;
+            }
             break;
           }
           default: {

@@ -64,6 +64,13 @@ export const routes: Routes = [
                 canActivate:[authGuard,authorizedGuard],
                 data: { breadcrumb: 'Matricualdos' },
                 loadComponent: () => import('./features/system/matricule/list/list.component')
+            },
+            {
+                path: 'ver-pagos',
+                title: 'AEC - Matriculados',
+                canActivate:[authGuard,authorizedGuard],
+                data: { breadcrumb: 'Ver Pagos' },
+                loadComponent: () => import('./features/system/search-pays/search-pays.component')
             }
         ],
         
