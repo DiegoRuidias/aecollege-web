@@ -22,7 +22,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { v4 as uuidv4 } from 'uuid';
 import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities';
 
-import { NgIconComponent, provideIcons} from '@ng-icons/core';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { 
   matVpnKey, matBadge, matDescription,
   matSchool,
@@ -66,13 +66,12 @@ import { DateValidator } from './validators/date.validator';
   ],
   providers: [
     provideIcons({
-      matVpnKey, matBadge, matDescription,matSchool, matWorkHistory
+      matVpnKey, matBadge, matDescription, matSchool, matWorkHistory
     })
   ],
   templateUrl: './periods.component.html',
   styleUrl: './periods.component.scss'
 })
-
 export default class PeriodsComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   periodsService = inject(PeriodsService);
@@ -93,15 +92,14 @@ export default class PeriodsComponent implements OnInit {
   isViewPeriods: boolean = false;
   isLoadingButton: boolean = false;
 
-
   public formPeriods: FormGroup = this.formBuilder.group({
     id: [''],
     name: ['', Validators.required],
-    yearStart: ['', Validators.required], 
-    yearEnd: ['', Validators.required],    
+    yearStart: ['', [Validators.required, DateValidator()]],  
+    yearEnd: ['', [Validators.required, DateValidator()]],  
     state: [0], 
     createdAt: [''],
-  },{ validators: DateValidator() } );
+  }, { validators: DateValidator() });
 
   initFormPeriods(): void {
     this.formPeriods.reset();
@@ -116,7 +114,7 @@ export default class PeriodsComponent implements OnInit {
         this.periodList = data;
         this.isLoadingPeriods = false;
       },
-      error: (data) => {
+      error: () => {
         this.isLoadingPeriods = false;
       }
     });  
@@ -128,13 +126,13 @@ export default class PeriodsComponent implements OnInit {
     this.isFormPeriods = true;
   }
 
-  openEdit( event: MouseEvent, item: any ): void {
+  openEdit(event: MouseEvent, item: any): void {
     this.isLoadingButton = false;
     this.formPeriods.reset();
     event.stopPropagation();
     event.preventDefault();
 
-    this.selectedPeriod = [item]
+    this.selectedPeriod = [item];
 
     this.formPeriods.controls['id'].setValue(item.id);
     this.formPeriods.controls['state'].setValue(item.state);
@@ -152,77 +150,65 @@ export default class PeriodsComponent implements OnInit {
     event.stopPropagation();
     event.preventDefault();
   
-    this.selectedPeriod = [item]
+    this.selectedPeriod = [item];
     this.isViewPeriods = true;
   }
 
   save(): void {
     if (!this.formPeriods.valid) {
-      markAllAsTouched(this.formPeriods)
+      markAllAsTouched(this.formPeriods);
       return;
     }
-
-    const isStateInProgress = this.formPeriods.value.state === 1;
-    const currentPeriodId = this.formPeriods.value.id;
-
-    if (isStateInProgress && this.hasCurrentPeriod(this.isEdit ? currentPeriodId : null)) {
-      this.toastService.add({
-        severity: 'warn',
-        life: 5000,
-        summary: 'Periodo duplicado',
-        detail: 'Solo puede haber un período en curso a la vez.'
-      });
-      return;
-    }
-
-    if (this.isEdit)
-        this.update();
-    else
-        this.create()  
-}
-
+    this.isEdit ? this.update() : this.create();
+  }
+  
   create(): void {
     this.isLoadingButton = true;
     this.periodsService.create(this.formPeriods.value).subscribe({
-      next:(data) => {
+      next: (data) => {
         this.periodList = [...this.periodList, data];
-        this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Creado', detail: 'El Rol se creó correctamente.' });
+        this.toastService.add({ severity: 'success', life: 5000, summary: 'Periodo Creado', detail: 'El Periodo se creó correctamente.' });
         this.isLoadingButton = false;
         this.isFormPeriods = false;
       },
-      error:(err) => {
+      error: (error) => {
         this.isLoadingButton = false;
+        this.handleBackendError(error);
       },
     });
-}
+  }
 
-  update(): void{
+  update(): void {
     this.isLoadingButton = true;
     this.periodsService.update(this.formPeriods.value).subscribe({
-      next:(data) => {
-      this.periodList.forEach((item, index) => {
-        if (item.id === data.id) {
-          this.periodList[index] = data;
-        }
-      });
-      this.toastService.add({ severity: 'success', life: 5000, summary: 'Periodo Editado', detail: 'El periodo se editó correctamente.' });
-      this.isLoadingButton = false;
-      this.isFormPeriods = false;
+      next: (data) => {
+        this.periodList.forEach((item, index) => {
+          if (item.id === data.id) {
+            this.periodList[index] = data;
+          }
+        });
+        this.toastService.add({ severity: 'success', life: 5000, summary: 'Periodo Editado', detail: 'El periodo se editó correctamente.' });
+        this.isLoadingButton = false;
+        this.isFormPeriods = false;
       },
-      error:(err) => {
+      error: (error) => {
         this.isLoadingButton = false;  
+        this.handleBackendError(error);
       },
-    });
-}
-
+    }); 
+  }
+  
   hasError(field: string, error: string): boolean | undefined {
     const control = this.formPeriods.get(field);
     return control?.hasError(error) && (control.dirty || control.touched);
   }
 
-  private hasCurrentPeriod(excludeId: string | null = null): boolean {
-    return this.periodList.some(period => 
-      period.state === 1 && period.id !== excludeId
-    );
+  private handleBackendError(error: any): void {
+    const errorMessage = error?.error?.message || 'Ocurrió un error inesperado en el ingreso de datos';
+    this.toastService.add({ severity: 'error', life: 5000, summary: 'Error', detail: errorMessage,});
+
+    const errMessage = error?.error?.message || 'Verificar que no exista duplicidad de datos';
+    this.toastService.add({ severity: 'warn', life: 5000, summary: 'Duplicidad de Datos', detail: errMessage,});
   }
+  
 }

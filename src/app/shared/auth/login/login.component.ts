@@ -4,7 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { LayoutService } from '../../layout/service/app.layout.service';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginService } from '../services/login.service';
 import { SettingsService } from '../../layout/service/settings.service';
 import { MenuService } from '../../layout/service/app.menu.service';
@@ -15,8 +15,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
-import { expiredSessionMessage, noLogout } from '../model/jwtToken.model';
-
+import { PasswordModule } from 'primeng/password';
+import { markAllAsTouched } from '../../utils/reactive-form-utilities';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -30,7 +30,8 @@ import { expiredSessionMessage, noLogout } from '../model/jwtToken.model';
     DialogModule,
     ProgressSpinnerModule,
     ToastModule,
-    MessagesModule
+    MessagesModule,
+    PasswordModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -50,8 +51,8 @@ export default class LoginComponent implements OnInit{
   private readonly formBuilder = inject(FormBuilder);
   isLoading: boolean = false;
   public formAuth: FormGroup = this.formBuilder.group({
-    username: [''],
-    password: ['']
+    username: ['', Validators.required],
+    password: ['',Validators.required]
   });
 
   ngOnInit(): void {
@@ -60,6 +61,10 @@ export default class LoginComponent implements OnInit{
   }
 
   async login(): Promise<void> {
+    if (!this.formAuth.valid) {
+      markAllAsTouched(this.formAuth);
+      return;
+    }
     this.loginService.logout();
     this.isLoading = true;
     try {
@@ -85,4 +90,8 @@ export default class LoginComponent implements OnInit{
     }
   }
 
+  hasError(field: string, error: string): boolean | undefined {
+    const control = this.formAuth.get(field);
+    return control?.hasError(error) && (control.dirty || control.touched);
+  };
 }

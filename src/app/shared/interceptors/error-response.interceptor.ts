@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
-import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 
 import { MessageService } from 'primeng/api';
-import { catchError, tap, throwError } from 'rxjs';
+import { tap} from 'rxjs';
 import { Router } from '@angular/router';
 import { LoginService } from '../auth/services/login.service';
 
@@ -14,30 +14,35 @@ export const errorResponseInterceptor: HttpInterceptorFn = (req, next) => {
     tap({
       error: (e) => {        
         switch (e.status) {
-          case 400: {
-            const arrayErrors: Array<any> = e.error.messages;
-            if (arrayErrors.length > 1) {
-              let errorMessage = "<ul>";
-              arrayErrors.forEach(item => {
-                errorMessage = errorMessage + "<li>" + item.message + "</li>";
-              });
-              errorMessage = errorMessage + "</ul>";
-              toastService.add({ severity: 'error', life: 10000, summary: 'Ha ocurrido los siguientes errores', detail: errorMessage, icon: 'pi-close' });
-            } else {
-              toastService.add({ severity: 'error', summary: 'Error', detail: e.error.messages[0] });
-            }
-            break;
-          }
           case 401: {
             toastService.add({ severity: 'error', life: 10000, summary: 'Fallo en la autenticación', detail: e.error.message });
+            loginService.logout();
             break;
           }
           case 500: {
-            console.log('default');
+            toastService.add({ severity: 'error', life: 10000, summary: 'Fallo en la autenticación', detail: e.error.message });
             break;
           }
           case 403: {
-            loginService.isAuthenticated();
+            toastService.add({ severity: 'error', life: 10000, summary: 'Fallo en la autenticación', detail: e.error.message });
+            const token = loginService.getToken();
+
+            if (token && token.split('.').length === 3) {
+                const payloadBase64 = token.split('.')[1];
+                const decodedPayload = atob(payloadBase64);
+                const payload = JSON.parse(decodedPayload);
+        
+                // Verifica si el token está expirado
+                const isExpired = Date.now() >= payload.exp * 1000;
+                if (isExpired) {
+                    loginService.logout(); // Si el token ha expirado, cierra la sesión
+                    break;
+                }
+            } else {
+                console.error('Token no disponible, nulo o con formato incorrecto.');
+                loginService.logout(); // Opcional: Cerrar sesión si no hay token o si el formato es incorrecto
+                break;
+            }
             break;
           }
           default: {

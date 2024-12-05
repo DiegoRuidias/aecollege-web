@@ -127,7 +127,8 @@ export default class AlumnosComponent implements OnInit{
   settings: Settings = {
     id:0,
     periodId:'',
-    studentRole:''
+    studentRole:'',
+    employeeRole:''
   }
 
   public formAcademic: FormGroup = this.formBuilder.group({

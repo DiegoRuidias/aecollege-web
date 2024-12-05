@@ -64,6 +64,13 @@ export const routes: Routes = [
                 canActivate:[authGuard,authorizedGuard],
                 data: { breadcrumb: 'Matricualdos' },
                 loadComponent: () => import('./features/system/matricule/list/list.component')
+            },
+            {
+                path: 'ver-pagos',
+                title: 'AEC - Matriculados',
+                canActivate:[authGuard,authorizedGuard],
+                data: { breadcrumb: 'Ver Pagos' },
+                loadComponent: () => import('./features/system/search-pays/search-pays.component')
             }
         ],
         
@@ -135,6 +142,19 @@ export const routes: Routes = [
                 data: { breadcrumb: 'Ajustes de sistema' },
                 loadComponent: () => import('./features/settings/settings/settings.component')
             }, 
+        ]
+    },
+    {
+        path: 'settings',
+        loadComponent: () => import('./shared/layout/views/app-layout/app-layout.component'),
+        children:[
+            {
+                path: 'docentes',
+                title: 'AEC - Docentes',
+                canActivate:[authGuard,authorizedGuard],
+                data: { breadcrumb: 'Docentes' },
+                loadComponent: () => import('./features/settings/employees/employees.component')
+            },  
         ]
     },
     {

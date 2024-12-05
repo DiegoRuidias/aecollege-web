@@ -14,8 +14,16 @@
         <div class="field col-12 md:col-6 py-0">
             <label for="studentRole" class="font-semibold mr-2">Rol del estudiante <span class="text-red-500">*</span></label>
             <p-dropdown inputId="studentRole" formControlName="studentRole" optionLabel="name" optionValue="id" [options]="studentRoleList"
-            class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasError('studentRole', 'required')}" placeholder=":: Seleccione Documento ::"/>
+            class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasError('studentRole', 'required')}" placeholder=":: Seleccione Rol de estudiante ::"/>
             @if (hasError('studentRole', 'required')) {
+                <div class="p-error">Por favor seleccione Rol de estudiante.</div>
+            }  
+        </div>
+        <div class="field col-12 md:col-6 py-0">
+            <label for="employeeRole" class="font-semibold mr-2">Rol del estudiante <span class="text-red-500">*</span></label>
+            <p-dropdown inputId="employeeRole" formControlName="employeeRole" optionLabel="name" optionValue="id" [options]="employeeRoleList"
+            class="w-5rem" [ngClass]="{'ng-invalid ng-dirty': hasError('employeeRole', 'required')}" placeholder=":: Seleccione Documento ::"/>
+            @if (hasError('employeeRole', 'required')) {
                 <div class="p-error">Por favor seleccione Rol de estudiante.</div>
             }  
         </div>

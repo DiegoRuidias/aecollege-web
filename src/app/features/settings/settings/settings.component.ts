@@ -37,11 +37,13 @@ export default class SettingsComponent implements OnInit{
 
   periodList: any[] = [];
   studentRoleList: any[] = [];
+  employeeRoleList: any[] = [];
 
   settings: Settings = {
     id:0,
     periodId:'',
-    studentRole:''
+    studentRole:'',
+    employeeRole:''
   }
 
   isLoadingButton: boolean = false
@@ -49,7 +51,8 @@ export default class SettingsComponent implements OnInit{
   public formSettings: FormGroup = this.formBuilder.group({
     id: [''],
     periodId: [this.settings?.periodId, Validators.required],
-    studentRole: [this.settings?.studentRole,Validators.required]
+    studentRole: [this.settings?.studentRole,Validators.required],
+    employeeRole:[this.settings?.studentRole,Validators.required]
   });
 
   ngOnInit(): void {
@@ -59,6 +62,7 @@ export default class SettingsComponent implements OnInit{
     forkJoin([requestPeriod,requestRoles]).subscribe({
       next:([period,roles]) => {
         this.studentRoleList = roles.filter(d => d.typePerson === 1);
+        this.employeeRoleList = roles.filter(d => d.typePerson === 2);
         this.periodList = period;
       }
     });
@@ -73,6 +77,7 @@ export default class SettingsComponent implements OnInit{
     this.settings = this.settingsService.getSettings();
     this.formSettings.get('studentRole')?.setValue(this.settings.studentRole);
     this.formSettings.get('periodId')?.setValue(this.settings.periodId);
+    this.formSettings.get('employeeRole')?.setValue(this.settings.employeeRole);
   }
 
   save(){
@@ -87,6 +92,7 @@ export default class SettingsComponent implements OnInit{
         this.settings = data;
         this.formSettings.get('studentRole')?.setValue(this.settings.studentRole);
         this.formSettings.get('periodId')?.setValue(this.settings.periodId);
+        this.formSettings.get('employeeRole')?.setValue(this.settings.employeeRole);
         this.toastService.add({ severity: 'success', life: 5000, summary: 'Ajustes correctos', detail: 'Los ajustes se guardaron correctamente.' });
       },
       error: (data) => {

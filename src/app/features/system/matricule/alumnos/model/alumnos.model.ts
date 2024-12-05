@@ -21,4 +21,3 @@ export const halfPayments: Option[] = [
     { id: 3, name: "Efectivo" }
 ];
 
-
