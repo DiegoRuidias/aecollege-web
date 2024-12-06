@@ -35,4 +35,5 @@ import { TruncateLabelPipe } from '../../../../../shared/pipes/truncate-label.pi
 })
 export class ParentsComponent {
   @Input() parents: any[]= []
+  @Input() admin: boolean = false
 }

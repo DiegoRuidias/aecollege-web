@@ -25,6 +25,7 @@ export class PaymentsComponent {
   @Input() person: any[] = [];
   @Input() pays: any[] = [];
   @Input() fileEconomic: any[] = [];
+  @Input() admin: boolean = false
   @Output() load = new EventEmitter<void>();
   historial: any[] = [];
 

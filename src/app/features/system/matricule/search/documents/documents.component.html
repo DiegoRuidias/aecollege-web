@@ -8,7 +8,9 @@
                 <li class="text-primary mb-3">Entregado</li>
             } @else {
                 <li class="text-red-500 mb-3">No Entregado</li>
+                @if (admin) {
                 <button pButton pRipple label="Solicitar" class="p-button-warning font-bold lg:mt-2 xl:mt-0"></button>               
+                }
             }
         </div>
     </div>
