@@ -10,6 +10,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(BrowserAnimationsModule),  // Importa BrowserAnimationsModule
     ...appConfig.providers,
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
   ]
 }).catch(err => console.error(err));
 
