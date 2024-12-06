@@ -38,6 +38,15 @@ export class LoginService extends AppService {
     return payload.name || 'INVITADO';  
   }
 
+
+  getUser(): string {
+    const token = this.getToken();
+    if (!token) return '';
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.sub || '';  
+  }
+
   getUserId(): number{
     const token = this.getToken();
     if (!token) return 1;

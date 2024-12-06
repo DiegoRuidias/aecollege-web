@@ -158,6 +158,20 @@ export const routes: Routes = [
         ]
     },
     {
+        path: 'estudiante',
+        loadComponent: () => import('./shared/layout/views/app-layout/app-layout.component'),
+        children:[
+            {
+                path: '',
+                title: 'AEC - Docentes',
+                canActivate:[authGuard,authorizedGuard],
+                data: { breadcrumb: 'Estudiante' },
+                loadComponent: () => import('./features/student/home/home.component')
+            },  
+        ]
+    },
+
+    {
         path: '**',
         redirectTo: '/home'
     }

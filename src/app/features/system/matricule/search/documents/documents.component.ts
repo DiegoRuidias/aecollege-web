@@ -25,4 +25,5 @@ import { ButtonModule } from 'primeng/button';
 })
 export class DocumentsComponent {
   @Input() documents: any[] = [];
+  @Input() admin: boolean = false
 }

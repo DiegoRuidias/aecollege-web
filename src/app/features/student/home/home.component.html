@@ -8,9 +8,6 @@
 <div class="grid m-0 p-0 mt-1">
     <div class="col-12 lg:col-3 p-0">
         <div class="card px-1 flex flex-column justify-content-center align-items-center px-4 lg:px-0 w-full">
-            <div class="col-12 p-0 text-lg px-3 mb-2">
-                <button pButton pRipple icon="pi pi-arrow-left" (click)=" this.router.navigate(['/system/consultar-matricula']);" class="p-button-danger font-bold"></button>
-            </div>
             <p-avatar [label]="matricule.person.name | avatarLabel"  styleClass="mr-2" size="xlarge" [style]="{ 'width': '9rem', 'height':'9rem' }" shape="circle" />
             <h3 class="mb-0 text-center">{{matricule.person.name}}</h3>
             <p class="mt-1 text-lg">{{matricule.person.documentType.name}}: {{matricule.person.documentNumber}}</p>
@@ -31,12 +28,6 @@
                 <div class="col-5 border-bottom-1 py-2 border-300 text-lg lg:text-left text-center">Deuda: </div>
                 <div class="col-7 border-bottom-1 py-2 border-300 text-lg text-red-500 lg:text-right text-center">S/. {{matricule.fileEconomic.debt}} </div>
             </div>
-            <div class="col-12 border-bottom-1 p-0 border-300 text-lg text-center ">
-                <div class="flex justify-content-around lg:flex-column xl:flex-row mt-4 w-full pb-3">
-                    <button pButton pRipple label="Editar" icon="pi pi-pencil" class="p-button-info font-bold"></button>
-                    <button pButton pRipple label="Notificar" icon="pi pi-bell" class="p-button-warning font-bold lg:mt-2 xl:mt-0"></button>
-                </div>
-            </div>
 
         </div>
     </div>
@@ -52,7 +43,7 @@
                             </span>
                         </div>
                     </ng-template>
-                    <app-payments [admin]="true" (load)="load()" [charges]="charges" [pays]="pays" [person]="matricule?.person" [fileEconomic]="matricule?.fileEconomic"></app-payments>
+                    <app-payments [charges]="charges" [pays]="pays" [person]="matricule?.person" [fileEconomic]="matricule?.fileEconomic"></app-payments>
                 </p-tabPanel>
                 <p-tabPanel>
                     <ng-template pTemplate="header">
@@ -63,7 +54,7 @@
                             </span>
                         </div>
                     </ng-template>
-                    <app-documents [admin]="true" [documents]="matricule?.documentList"></app-documents>
+                    <app-documents [documents]="matricule?.documentList"></app-documents>
                 </p-tabPanel>
                 <p-tabPanel>
                     <ng-template pTemplate="header">
@@ -87,11 +78,10 @@
                             </span>
                         </div>
                     </ng-template>
-                    <app-parents [admin]="true" [parents]="matricule?.parents"></app-parents>
+                    <app-parents [parents]="matricule?.parents"></app-parents>
                 </p-tabPanel>
             </p-tabView>
         </div>
     </div>
 </div>
 }
-

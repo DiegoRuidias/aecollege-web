@@ -1,7 +1,9 @@
 <div class="grid">
+    @if (admin) {
     <div class="col-12 p-0 text-lg px-3 mt-2">
         <button pButton pRipple label="Agregar Apoderado" icon="pi pi-plus" class="p-button-success font-bold"></button>
     </div>
+    }
     @for (item of parents; track $index) {
         <div class="col-12 md:col-6">
             <div class="card surface-50 p-3">
@@ -22,12 +24,14 @@
                     <div class="col-7 border-bottom-1 py-2 border-300 text-lg text-right text-primary">{{item.address | truncateLabel:15}} </div>
     
                 </div>
-                <div class="col-12 border-bottom-1 p-0 border-300 text-lg text-center ">
-                    <div class="flex justify-content-around lg:flex-column xl:flex-row mt-4 w-full pb-3">
-                        <button pButton pRipple label="Editar" icon="pi pi-pencil" class="p-button-info font-bold"></button>
-                        <button pButton pRipple label="Eliminar" icon="pi pi-trash" class="p-button-danger font-bold lg:mt-2 xl:mt-0"></button>
+                @if (admin) {
+                    <div class="col-12 border-bottom-1 p-0 border-300 text-lg text-center ">
+                        <div class="flex justify-content-around lg:flex-column xl:flex-row mt-4 w-full pb-3">
+                            <button pButton pRipple label="Editar" icon="pi pi-pencil" class="p-button-info font-bold"></button>
+                            <button pButton pRipple label="Eliminar" icon="pi pi-trash" class="p-button-danger font-bold lg:mt-2 xl:mt-0"></button>
+                        </div>
                     </div>
-                </div>
+                }   
                 
             </div>
         </div>

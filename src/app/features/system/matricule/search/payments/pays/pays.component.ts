@@ -31,6 +31,7 @@ export class PaysComponent {
   @Input() person: any;
   @Input() pays: any[] = [];
   @Input() fileEconomic: any;
+  @Input() admin: boolean = false
   @Output() load = new EventEmitter<void>();
   router = inject(Router);
   revenuesService = inject(RevenuesService);
@@ -53,12 +54,13 @@ export class PaysComponent {
   }
   
   viewComponent(): void {
+    if(this.admin){
     this.lastSelectedIndex = -1;
     this.selectedHalfPayment = 3;
     this.selectedCharges = [];
     this.isHalfPaymentSelected = false;
     this.isPaysVisible = true;
-    console.log(this.loginService.getUserId())
+    }
   }
 
   onPay(): void {

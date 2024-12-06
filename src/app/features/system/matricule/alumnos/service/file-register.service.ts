@@ -26,6 +26,11 @@ export class FileRegisterService extends AppService{
     return this.http.get<any[]>(`${this.baseUrl}/v1/fileRegister/${id}`);
   }
 
+  findByDocumentNumberByPeriod(documentNumber: string, periodId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/v1/fileRegister/${documentNumber}/${periodId}`);
+  }
+
+
   validateStudentPeriod(documentNumber: string, periodId: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.baseUrl}/v1/fileRegister/student-valid/${documentNumber}/${periodId}`);
   }
