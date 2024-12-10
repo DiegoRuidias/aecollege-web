@@ -1,13 +1,27 @@
 
 <div class="flex justify-content-center m-0 p-fluid w-screen h-screen p-0 ">
     <div class="grid w-full h-screen m-0 p-0">
-        <div class="hidden background md:block md:col-6 xl:col-8 p-0 h-full flex flex-column justify-content-center align-items-center bg-primary">
-    
+        <div class="hidden background md:block md:col-6 xl:col-8 p-0 h-full w-full flex justify-content-center align-items-center bg-primary">
+            <div class="flex w-full h-full justify-content-center align-items-center text-center">
+                <p-galleria 
+                    [value]="images"
+                    [showIndicators]="true" 
+                    [showThumbnails]="false"
+                    [circular]="true"
+                    [autoPlay]="true" 
+                    [transitionInterval]="5000"
+                    showIndicatorsOnItem="Inside" 
+                    [containerStyle]="{ 'max-width': '70%', 'margin-left':'15%' }">
+                    <ng-template pTemplate="item" let-item>
+                        <img [src]="item.src" style="width: 100%; display: block;" />
+                    </ng-template>
+                </p-galleria>
+            </div>
         </div>
     
         <!-- Formulario de Login a la derecha -->
         <div class="col-12 md:col-6 xl:col-4 flex justify-content-center align-items-center h-full">
-            <div class="flex flex-column align-items-center text-center px-8" >
+            <div class="flex flex-column align-items-center text-center px-4 md:px-8" >
                 <img src="/layout/images/logo.png" class="cursor-pointer" alt="Login Image" style="width: 100%; max-width: 7rem; object-fit: cover;">
                 <h2 class="text-center text-primary font-bold mb-4">Albert Einstein College</h2>
                 <form [formGroup]="formAuth" class="p-fluid p-formgrid grid mt-0">
@@ -29,7 +43,7 @@
                         }  
                     </div>
                     <br />
-                    <button pButton label="Acceder" (click)="login()" [loading]="isLoading" class="p-mt-3 w-full text-xl font-bold"></button>
+                    <button pButton label="Acceder" (click)="login()" class="p-mt-3 w-full text-xl font-bold"></button>
                 </form>
             </div>
         </div>

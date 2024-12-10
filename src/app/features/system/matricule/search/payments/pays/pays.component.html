@@ -1,12 +1,12 @@
-<p-dialog  [modal]="true" [(visible)]="isPaysVisible" [style]="{ width: '90vw' }">
+<p-dialog  [modal]="true" [(visible)]="isPaysVisible" [style]="{ width: '92vw' }">
     <ng-template pTemplate="header" class="z-0 mb-0">
         <div class="flex flex-column">
             <div class="p-dialog-title">Pagos - {{person?.name}}</div>
             <div class="mt-2 text-blue-600">Seleccione los pagos secuencialmente</div>
         </div>
     </ng-template>
-    <div class="grid mt-0 pt-0">
-        <div class="col-12 md:col-6 mt-0 pt-0">
+    <div class="grid mt-0 pt-0 ">
+        <div class="col-12 md:col-6 h-35rem flex-order-2 mt-0 pt-0 md:overflow-auto md:flex-order-1">
             @for (charge of pays; track $index) {
                 <div class="card surface-50  px-2 p-0 mb-0 mt-2">
                     <div class="grid p-0 pt-2">
@@ -24,7 +24,7 @@
 
         </div>
     
-        <div class="col-12 md:col-6 mt-2">
+        <div class="col-12 md:col-6 h-35rem flex-order-1 md:flex-order-2 mt-2 md:overflow-auto">
             <label for="gradeId" class="font-semibold mr-2">Medio de pago <span class="text-red-500">*</span></label>
             <p-dropdown [(ngModel)]="selectedHalfPayment" (onChange)="isHalfPaymentSelected = false" placeholder=":: Eliga medio de pago ::" [options]="halfPayments" optionValue="id" class="p-fluid text-base" optionLabel="name"
             [ngClass]="{'ng-invalid ng-dirty': isHalfPaymentSelected }" />
@@ -52,8 +52,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 p-0 text-lg mb-2 text-right">
-            <button pButton pRipple icon="pi pi-check-circle" label="Pagar" [loading]="isLoading" (click)="onPay()" class="p-button-info font-bold"></button>
+            <div class="p-0 text-lg mb-2 text-right">
+                <button pButton pRipple icon="pi pi-check-circle" label="Pagar" [loading]="isLoading" (click)="onPay()" class="p-button-info font-bold"></button>
             </div>
         </div>
     </div>
