@@ -24,7 +24,8 @@ export const errorResponseInterceptor: HttpInterceptorFn = (req, next) => {
             break;
           }
           case 403: {
-            toastService.add({ severity: 'error', life: 10000, summary: 'Fallo en la autenticación', detail: e.error.message });
+            console.log(e)
+            toastService.add({ severity: 'error', life: 10000, summary: 'Fallo en la autenticación', detail: "No hay permisos suficientes" });
             const token = loginService.getToken();
 
             if (token && token.split('.').length === 3) {

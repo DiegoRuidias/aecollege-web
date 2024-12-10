@@ -1,7 +1,7 @@
 <div class="card p-2 md:p-4">
     <p-toolbar>
         <div>
-            <button pButton pRipple label="Nuevo" (click)="openNew()" icon="pi pi-plus" class="text-white font-bold"></button>
+            <button pButton pRipple label="Nuevo" (click)="openNew()" icon="pi pi-user-plus" class="text-white font-bold"></button>
         </div>
         <div>
             <span class="p-input-icon-left">
@@ -35,11 +35,18 @@
                 <td>{{ item.username }}</td>
                 <td>{{ item.phone | labelBlankUsers }}</td>
                 <td>{{ item.email | labelBlankUsers }}</td>
-                <td><p-inputSwitch [(ngModel)]="item.isActive"  (ngModelChange)="updateIsActive(item.id, $event)"/></td>
+                <td>
+                    @if(!(item.code === 'ADMIN')){
+                    <p-inputSwitch [(ngModel)]="item.isActive"  readonly="true" (click)="openUpdateActive(item,!item.isActive)"/>
+                    }
+                </td>
                 <td pFrozenColumn alignFrozen="right">
+                    @if(!(item.username === 'admin')){
                     <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Ver" (click)="openView($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
                     <button pButton pRipple type="button" [rounded]="true"  severity="warning" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
-                    <button pButton pRipple type="button" [rounded]="true"  severity="help" pTooltip="Recursos" (click)="openRoles($event, item)" icon="pi pi-shield" class="mr-2  text-black text-xs"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="help" pTooltip="Roles de Usuario" (click)="openRoles($event, item)" icon="pi pi-shield" class="mr-2  text-black text-xs"></button>
+                    }
+                    <button pButton pRipple type="button" [rounded]="true"  severity="contrast" pTooltip="Cambiar Contraseña" (click)="openSavePassword($event, item)" icon="pi pi-lock" class="mr-2  text-black text-xs"></button>
                 </td>
             </tr>
         </ng-template>
@@ -165,6 +172,37 @@
         <button pButton pRipple type="button"  severity="primary" pTooltip="Cerrar" (click)="isViewUsers = false" class="font-semibold">Cerrar</button>    </div>
 </p-dialog>
 
+<p-dialog  header="Usuario" [modal]="true" [(visible)]="isChangePassword" [resizable]="false" [style]="{ width: '30rem' }">
+    <ng-template pTemplate="header">
+        <div class="flex flex-column">
+            <div class="p-dialog-title">Cambiar contraseña</div>
+            <div class="mt-2 text-blue-600">Ingrese la nueva contraseña</div>
+        </div>
+    </ng-template>
+    <form [formGroup]="formChangePass" class="p-fluid p-formgrid grid mt-0">
+        <div class="field col-12 py-0 p-fluid">
+            <label for="prePass"  class="font-semibold w-6rem">Contraseña:</label>
+            <input pInputText formControlName="prePass" class="mt-2 p-fluid w-full" placeholder="Ingrese contraseña"  id="prePass" type="password"
+            [ngClass]="{'ng-invalid ng-dirty': hasErrorPassword('prePass', 'required')}"/>
+            @if (hasErrorPassword('prePass', 'required')) {
+                <div class="p-error">Por favor ingrese la contraseña.</div>
+            } 
+        </div>
+        <div class="field col-12 py-0 p-fluid">
+            <label for="password" class="font-semibold">Confirmar contraseña:</label>
+            <p-password  class="mt-2 p-fluid w-full"  [feedback]="false" placeholder="Confirmar contraseña"  id="password" [toggleMask]="true" formControlName="password" type="password"
+            [ngClass]="{'ng-invalid ng-dirty': hasErrorPassword('password', 'required')}"></p-password>
+            @if (hasErrorPassword('password', 'required')) {
+                <div class="p-error">Por favor ingrese la nueva contraseña.</div>
+            } 
+        </div>
+    </form>
+    <div class="flex justify-content-end gap-2 mt-2">
+        <button pButton pRipple type="button"  severity="danger" pTooltip="Cerrar" (click)="isChangePassword = false" class="font-semibold mr-2">Cerrar</button>    
+        <button pButton pRipple type="button"  severity="primary" pTooltip="Confirmar" (click)="savePassword()" [loading]="isLoadingButton" class="font-semibold">Confirmar</button>    
+    </div>
+</p-dialog>
+
 
 <p-dialog [modal]="true" [(visible)]="isFormUsers" [resizable]="false" [style]="{ width: '35rem' }">
     <ng-template pTemplate="header">
@@ -184,7 +222,7 @@
                 [ngClass]="{'ng-invalid ng-dirty': hasError('name', 'required')}"/>
             </p-inputGroup>
             @if (hasError('name', 'required')) {
-                <div class="p-error ml-6">Por favor ingrese el nombre del Usuario.</div>
+                <div class="p-error ml-5">Por favor ingrese el nombre del Usuario.</div>
             }  
         </div>
         <div class="field col-12 py-0">
@@ -197,7 +235,7 @@
                 [ngClass]="{'ng-invalid ng-dirty': hasError('username', 'required')}"/>              
             </p-inputGroup>
             @if (hasError('username', 'required')) {
-                <div class="p-error ml-6">Por favor ingrese el nombre de usuario.</div>
+                <div class="p-error ml-5">Por favor ingrese el nombre de usuario.</div>
             }  
         </div>
         <div class="field col-12 py-0">
@@ -210,10 +248,10 @@
                 [ngClass]="{'ng-invalid ng-dirty': hasError('phone', 'required') && hasError('phone', 'invalidFormat')}"/>                 
             </p-inputGroup>
             @if (hasError('phone', 'invalidFormat')) {
-                <div class="p-error ml-6">Por favor formato del celular correcto.</div>
+                <div class="p-error ml-5">Por favor formato del celular correcto.</div>
             }
             @if (hasError('phone', 'required')) {
-                <div class="p-error ml-6">Por favor ingrese el celular del Usuario.</div>
+                <div class="p-error ml-5">Por favor ingrese el celular del Usuario.</div>
             } 
         </div>
         <div class="field col-12 py-0">
@@ -226,24 +264,19 @@
                 [ngClass]="{'ng-invalid ng-dirty': hasError('email','required') && hasError('email','invalidFormat')}"/>
             </p-inputGroup>
             @if (hasError('email', 'invalidFormat')) {
-                <div class="p-error ml-6">Por favor ingrese formato correcto.</div>
+                <div class="p-error ml-5">Por favor ingrese formato correcto.</div>
             }
             @if (hasError('email', 'required')) {
-                <div class="p-error ml-6">Por favor ingrese el email del Usuario.</div>
+                <div class="p-error ml-5">Por favor ingrese el email del Usuario.</div>
             }  
         </div>
         @if(!isEdit){
-            <div class="field col-12 py-0">
+            <div class="field col-12 py-0 p-fluid">
                 <label for="password" class="font-semibold w-6rem">Contraseña:</label>
-                <p-inputGroup>
-                    <p-inputGroupAddon>
-                        <ng-icon name="matBadge" class="text-color text-lg"></ng-icon>
-                    </p-inputGroupAddon>
-                    <input pInputText type="password" id="password" formControlName="password" [maxLength]="50" class="w-full" 
-                    [ngClass]="{'ng-invalid ng-dirty': hasError('password', 'required')}"/>
-                </p-inputGroup>
+                <p-password  class="mt-2 p-fluid w-full"  [feedback]="false" placeholder="Ingrese constraseña"  id="password" [toggleMask]="true" formControlName="password" type="password"
+                [ngClass]="{'ng-invalid ng-dirty': hasError('password', 'required')}"></p-password>
                 @if (hasError('password', 'required')) {
-                    <div class="p-error ml-6">Por favor ingrese el contraseña del Usuario.</div>
+                    <div class="p-error">Por favor ingrese el contraseña del Usuario.</div>
                 } 
             </div>
         }

@@ -154,7 +154,7 @@
                         <div class="field col-12 md:col-6 py-0">
                             <label for="dateOfBirth " class="font-semibold mr-2 w-full">Fecha nacimiento <span class="text-red-500">*</span></label>
                             <p-calendar inputId="dateOfBirth" showIcon="true" [readonlyInput]="isStudentReadonly" inputStyleClass="w-full" formControlName="dateOfBirth"
-                            class="w-full" [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('dateOfBirth', 'required')}" placeholder="dd/mm/yyyy"/>
+                            class="w-full" [ngClass]="{'ng-invalid ng-dirty': hasErrorStudent('dateOfBirth', 'required')}" [maxDate]="maxDate" placeholder="dd/mm/yyyy"/>
                             @if (hasErrorStudent('dateOfBirth', 'required')) {
                                 <div class="p-error">Por favor ingrese fecha de nacimiento.</div>
                             }  
@@ -381,7 +381,7 @@
         </div>
         <div class="field col-12 md:col-6 py-0">
             <label for="dateOfBirth " class="font-semibold mr-2 w-full">Fecha nacimiento <span class="text-red-500">*</span></label>
-            <p-calendar inputId="dateOfBirth" showIcon="true" [readonlyInput]="isParentReadonly" inputStyleClass="w-full" formControlName="dateOfBirth" optionLabel="label" optionValue="value" 
+            <p-calendar inputId="dateOfBirth" showIcon="true" [maxDate]="maxDateParent" [readonlyInput]="isParentReadonly" inputStyleClass="w-full" formControlName="dateOfBirth" optionLabel="label" optionValue="value" 
             class="w-full" [ngClass]="{'ng-invalid ng-dirty': hasErrorParent('dateOfBirth', 'required')}" placeholder="dd/mm/yyyy" appendTo="body"/>
             @if (hasErrorParent('dateOfBirth', 'required')) {
                 <div class="p-error">Por favor ingrese fecha de nacimiento.</div>

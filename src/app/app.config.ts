@@ -5,7 +5,7 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { errorResponseInterceptor } from './shared/interceptors/error-response.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { authInterceptor } from './shared/interceptors/auth.interceptor';
 
 import { registerLocaleData } from '@angular/common';
@@ -22,7 +22,7 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([errorResponseInterceptor,authInterceptor])
     ),
     provideAnimations(),
-    MessageService,
+    MessageService,ConfirmationService,
     { provide: LOCALE_ID, useValue: 'es' },
     ]
     

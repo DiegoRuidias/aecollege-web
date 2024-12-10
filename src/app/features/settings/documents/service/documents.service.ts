@@ -13,4 +13,8 @@ export class DocumentsService extends AppService{
   create(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/v1/documents`, data);
   }
+
+  updateDeletedAt(id: string): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/v1/documents/${id}`,[]);
+  }
 }

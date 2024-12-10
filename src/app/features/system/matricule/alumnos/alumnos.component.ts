@@ -103,6 +103,8 @@ export default class AlumnosComponent implements OnInit{
   activeIndex: number = 0;
   typeDocumentLength: number = 8;
   typeDocumentLengthParent: number = 8;
+  maxDate?: Date;
+  maxDateParent?: Date;
 
   selectedParents: any[] = [];
   parents: any[] = [];
@@ -200,6 +202,12 @@ export default class AlumnosComponent implements OnInit{
   }
   
   ngOnInit(): void {
+    const currentDate = new Date();
+    this.maxDate = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+    
+    const currentDateParent = new Date();
+    this.maxDateParent = new Date(currentDateParent.getFullYear() - 18, currentDateParent.getMonth(), currentDateParent.getDate());
+    this.formStudent.controls['dateOfBirth'].setValue(currentDate);
     this.load();
   };
 

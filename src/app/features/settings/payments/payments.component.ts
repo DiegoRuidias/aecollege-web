@@ -22,6 +22,7 @@ import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities'
 import { matAttachMoney, matBadge, matCalendarMonth, matDescription, matToday, matVpnKey } from '@ng-icons/material-icons/baseline';
 import { months, typePayment } from './model/payments.model';
 import { PeriodsService } from '../periods/service/periods.service';
+import { TooltipModule } from 'primeng/tooltip';
 @Component({
   selector: 'app-payments',
   standalone: true,
@@ -43,7 +44,8 @@ import { PeriodsService } from '../periods/service/periods.service';
     TagModule,
     MonthPipe,
     CheckboxModule,
-    NgIconComponent
+    NgIconComponent,
+    TooltipModule
   ],
   providers: [
     provideIcons({

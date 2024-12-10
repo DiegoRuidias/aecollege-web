@@ -1,8 +1,10 @@
   .student-card {
     cursor: pointer;
     transition: transform 0.5s ease;
+    background-color: var(--surface-a);
   }
   
   .student-card:hover {
     transform: translateY(-5px);
+    background-color: var(--surface-ground);
   }

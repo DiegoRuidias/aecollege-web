@@ -16,10 +16,11 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DocumentsService } from './service/documents.service';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { TooltipModule } from 'primeng/tooltip';
 @Component({
   selector: 'app-documents',
   standalone: true,
@@ -40,7 +41,8 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     NgIconComponent,
     InputTextModule,
     InputNumberModule,
-    CheckboxModule
+    CheckboxModule,
+    TooltipModule
   ],
   providers: [
     provideIcons({
@@ -54,6 +56,7 @@ export default class DocumentsComponent implements OnInit{
   private readonly formBuilder = inject(FormBuilder);
   toastService = inject(MessageService);
   documentService = inject(DocumentsService);
+  confirmationService = inject(ConfirmationService);
   documentList: any[] = [];
   selectedDocument: any[] = [];
 
@@ -84,6 +87,17 @@ export default class DocumentsComponent implements OnInit{
     this.isFormDocuments = true;
   };
 
+  openDelete(event: MouseEvent, item: any): void {
+    this.selectedDocument = [item];
+    this.confirmationService.confirm({
+      message: '¿ Desea eliminar el documento ?',
+      header: 'Confirmación',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => this.updateDelete()
+    });
+    event.stopImmediatePropagation();
+  }
+
   save(): void {
     if (!this.formDocument.valid) {
       markAllAsTouched(this.formDocument)
@@ -112,6 +126,15 @@ export default class DocumentsComponent implements OnInit{
       },
     })
   }
+
+
+  updateDelete(): void{
+    this.documentService.updateDeletedAt(this.selectedDocument[0].id).subscribe(data =>{
+      this.toastService.add({ severity: 'success', life: 5000, summary: 'Documento Eliminado', detail: 'El documento se eliminó correctamente.' }); 
+      this.documentList = this.documentList.filter(r => r.id !== this.selectedDocument[0]?.id);
+    })
+  }
+
   hasError(field: string, error: string): boolean | undefined {
     const control = this.formDocument.get(field);
     return control?.hasError(error) && (control.dirty || control.touched);

@@ -29,6 +29,7 @@ import {
   matWorkHistory
 } from '@ng-icons/material-icons/baseline'
 import { DateValidator } from './validators/date.validator';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-periods',
@@ -62,7 +63,8 @@ import { DateValidator } from './validators/date.validator';
     InputSwitchModule,
     ProgressSpinnerModule,
     TagModule,
-    ToolbarModule
+    ToolbarModule,
+    TooltipModule
   ],
   providers: [
     provideIcons({

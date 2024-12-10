@@ -22,6 +22,7 @@ import { GradeService } from './service/grade.service';
 import { Levels } from './model/levels.model';
 import { Grade } from './model/grade.model';
 import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-levels-grades',
@@ -42,7 +43,8 @@ import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities'
     DialogModule,
     ProgressSpinnerModule,
     NgIconComponent,
-    ToolbarModule
+    ToolbarModule,
+    TooltipModule
   ],
   providers: [
     provideIcons({

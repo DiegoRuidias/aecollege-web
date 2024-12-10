@@ -14,4 +14,8 @@ export class TypeDocumentService extends AppService{
   create(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/v1/documentType`, data);
   }
+
+  deleted(id: string): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/v1/documentType/${id}`,[]);
+  }
 }

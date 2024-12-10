@@ -8,6 +8,8 @@ import { AppTopbarComponent } from '../app-topbar/app-topbar.component';
 import { AppFooterComponent } from '../app-footer/app-footer.component';
 import { ToastModule } from 'primeng/toast';
 import { SettingsService } from '../../service/settings.service';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 @Component({
   selector: 'app-layout',
   standalone: true,
@@ -17,7 +19,8 @@ import { SettingsService } from '../../service/settings.service';
     AppTopbarComponent,
     AppSidebarComponent,
     RouterOutlet,
-    ToastModule
+    ToastModule,
+    ConfirmDialogModule
     
   ],
   templateUrl: './app-layout.component.html',

@@ -75,6 +75,7 @@ export default class EmployeesComponent implements OnInit {
   selectedEmployees: any[] = [];
   typeDocumentList: any[] = [];
   typeDocumentLength: number = 8;
+  maxDateParent?: Date;
 
   isLoading: boolean = false;
   isLoadingButton: boolean = false;
@@ -113,6 +114,9 @@ export default class EmployeesComponent implements OnInit {
   }
   
   ngOnInit(): void {
+    const currentDateParent = new Date();
+    this.maxDateParent = new Date(currentDateParent.getFullYear() - 18, currentDateParent.getMonth(), currentDateParent.getDate());
+    
     this.settings = this.settingsService.getSettings();
     this.load();
   }
