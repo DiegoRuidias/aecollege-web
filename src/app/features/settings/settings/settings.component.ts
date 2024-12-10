@@ -12,6 +12,7 @@ import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities'
 import { Settings } from '../../../shared/layout/api/settings.model';
 import { SettingsService } from '../../../shared/layout/service/settings.service';
 import { MessageService } from 'primeng/api';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-settings',
@@ -23,7 +24,8 @@ import { MessageService } from 'primeng/api';
     FormsModule,
     DropdownModule,
     ButtonModule,
-    RippleModule
+    RippleModule,
+    TooltipModule
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'

@@ -1,7 +1,8 @@
-<div class="card p-2 md:p-4">
+<div class="card p-2 md:p-3">
     <p-toolbar>
+        <h5 class="mt-3">Roles de Usuario</h5>
         <div>
-            <button pButton pRipple label="Nuevo" (click)="openNew()" icon="pi pi-plus" class="text-white font-bold"></button>
+            <button pButton pRipple label="Nuevo" (click)="openNew()" icon="pi pi-plus-circle" class="text-white font-bold"></button>
         </div>
     </p-toolbar>
     <p-table [value]="rolesList" [tableStyle]="{ 'min-width': '65rem' }" [scrollable]="true"  
@@ -16,7 +17,7 @@
                 <th id="col3" style="width: 10rem;">Nombre</th>
                 <th id="col4" style="width: 20rem;">Descripción</th>
                 <th id="col5" style="width: 6rem;">Activo</th>
-                <th id="col6" style="width: 11rem;" pFrozenColumn alignFrozen="right">Opciones</th>
+                <th id="col6" style="width: 7rem;" pFrozenColumn alignFrozen="right">Opciones</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item let-index="rowIndex">
@@ -30,12 +31,17 @@
                 <td>{{ item.code }}</td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.description }}</td>
-                <td><p-inputSwitch [(ngModel)]="item.isActive"  (ngModelChange)="updateIsActive(item.id, $event)"/></td>
+                <td>
+                    @if(!(item.code === 'ADMIN')){
+                    <p-inputSwitch [(ngModel)]="item.isActive" [readonly]="true" (click)="openUpdateActive(item,!item.isActive)"/>
+                    }
+                </td>
                 <td pFrozenColumn alignFrozen="right">
+                    @if(!(item.code === 'ADMIN')){
                     <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Ver" (click)="openView($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
                     <button pButton pRipple type="button" [rounded]="true"  severity="warning" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
-                    <button pButton pRipple type="button" [rounded]="true"  severity="help" pTooltip="Recursos" (click)="openAccess($event, item);rolesMenusComponent.openMenusComponents(item,this.menuData)" icon="pi pi-shield" class="mr-2  text-black text-xs"></button>
-                    <button pButton pRipple type="button" [rounded]="true"  severity="danger" pTooltip="Eliminar" (click)="openEdit($event, item)" icon="pi pi-trash" class="mr-2 text-xs"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="danger" pTooltip="Eliminar" (click)="openDelete($event, item)" icon="pi pi-trash" class="mr-2 text-xs"></button>
+                    }
                 </td>
             </tr>
         </ng-template>
@@ -150,6 +156,24 @@
     </div>
     <div class="flex justify-content-end gap-2 mt-2">
         <button pButton pRipple type="button"  severity="primary" pTooltip="Cerrar" (click)="isViewRoles = false" class="font-semibold">Cerrar</button>    </div>
+</p-dialog>
+
+<p-dialog [(visible)]="isDeleteDialog" header="Confirmar" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-first justify-content-around">
+        <p>
+            <i class="pi pi-exclamation-triangle" style="font-size: 4rem"></i>
+        </p>
+        <div>
+            <p>El Rol será elimindo </p>
+            <p>¿Está seguro de eliminar?</p>
+        </div>
+        
+    </div>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="isDeleteDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" label="Si" (click)="updateDelete()" [loading]="isLoadingButton"></button>
+    </ng-template>
 </p-dialog>
 
 <app-roles-menus #rolesMenusComponent></app-roles-menus>

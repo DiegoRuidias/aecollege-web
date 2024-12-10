@@ -23,4 +23,8 @@ export class RolesService extends AppService{
     return this.http.get<any[]>(`${this.baseUrl}/v1/roles`);
   }
 
+  updateDeletedAt(id: string): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/v1/roles/${id}`,[]);
+  }
+
 }

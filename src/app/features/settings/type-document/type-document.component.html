@@ -14,7 +14,7 @@
                     <p-tableHeaderCheckbox /></th>
                 <th id="col2" style="width: 20rem;">Nombre</th>
                 <th id="col3" style="width: 14rem;">Longitud</th>
-                <th id="col7" style="width: 9rem;" pFrozenColumn alignFrozen="right">Opciones</th>
+                <th id="col7" style="width: 2rem;" pFrozenColumn alignFrozen="right">Opciones</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item let-index="rowIndex">
@@ -25,7 +25,7 @@
                 <td>{{ item.name }}</td>
                 <td>{{ item.length }}</td>
                 <td pFrozenColumn alignFrozen="right">
-                    <button pButton pRipple type="button" [rounded]="true"  severity="danger" pTooltip="Eliminar" icon="pi pi-trash" class="mr-2 text-xs"></button>
+                    <button pButton pRipple type="button" [rounded]="true" (click)="openDelete($event,item)"  severity="danger" pTooltip="Eliminar" icon="pi pi-trash" class="mr-2 text-xs"></button>
                 </td>
             </tr>
         </ng-template>

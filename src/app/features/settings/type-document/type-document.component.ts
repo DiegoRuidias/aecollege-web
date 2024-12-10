@@ -18,7 +18,8 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { markAllAsTouched } from '../../../shared/utils/reactive-form-utilities';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-type-document',
@@ -38,7 +39,8 @@ import { MessageService } from 'primeng/api';
     DialogModule,
     NgIconComponent,
     InputTextModule,
-    InputNumberModule
+    InputNumberModule,
+    TooltipModule
   ],
   providers: [
     provideIcons({
@@ -51,7 +53,8 @@ import { MessageService } from 'primeng/api';
 export default class TypeDocumentComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   toastService = inject(MessageService);
-  typeDocumentService = inject(TypeDocumentService)
+  typeDocumentService = inject(TypeDocumentService);
+  confirmationService = inject(ConfirmationService);
   typeDocumentList: any[] = [];
   selectedDocumentList: any[] = [];
 
@@ -83,6 +86,17 @@ export default class TypeDocumentComponent implements OnInit {
     this.isFormTypeDocument = true;
   };
 
+  openDelete(event: MouseEvent, item: any): void {
+    this.selectedDocumentList = [item];
+    this.confirmationService.confirm({
+      message: '¿ Desea eliminar el tipo de documento ?',
+      header: 'Confirmación',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => this.updateDelete()
+    });
+    event.stopImmediatePropagation();
+  }
+
   save(): void {
     if (!this.formTypeDocument.valid) {
       markAllAsTouched(this.formTypeDocument)
@@ -110,6 +124,14 @@ export default class TypeDocumentComponent implements OnInit {
       },
     })
   }
+
+  updateDelete(): void {
+    this.typeDocumentService.deleted(this.selectedDocumentList[0].id).subscribe(data =>{
+      this.toastService.add({ severity: 'success', life: 5000, summary: 'Documento Eliminado', detail: 'El documento se eliminó correctamente.' }); 
+      this.typeDocumentList = this.typeDocumentList.filter(r => r.id !== this.selectedDocumentList[0]?.id);
+    })
+  }
+
   hasError(field: string, error: string): boolean | undefined {
     const control = this.formTypeDocument.get(field);
     return control?.hasError(error) && (control.dirty || control.touched);

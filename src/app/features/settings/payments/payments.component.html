@@ -37,7 +37,7 @@
                 <td class="text-center"><p-tag severity="success" [value]="item.monthStart | month" [style]="{'font-size': '0.9rem'}"/></td>
                 <td class="text-center"><p-tag severity="danger" [value]="item.monthEnd | month" [style]="{'font-size': '0.9rem'}"/></td>
                 <td pFrozenColumn alignFrozen="right">
-                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="ver" (click)="openView($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
+                    <button pButton pRipple type="button" [rounded]="true"  severity="info" pTooltip="Ver" (click)="openView($event, item)" icon="pi pi-eye" class="mr-2 text-xs font-bold"></button>
                     <button pButton pRipple type="button" [rounded]="true"  severity="warning" pTooltip="Editar" (click)="openEdit($event, item)" icon="pi pi-pencil" class="mr-2  text-xs font-bold"></button>
                 </td>
             </tr>

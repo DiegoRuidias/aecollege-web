@@ -23,7 +23,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators,FormsModule } from '@angular/forms';
 
 import { RolesService } from './service/roles.service';
-import { MessageService, TreeNode } from 'primeng/api';
+import { ConfirmationService, MessageService, TreeNode } from 'primeng/api';
 import { RolesMenusComponent } from './roles-menus/roles-menus.component';
 import { MenusService } from '../../system/menus/service/menus.service';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -32,6 +32,9 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
 import { forkJoin } from 'rxjs';
 import { typePerson } from './model/roles.model';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TooltipModule } from 'primeng/tooltip';
+
 @Component({
   selector: 'app-roles',
   standalone: true,
@@ -55,7 +58,9 @@ import { typePerson } from './model/roles.model';
     ProgressSpinnerModule,
     MessagesModule,
     ToolbarModule,
-    DropdownModule
+    DropdownModule,
+    ConfirmDialogModule,
+    TooltipModule
   ],
   providers: [
     provideIcons({
@@ -70,12 +75,14 @@ export default class RolesComponent implements OnInit{
   rolesService = inject(RolesService);
   menuService = inject(MenusService);
   toastService = inject(MessageService);
-
+  confirmationService = inject(ConfirmationService);
   selectedRoles: any[] = [];
   rolesList: any[] = [];
   menuData: TreeNode[] = [];
   typePersonList = typePerson;
 
+  
+  isDeleteDialog: boolean = false;
   isViewRoles: boolean = false;
   isFormRoles: boolean = false;
   isEdit: boolean = false;
@@ -151,6 +158,7 @@ public formRoles: FormGroup = this.formBuilder.group({
 
  
     this.formRoles.controls['id'].setValue(item.id);
+    this.formRoles.controls['typePerson'].setValue(item.typePerson);
     this.formRoles.controls['isActive'].setValue(item.isActive);
     this.formRoles.controls['code'].setValue(item.code);
     this.formRoles.controls['name'].setValue(item.name);
@@ -159,6 +167,32 @@ public formRoles: FormGroup = this.formBuilder.group({
     this.isFormRoles = true;
     this.isEdit = true;
 
+  }
+
+  openDelete(event: MouseEvent, item: any): void {
+    this.selectedRoles = [item];
+    this.confirmationService.confirm({
+      message: '¿ Desea eliminar el rol seleccionado, y desactivar sus usuarios ?',
+      header: 'Confirmación',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => this.updateDelete()
+    });
+    event.stopImmediatePropagation();
+  }
+
+  openUpdateActive(item: any, event: any): void {
+    this.selectedRoles = [item];
+    let message: string = '¿ Desea desactivar el rol seleccionado y sus usuarios ?'
+    if(event){
+      message = '¿ Desea activar el rol seleccionado y sus usuarios ?';
+    } 
+
+    this.confirmationService.confirm({
+      message: message,
+      header: 'Confirmación',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => this.updateIsActive(event)
+    });
   }
 
   save(): void {
@@ -171,23 +205,7 @@ public formRoles: FormGroup = this.formBuilder.group({
         this.update();
     else
         this.create();
-  }
-
-  create(): void {
-    this.isLoadingButton = true;
-    this.rolesService.create(this.formRoles.value).subscribe({
-      next:(data) => {
-        this.rolesList = [...this.rolesList, data];
-        this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Creado', detail: 'El Rol se creó correctamente.' });
-        this.isLoadingButton = false;
-        this.isFormRoles = false;
-      },
-      error:(err) => {
-        this.isLoadingButton = false;
-      },
-    });
-  }
-  
+  } 
 
   update(): void{
     this.isLoadingButton = true;
@@ -208,15 +226,51 @@ public formRoles: FormGroup = this.formBuilder.group({
     });
   }
 
-  updateIsActive(id: string , event: boolean): void{
-    this.rolesService.updateIsActive(id,event).subscribe(data =>{
-      this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Editado', detail: 'El rol se editó correctamente.' }); 
+  create(): void {
+    this.isLoadingButton = true;
+    this.rolesService.create(this.formRoles.value).subscribe({
+      next:(data) => {
+        this.rolesList = [...this.rolesList, data];
+        this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Creado', detail: 'El Rol se creó correctamente.' });
+        this.isLoadingButton = false;
+        this.isFormRoles = false;
+      },
+      error:(err) => {
+        this.isLoadingButton = false;
+      },
+    });
+  }
+
+  updateIsActive(event: boolean): void{
+    this.rolesService.updateIsActive(this.selectedRoles[0].id,event).subscribe(data =>{
+      this.rolesList = this.rolesList.map(r => {
+        if (r.id === this.selectedRoles[0].id) {
+          return { ...r, isActive: event }; 
+        }
+        return r; 
+      });
+      if(event){
+        this.toastService.add({ severity: 'success', life: 5000, summary: 'Usuario Activado', detail: 'El usuario se activo correctamente.' });
+      } else {
+        this.toastService.add({ severity: 'success', life: 5000, summary: 'Usuario desactivado', detail: 'El usuario se desactivo correctamente.' });
+      }
     })
   }
+
+  updateDelete(): void {
+    this.rolesService.updateDeletedAt(this.selectedRoles[0]?.id).subscribe(data =>{
+      this.toastService.add({ severity: 'success', life: 5000, summary: 'Rol Eliminado', detail: 'El rol se eliminó correctamente.' }); 
+      this.rolesList = this.rolesList.filter(r => r.id !== this.selectedRoles[0]?.id);
+      this.isDeleteDialog = false;
+    })
+  }
+
 
   hasError(field: string, error: string): boolean | undefined {
     const control = this.formRoles.get(field);
     return control?.hasError(error) && (control.dirty || control.touched);
   }
+
+
 
 }

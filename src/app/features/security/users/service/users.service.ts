@@ -19,6 +19,10 @@ export class UsersService extends AppService{
     return this.http.patch(`${this.baseUrl}/v1/users/${id}/${isActive}`,[]);
   }
 
+  updatePassword(data: any): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/v1/users/password`,data);
+  }
+  
   update(data: any): Observable<any> {
     return this.http.put(`${this.baseUrl}/v1/users/${data.id}`, data);
   }

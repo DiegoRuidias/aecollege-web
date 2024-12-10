@@ -7,7 +7,7 @@ import { RippleModule } from 'primeng/ripple';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { UsersService } from './service/users.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LabelBlankUsersPipe } from './pipes/label-blank-users.pipe';
 import { DialogModule } from 'primeng/dialog';
@@ -28,6 +28,8 @@ import { EmailValidator } from '../../system/matricule/alumnos/validators/email.
 import { PhoneValidator } from '../../system/matricule/alumnos/validators/phone.validator';
 import { typePerson } from '../roles/model/roles.model';
 import { DropdownModule } from 'primeng/dropdown';
+import { TooltipModule } from 'primeng/tooltip';
+import { PasswordModule } from 'primeng/password';
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -48,7 +50,9 @@ import { DropdownModule } from 'primeng/dropdown';
     ToolbarModule,
     ProgressSpinnerModule,
     NgIconComponent,
-    DropdownModule
+    DropdownModule,
+    TooltipModule,
+    PasswordModule
   ],
   providers: [
     provideIcons({
@@ -62,6 +66,7 @@ export default class UsersComponent implements OnInit{
   @ViewChild('tableUsers') tableUsers!: Table;
   @ViewChild('tableRoles') tableRoles!: Table;
   private readonly formBuilder = inject(FormBuilder);
+  confirmationService = inject(ConfirmationService);
   usersService = inject(UsersService);
   userRolesService = inject(UserRolesService)
   toastService = inject(MessageService);
@@ -69,6 +74,7 @@ export default class UsersComponent implements OnInit{
   userList: any[] = [];
   selectedUser: any[] = [];
 
+  isChangePassword: boolean = false;
   isViewUsers: boolean = false;
   isFormUsers: boolean = false;
   rolesTable: any[] = [];
@@ -87,7 +93,13 @@ export default class UsersComponent implements OnInit{
     phone: ['',[PhoneValidator(), Validators.required]],
     email: ['',[EmailValidator(), Validators.required]],
     password: ['', Validators.required]
-});
+  });
+
+  public formChangePass: FormGroup = this.formBuilder.group({
+    id: [''],
+    password: ['', Validators.required],
+    prePass: ['', Validators.required]
+  });
 
   ngOnInit(): void {
     this.isViewSave = false;
@@ -159,13 +171,31 @@ export default class UsersComponent implements OnInit{
     });
   }
 
-  hasError(field: string, error: string): boolean | undefined {
-    const control = this.formUsers.get(field);
-    return control?.hasError(error) && (control.dirty || control.touched);
+  openUpdateActive(item: any, event: any): void {
+    this.selectedUser= [item];
+    let message: string = '¿ Desea desactivar el usuario Seleccionado ?'
+    if(event){
+      message = '¿ Desea activar el usuario Seleccionado ?';
+    } 
+
+    this.confirmationService.confirm({
+      message: message,
+      header: 'Confirmación',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => this.updateIsActive(event)
+    });
   }
 
-  updateIsActive(id: string , event: boolean): void{
-    this.usersService.updateIsActive(id,event).subscribe(data =>{
+
+
+  updateIsActive(event: boolean): void{
+    this.usersService.updateIsActive(this.selectedUser[0].id,event).subscribe(data =>{
+      this.userList = this.userList.map(r => {
+        if (r.id === this.selectedUser[0].id) {
+          return { ...r, isActive: event }; 
+        }
+        return r; 
+      });
       if(event){
         this.toastService.add({ severity: 'success', life: 5000, summary: 'Usuario Activado', detail: 'El usuario se activo correctamente.' });
       } else {
@@ -223,6 +253,32 @@ export default class UsersComponent implements OnInit{
 
   }
 
+  openSavePassword(event: any, item: any ): void {
+    this.formChangePass.reset();
+    event.stopPropagation();
+    event.preventDefault();
+    this.selectedUser = [item]
+    this.isChangePassword = true;
+  }
+
+  savePassword(): void {
+    const newPassword: string = this.formChangePass?.value.prePass;
+    if (!this.formChangePass.valid) {
+      markAllAsTouched(this.formChangePass)
+      return;
+    }
+    if(this.formChangePass.value.password !== newPassword){
+      this.toastService.add({ severity: 'warn', life: 5000, summary: 'Contraseñas', detail: 'Las contraseñas no coinciden.' });
+      return;
+    }
+    this.confirmationService.confirm({
+      message: 'Desea cambiar la contraseña',
+      header: 'Confirmación',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => this.updatePassword()
+    });
+  }
+
   save(): void {
     if (!this.formUsers.valid) {
       markAllAsTouched(this.formUsers)
@@ -266,5 +322,30 @@ export default class UsersComponent implements OnInit{
         this.isLoadingButton = false;
       },
     });
+  }
+
+  updatePassword(): void {
+    this.isLoadingButton = true;
+    this.formChangePass.controls['id'].setValue(this.selectedUser[0].id);
+    this.usersService.updatePassword(this.formChangePass.value).subscribe({
+      next:(data) => {
+      this.toastService.add({ severity: 'success', life: 5000, summary: 'Contraseña cambiada', detail: 'La contraseña se restauró correctamente.' });
+      this.isChangePassword = false;
+      this.isLoadingButton = false;  
+      },
+      error:(err) => {
+        this.isLoadingButton = false;  
+      },
+    });
+  }
+
+  hasError(field: string, error: string): boolean | undefined {
+    const control = this.formUsers.get(field);
+    return control?.hasError(error) && (control.dirty || control.touched);
+  }
+
+  hasErrorPassword(field: string, error: string): boolean | undefined {
+    const control = this.formChangePass.get(field);
+    return control?.hasError(error) && (control.dirty || control.touched);
   }
 }

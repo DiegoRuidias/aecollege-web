@@ -81,8 +81,8 @@ export default class LoginComponent implements OnInit{
         return;
       }
 
-      this.isLoading = false;
       this.router.navigate(['/home']);
+      this.isLoading = false;
       
       
     } catch (error) {

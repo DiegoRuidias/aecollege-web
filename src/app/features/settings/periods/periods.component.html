@@ -1,7 +1,8 @@
 <div class="card">
     <p-toolbar>
+        <h5 class="mt-3">Periodos Escolares</h5>
         <div>
-            <button pButton pRipple label="Nuevo" (click)="openNew()" icon="pi pi-plus" class="text-white font-bold"></button>
+            <button pButton pRipple pTooltip="Nuevo Periodo" label="Nuevo" (click)="openNew()" icon="pi pi-plus" class="text-white font-bold"></button>
         </div>
     </p-toolbar>
     <p-table [value]="periodList" [tableStyle]="{ 'min-width': '60rem' }" [scrollable]="true"  
@@ -14,7 +15,7 @@
                 <th id="col3" style="width: 14rem;">Fecha Inicio</th>
                 <th id="col4" style="width: 14rem;">Fecha Fin</th>
                 <th id="col5" style="width: 10rem;">Estado</th>
-                <th id="col7" style="width: 9rem;" pFrozenColumn alignFrozen="right">Opciones</th>
+                <th id="col7" style="width: 6rem;" pFrozenColumn alignFrozen="right">Opciones</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item let-index="rowIndex">

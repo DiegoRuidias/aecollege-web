@@ -87,7 +87,6 @@ export default class HomeComponent implements OnInit{
     this.fileRegisterService.findByDocumentNumberByPeriod(this.loginService.getUser(),this.settings.periodId).subscribe({
       next:(data) => {
         this.matricule = data;
-        console.log(this.matricule)
         if(data){
           this.getCharges(this.matricule.fileEconomic.id)
         }else {
