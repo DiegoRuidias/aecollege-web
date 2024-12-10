@@ -16,6 +16,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { PasswordModule } from 'primeng/password';
+import { GalleriaModule } from 'primeng/galleria';
 import { markAllAsTouched } from '../../utils/reactive-form-utilities';
 @Component({
   selector: 'app-login',
@@ -31,7 +32,8 @@ import { markAllAsTouched } from '../../utils/reactive-form-utilities';
     ProgressSpinnerModule,
     ToastModule,
     MessagesModule,
-    PasswordModule
+    PasswordModule,
+    GalleriaModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -42,18 +44,25 @@ export default class LoginComponent implements OnInit{
   settingsService = inject(SettingsService);
   menuService = inject(MenuService);
   toastService = inject(MessageService);
+  private readonly formBuilder = inject(FormBuilder);
   router = inject(Router);
+  isLoading: boolean = false;
 
+  
   constructor(public layoutService: LayoutService) {
     layoutService.themeLigth()
-   }
+  }
 
-  private readonly formBuilder = inject(FormBuilder);
-  isLoading: boolean = false;
   public formAuth: FormGroup = this.formBuilder.group({
     username: ['', Validators.required],
     password: ['',Validators.required]
   });
+
+  images = [
+    { src: '/layout/images/descubre.jpg', alt: 'Image 1' },
+    { src: '/layout/images/descubre1.jpg', alt: 'Image 2' },
+    { src: '/layout/images/descubre2.jpg', alt: 'Image 3' }
+  ];
 
   ngOnInit(): void {
     this.loginService.logout();

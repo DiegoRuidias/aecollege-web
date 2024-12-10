@@ -1,0 +1,8 @@
+
+.h-35rem {
+    height: 100%; // Ocupa todo el ancho por defecto
+
+    @media (min-width: 760px) {
+      height: 35rem; // A partir de `md`, ocupa la mitad del ancho
+    }
+  }
