@@ -436,7 +436,7 @@ export default class AlumnosComponent implements OnInit{
   }
 
   private buildFullName(firstName: string, middleName: string, maternalSurname: string, paternalSurname: string): string {
-    return [firstName, middleName, maternalSurname, paternalSurname]
+    return [firstName.trim(), middleName.trim(), maternalSurname.trim(), paternalSurname.trim()]
       .filter(name => name && name.trim() !== '')
       .join(' '); 
   }
