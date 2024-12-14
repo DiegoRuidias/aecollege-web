@@ -4225,7 +4225,7 @@
     border-width: 0 0 2px 0;
     border-color: transparent transparent #e5e7eb transparent;
     background: #ffffff;
-    color: #6b7280;
+    color: #6b7280 !important;
     padding: 1.25rem;
     font-weight: 700;
     border-top-right-radius: 6px;
@@ -4246,7 +4246,7 @@
   .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
     background: #ffffff;
     border-color: #4CAF50;
-    color: #4CAF50;
+    color: #4CAF50 !important;
   }
   .p-tabview .p-tabview-left-icon {
     margin-right: 0.5rem;
