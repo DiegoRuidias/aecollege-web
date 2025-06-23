@@ -1,77 +1,101 @@
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService } from '../../services/app.service';
 import { Observable } from 'rxjs';
 import { JwtToken } from '../model/jwtToken.model';
+import { EncryptionUtils } from '../../utils/EncryptionUtils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService extends AppService {
-  router = inject(Router);
+  private router = inject(Router);
+  private readonly TOKEN_KEY = 'secure_session';
+  private readonly tokenSignal = signal<string | null>(null);
+  private readonly userSignal = signal<string | null>(null);
 
-  login(data: any):Observable<JwtToken> {
-    return this.http.post<JwtToken>(`${this.baseUrl}/v1/auth/login`, data);
+  readonly currentUser = computed(() => this.userSignal());
+
+  constructor(){
+    super();
+    EncryptionUtils.initializeKey();
+    this.initToken();
   }
 
-  saveToken(token: string) {
-    localStorage.setItem('token', token);
-  }
+  initToken(): void {
+    if(this.getToken()){
+      return
+    }
+    const token = localStorage.getItem(this.TOKEN_KEY);
+    if( token ){
+      this.tokenSignal.set(EncryptionUtils.decrypt(token));
+      return
+    }
+    
+    this.tokenSignal.set(null)
+  };
 
-  getToken() {
-    return localStorage.getItem('token');
-  }
+  login(credentials: any): Observable<JwtToken> {
+    return this.http.post<JwtToken>(`${this.baseUrl}/v1/auth/login`, credentials);
+  };
 
-  getRole(): number{
+  saveToken(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, EncryptionUtils.encrypt(token));
+    this.tokenSignal.set(token);
+  };
+
+  getToken(): string | null {
+    return this.tokenSignal();
+  };
+
+  private decodeToken(): any {
     const token = this.getToken();
-    if (!token) return 6;
+    if (!token) return null;
+    
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch {
+      this.logout();
+      return null;
+    }
+  };
 
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.role || 6;  
-  }
+  getRole(): number {
+    const payload = this.decodeToken();
+    return payload?.role ?? 6;
+  };
 
-  getName(): string{
-    const token = this.getToken();
-    if (!token) return 'INVITADO';
-
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.name || 'INVITADO';  
-  }
-
+  getName(): string {
+    const payload = this.decodeToken();
+    return payload?.name ?? 'INVITADO';
+  };
 
   getUser(): string {
-    const token = this.getToken();
-    if (!token) return '';
+    const payload = this.decodeToken();
+    return payload?.sub ?? '';
+  };
 
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.sub || '';  
-  }
-
-  getUserId(): number{
-    const token = this.getToken();
-    if (!token) return 1;
-
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.userId || 1;  
-  }
+  getUserId(): number {
+    const payload = this.decodeToken();
+    return payload?.userId ?? 1;
+  };
 
   isAuthenticated(): boolean {
-  const token = this.getToken();
-  if (!token) return false;
+    const payload = this.decodeToken();
+    if (!payload) return false;
 
+    const isExpired = Date.now() >= payload.exp * 1000;
+    if (isExpired) {
+      this.logout();
+      return false;
+    }
+    return true;
+  };
 
-  const payload = JSON.parse(atob(token.split('.')[1]));
-  const isExpired = Date.now() >= payload.exp * 1000;
-  if (isExpired) {
-    this.logout(); // Si el token ha expirado, cierra la sesión
-    return false;
-  }
-  return true;
-  }
-
-  logout() {
-    localStorage.removeItem('token');
+  logout(): void {
+    this.tokenSignal.set(null);
+    localStorage.removeItem(this.TOKEN_KEY);
     this.router.navigate(['/auth']);
-  }
+  };
 }
 

@@ -74,27 +74,26 @@ export default class LoginComponent implements OnInit{
       markAllAsTouched(this.formAuth);
       return;
     }
-    this.loginService.logout();
-    this.isLoading = true;
+  
     try {
+      this.isLoading = true;
+      this.loginService.logout(); 
+  
       const loginData = await firstValueFrom(this.loginService.login(this.formAuth.value));
-
+  
       this.loginService.saveToken(loginData.token);
-
-      this.menuService.loadMenus(this.loginService.getRole());
-
+  
+      await this.menuService.loadMenus(this.loginService.getRole());
       const settingsSuccess = await this.settingsService.fetchAndSaveSettings();
-      
+  
       if (!settingsSuccess) {
-        this.isLoading = false;
-        return;
+        this.toastService.add({ severity: 'error', life: 5000, summary: 'Error de Servidor', detail: 'Hubo un error al cargar la configuración.' });
       }
-
+  
       this.router.navigate(['/home']);
-      this.isLoading = false;
-      
-      
     } catch (error) {
+
+    } finally {
       this.isLoading = false;
     }
   }
