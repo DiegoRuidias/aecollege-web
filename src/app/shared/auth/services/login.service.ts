@@ -3,29 +3,50 @@ import { Router } from '@angular/router';
 import { AppService } from '../../services/app.service';
 import { Observable } from 'rxjs';
 import { JwtToken } from '../model/jwtToken.model';
+import { EncryptionUtils } from '../../utils/EncryptionUtils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService extends AppService {
   private router = inject(Router);
-
+  private readonly TOKEN_KEY = 'secure_session';
   private readonly tokenSignal = signal<string | null>(null);
   private readonly userSignal = signal<string | null>(null);
 
   readonly currentUser = computed(() => this.userSignal());
 
-  login(credentials: any): Observable<JwtToken> {
-    return this.http.post<JwtToken>(`${this.baseUrl}/v1/auth/login`, credentials);
+  constructor(){
+    super();
+    EncryptionUtils.initializeKey();
+    this.initToken();
   }
 
+  initToken(): void {
+    if(this.getToken()){
+      return
+    }
+    const token = localStorage.getItem(this.TOKEN_KEY);
+    if( token ){
+      this.tokenSignal.set(EncryptionUtils.decrypt(token));
+      return
+    }
+    
+    this.tokenSignal.set(null)
+  };
+
+  login(credentials: any): Observable<JwtToken> {
+    return this.http.post<JwtToken>(`${this.baseUrl}/v1/auth/login`, credentials);
+  };
+
   saveToken(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, EncryptionUtils.encrypt(token));
     this.tokenSignal.set(token);
-  }
+  };
 
   getToken(): string | null {
     return this.tokenSignal();
-  }
+  };
 
   private decodeToken(): any {
     const token = this.getToken();
@@ -37,27 +58,27 @@ export class LoginService extends AppService {
       this.logout();
       return null;
     }
-  }
+  };
 
   getRole(): number {
     const payload = this.decodeToken();
     return payload?.role ?? 6;
-  }
+  };
 
   getName(): string {
     const payload = this.decodeToken();
     return payload?.name ?? 'INVITADO';
-  }
+  };
 
   getUser(): string {
     const payload = this.decodeToken();
     return payload?.sub ?? '';
-  }
+  };
 
   getUserId(): number {
     const payload = this.decodeToken();
     return payload?.userId ?? 1;
-  }
+  };
 
   isAuthenticated(): boolean {
     const payload = this.decodeToken();
@@ -69,11 +90,12 @@ export class LoginService extends AppService {
       return false;
     }
     return true;
-  }
+  };
 
   logout(): void {
     this.tokenSignal.set(null);
+    localStorage.removeItem(this.TOKEN_KEY);
     this.router.navigate(['/auth']);
-  }
+  };
 }
 
