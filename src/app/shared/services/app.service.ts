@@ -8,7 +8,7 @@ export class AppService {
 
   protected readonly http = inject(HttpClient)
 
-  protected readonly baseUrl: string = "https://aecollege-rest-production.up.railway.app/"
+  protected readonly baseUrl: string = "https://aecollege-rest-production.up.railway.app/api"
 
   constructor() { }
 
