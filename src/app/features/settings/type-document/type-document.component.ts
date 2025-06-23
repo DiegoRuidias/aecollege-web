@@ -10,7 +10,7 @@ import { TypeDocumentService } from './service/type-document.service';
 import { DialogModule } from 'primeng/dialog';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputGroupModule } from 'primeng/inputgroup';
-import { 
+import {
   mat123,
   matBarChart, matLayers
 } from '@ng-icons/material-icons/baseline';
@@ -73,7 +73,6 @@ export default class TypeDocumentComponent implements OnInit {
       next:(data) => {
         this.typeDocumentList = data;
         this.isLoadingDocument = false;
-        console.log(this.typeDocumentList)
       },
       error:(data) => {
         this.isLoadingDocument = false;
@@ -127,7 +126,7 @@ export default class TypeDocumentComponent implements OnInit {
 
   updateDelete(): void {
     this.typeDocumentService.deleted(this.selectedDocumentList[0].id).subscribe(data =>{
-      this.toastService.add({ severity: 'success', life: 5000, summary: 'Documento Eliminado', detail: 'El documento se eliminó correctamente.' }); 
+      this.toastService.add({ severity: 'success', life: 5000, summary: 'Documento Eliminado', detail: 'El documento se eliminó correctamente.' });
       this.typeDocumentList = this.typeDocumentList.filter(r => r.id !== this.selectedDocumentList[0]?.id);
     })
   }

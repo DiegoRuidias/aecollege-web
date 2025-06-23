@@ -12,7 +12,7 @@ export const errorResponseInterceptor: HttpInterceptorFn = (req, next) => {
   const loginService = inject(LoginService);
   return next(req).pipe(
     tap({
-      error: (e) => {        
+      error: (e) => {
         switch (e.status) {
           case 401: {
             toastService.add({ severity: 'error', life: 10000, summary: 'Fallo en la autenticación', detail: e.error.message });
@@ -24,7 +24,7 @@ export const errorResponseInterceptor: HttpInterceptorFn = (req, next) => {
             break;
           }
           case 403: {
-            console.log(e)
+
             toastService.add({ severity: 'error', life: 10000, summary: 'Fallo en la autenticación', detail: "No hay permisos suficientes" });
             const token = loginService.getToken();
 
@@ -32,7 +32,7 @@ export const errorResponseInterceptor: HttpInterceptorFn = (req, next) => {
                 const payloadBase64 = token.split('.')[1];
                 const decodedPayload = atob(payloadBase64);
                 const payload = JSON.parse(decodedPayload);
-        
+
                 // Verifica si el token está expirado
                 const isExpired = Date.now() >= payload.exp * 1000;
                 if (isExpired) {
@@ -40,7 +40,6 @@ export const errorResponseInterceptor: HttpInterceptorFn = (req, next) => {
                     break;
                 }
             } else {
-                console.error('Token no disponible, nulo o con formato incorrecto.');
                 loginService.logout(); // Opcional: Cerrar sesión si no hay token o si el formato es incorrecto
                 break;
             }
@@ -68,7 +67,7 @@ export const errorResponseInterceptor: HttpInterceptorFn = (req, next) => {
       }
     })
   );
-  
+
 };
 /*
 function handleErrorResponse(toastService: MessageService,error: HttpErrorResponse) {

@@ -23,12 +23,11 @@ export class EncryptionUtils {
     try {
       const textToChars = text.split('').map(c => c.charCodeAt(0));
       const keyToChars = this.encryptionKey.split('').map(c => c.charCodeAt(0));
-      const bytes = new Uint8Array(textToChars.map((char, index) => 
+      const bytes = new Uint8Array(textToChars.map((char, index) =>
         char ^ keyToChars[index % keyToChars.length]
       ));
       return btoa(String.fromCharCode(...bytes));
     } catch (e) {
-      console.error('Encryption error', e);
       return '';
     }
   }
@@ -41,12 +40,11 @@ export class EncryptionUtils {
     try {
       const textToChars = atob(encrypted).split('').map(c => c.charCodeAt(0));
       const keyToChars = this.encryptionKey.split('').map(c => c.charCodeAt(0));
-      const bytes = new Uint8Array(textToChars.map((char, index) => 
+      const bytes = new Uint8Array(textToChars.map((char, index) =>
         char ^ keyToChars[index % keyToChars.length]
       ));
       return String.fromCharCode(...bytes);
     } catch (e) {
-      console.error('Decryption error', e);
       return '';
     }
   }

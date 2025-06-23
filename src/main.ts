@@ -12,5 +12,5 @@ bootstrapApplication(AppComponent, {
     ...appConfig.providers,
     {provide: LocationStrategy, useClass: HashLocationStrategy}
   ]
-}).catch(err => console.error(err));
+}).catch();
 

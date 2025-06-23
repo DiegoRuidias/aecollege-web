@@ -33,7 +33,7 @@ import { halfPayments } from '../alumnos/model/alumnos.model';
 export class PayComponent {
   location = inject(Location);
   total: number = 0.0;
-  lastSelectedIndex: number = -1; 
+  lastSelectedIndex: number = -1;
 
   halfPayments = halfPayments;
   selectedCharges: any[] = [];
@@ -61,7 +61,7 @@ export class PayComponent {
     }
   ]
   onPay(): void{
-    console.log(this.selectedCharges)
+
   }
 
   onChangePay(charge: any, index: number): void {
