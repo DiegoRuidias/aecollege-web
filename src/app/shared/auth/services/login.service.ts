@@ -13,12 +13,14 @@ export class LoginService extends AppService {
   private readonly TOKEN_KEY = 'secure_session';
   private readonly tokenSignal = signal<string | null>(null);
   private readonly userSignal = signal<string | null>(null);
+  private readonly SESSION_KEY = 'session_key';
 
   readonly currentUser = computed(() => this.userSignal());
 
   constructor(){
     super();
-    EncryptionUtils.initializeKey();
+    let key = localStorage.getItem(this.SESSION_KEY);
+    // EncryptionUtils.initializeKey();
     this.initToken();
   }
 
@@ -28,10 +30,11 @@ export class LoginService extends AppService {
     }
     const token = localStorage.getItem(this.TOKEN_KEY);
     if( token ){
-      this.tokenSignal.set(EncryptionUtils.decrypt(token));
+      // this.tokenSignal.set(EncryptionUtils.decrypt(token));
+      this.tokenSignal.set(token);
       return
     }
-    
+
     this.tokenSignal.set(null)
   };
 
@@ -40,7 +43,8 @@ export class LoginService extends AppService {
   };
 
   saveToken(token: string): void {
-    localStorage.setItem(this.TOKEN_KEY, EncryptionUtils.encrypt(token));
+    localStorage.setItem(this.TOKEN_KEY, token);
+    // localStorage.setItem(this.TOKEN_KEY, EncryptionUtils.encrypt(token));
     this.tokenSignal.set(token);
   };
 
@@ -51,7 +55,7 @@ export class LoginService extends AppService {
   private decodeToken(): any {
     const token = this.getToken();
     if (!token) return null;
-    
+
     try {
       return JSON.parse(atob(token.split('.')[1]));
     } catch {
